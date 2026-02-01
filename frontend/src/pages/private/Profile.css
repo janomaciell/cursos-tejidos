@@ -1,0 +1,101 @@
+.profile-page {
+    min-height: calc(100vh - 80px);
+    background: #f9fafb;
+    padding: 2rem;
+  }
+  
+  .profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-container h1 {
+    font-size: 2rem;
+    color: #1f2937;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  
+  .tab-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #6b7280;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: -2px;
+   }
+    .tab-button:hover {
+    color: #6366f1;
+   }
+    .tab-button.active {
+    color: #6366f1;
+    border-bottom-color: #6366f1;
+   }
+    .message {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+    .message.success {
+    background: #d1fae5;
+    color: #065f46;
+    border-left: 4px solid #10b981;
+    }
+    .message.error {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+    }
+    .profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    }
+    .form-section h2 {
+    font-size: 1.25rem;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    }
+    .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    }
+    @media (max-width: 768px) {
+    .profile-page {
+    padding: 1rem;
+    }
+    .profile-container {
+    padding: 1.5rem;
+    }
+    .form-row {
+    grid-template-columns: 1fr;
+    }
+    .profile-tabs {
+    flex-direction: column;
+    }
+    .tab-button {
+    border-bottom: none;
+    border-left: 3px solid transparent;
+    }
+    .tab-button.active {
+    border-left-color: #6366f1;
+    border-bottom-color: transparent;
+    }
+}

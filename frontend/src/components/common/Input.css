@@ -1,0 +1,80 @@
+.input-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .required {
+    color: #ef4444;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    font-family: inherit;
+  }
+  
+  .input-field:focus {
+    outline: none;
+    border-color: #6366f1;
+  }
+  
+  .input-field:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+  }
+
+  .input-password-wrapper {
+    position: relative;
+    display: block;
+  }
+
+  .input-field--with-icon {
+    padding-right: 3rem;
+  }
+
+  .input-password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.2s;
+  }
+
+  .input-password-toggle:hover {
+    color: #374151;
+  }
+
+  .input-password-toggle:focus {
+    outline: none;
+    color: #6366f1;
+  }
+
+  .input-error {
+    border-color: #ef4444;
+  }
+  
+  .error-message {
+    display: block;
+    margin-top: 0.5rem;
+    color: #ef4444;
+    font-size: 0.875rem;
+  }
