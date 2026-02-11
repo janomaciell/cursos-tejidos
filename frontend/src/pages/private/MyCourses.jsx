@@ -16,7 +16,8 @@ const MyCourses = () => {
   const loadMyCourses = async () => {
     try {
       const data = await paymentsAPI.getMyCourses();
-      setCourses(data.results || data);
+      const list = Array.isArray(data) ? data : (data?.results ?? []);
+      setCourses(list);
     } catch (error) {
       console.error('Error al cargar cursos:', error);
     } finally {
@@ -36,6 +37,8 @@ const MyCourses = () => {
     return <Loader fullScreen />;
   }
 
+  const list = Array.isArray(courses) ? courses : [];
+
   return (
     <div className="my-courses-page">
       <div className="page-header">
@@ -43,9 +46,9 @@ const MyCourses = () => {
         <p>Accede a todos tus cursos adquiridos</p>
       </div>
 
-      {courses.length > 0 ? (
+      {list.length > 0 ? (
         <div className="my-courses-grid">
-          {courses.map((access) => (
+          {list.map((access) => (
             <div key={access.id} className="my-course-card">
               <div className="course-image-wrapper">
                 <img src={access.course.cover_image} alt={access.course.title} />

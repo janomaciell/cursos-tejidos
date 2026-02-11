@@ -6,6 +6,12 @@ export const paymentsAPI = {
     return response.data;
   },
 
+  // Cambiar el nombre para que coincida
+  checkPreferenceStatus: async (preferenceId) => {
+    const response = await api.get(`/payments/check-preference/${preferenceId}/`);
+    return response.data;
+  },
+
   getPaymentStatus: async (paymentId) => {
     const response = await api.get(`/payments/status/${paymentId}/`);
     return response.data;

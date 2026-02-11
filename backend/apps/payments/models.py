@@ -3,6 +3,7 @@ from django.utils import timezone
 from apps.users.models import User
 from apps.courses.models import Course
 
+
 class Transaction(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pendiente'),
@@ -14,21 +15,26 @@ class Transaction(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='transactions')
-    
+
     # Mercado Pago data
-    mp_payment_id = models.CharField('ID de pago MP', max_length=100, unique=True)
+    # Al crear la transacción en create_payment solo tenemos preference_id;
+    # el payment_id lo asigna el webhook cuando MP confirma el pago.
+    # null=True permite varias transacciones pendientes (sin payment_id aún).
+    mp_payment_id = models.CharField(
+        'ID de pago MP', max_length=100, unique=True, blank=True, null=True
+    )
     mp_preference_id = models.CharField('ID de preferencia MP', max_length=100, blank=True)
     mp_merchant_order_id = models.CharField('ID de orden MP', max_length=100, blank=True)
-    
+
     amount = models.DecimalField('Monto', max_digits=10, decimal_places=2)
     status = models.CharField('Estado', max_length=20, choices=STATUS_CHOICES, default='pending')
     payment_method = models.CharField('Método de pago', max_length=50, blank=True)
     payment_type = models.CharField('Tipo de pago', max_length=50, blank=True)
-    
+
     # Metadata
     raw_data = models.JSONField('Datos crudos', default=dict, blank=True)
     ip_address = models.GenericIPAddressField('IP', null=True, blank=True)
-    
+
     created_at = models.DateTimeField('Fecha de creación', auto_now_add=True)
     updated_at = models.DateTimeField('Última actualización', auto_now=True)
     approved_at = models.DateTimeField('Fecha de aprobación', null=True, blank=True)
@@ -40,14 +46,18 @@ class Transaction(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"Transaction {self.mp_payment_id} - {self.user.email} - {self.status}"
+        return f"Transaction {self.mp_payment_id or self.mp_preference_id} - {self.user.email} - {self.status}"
 
     def approve(self):
-        """Aprobar transacción y dar acceso al curso"""
+        """Aprobar transacción y dar acceso al curso.
+        
+        FIX: eliminado self.save() de aquí. El que llame a approve()
+        debe hacer save() después, así evitamos guardar dos veces
+        (una aquí y otra en el webhook).
+        """
         self.status = 'approved'
         self.approved_at = timezone.now()
-        self.save()
-        
+
         # Crear o activar acceso al curso
         CourseAccess.objects.update_or_create(
             user=self.user,
@@ -60,11 +70,11 @@ class CourseAccess(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_accesses')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='user_accesses')
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True, blank=True)
-    
+
     is_active = models.BooleanField('Activo', default=True)
     purchased_at = models.DateTimeField('Fecha de compra', auto_now_add=True)
     expires_at = models.DateTimeField('Fecha de expiración', null=True, blank=True)
-    
+
     created_at = models.DateTimeField('Fecha de creación', auto_now_add=True)
     updated_at = models.DateTimeField('Última actualización', auto_now=True)
 

@@ -139,6 +139,12 @@ CORS_ALLOWED_ORIGINS = config(
     default='http://localhost:5173,http://127.0.0.1:5173'
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
+# Permitir header de ngrok para evitar la página de aviso cuando la API se expone por ngrok
+from corsheaders.defaults import default_headers
+CORS_ALLOW_HEADERS = list(default_headers) + ['ngrok-skip-browser-warning']
+
+# FRONTEND URL (para back_urls de Mercado Pago)
+FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:5173')
 
 # MERCADO PAGO
 MERCADOPAGO_ACCESS_TOKEN = config('MERCADOPAGO_ACCESS_TOKEN', default='')
@@ -158,6 +164,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@elearning.com')
+
+
 
 # SECURITY SETTINGS (Production)
 if not DEBUG:

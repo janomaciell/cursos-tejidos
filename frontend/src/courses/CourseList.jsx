@@ -3,6 +3,8 @@ import Loader from '../components/common/Loader';
 import './CourseList.css';
 
 const CourseList = ({ courses, loading }) => {
+  const list = Array.isArray(courses) ? courses : [];
+
   if (loading) {
     return (
       <div className="courses-loading">
@@ -12,7 +14,7 @@ const CourseList = ({ courses, loading }) => {
     );
   }
 
-  if (!courses || courses.length === 0) {
+  if (list.length === 0) {
     return (
       <div className="courses-empty">
         <p>No se encontraron cursos</p>
@@ -22,7 +24,7 @@ const CourseList = ({ courses, loading }) => {
 
   return (
     <div className="courses-grid">
-      {courses.map((course) => (
+      {list.map((course) => (
         <CourseCard key={course.id} course={course} />
       ))}
     </div>

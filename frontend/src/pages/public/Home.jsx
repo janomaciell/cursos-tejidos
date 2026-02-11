@@ -17,7 +17,7 @@ const Home = () => {
   const loadFeaturedCourses = async () => {
     try {
       const data = await coursesAPI.getFeaturedCourses();
-      setFeaturedCourses(data);
+      setFeaturedCourses(Array.isArray(data) ? data : (data?.results ?? []));
     } catch (error) {
       console.error('Error al cargar cursos destacados:', error);
     } finally {

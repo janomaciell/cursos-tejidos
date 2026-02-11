@@ -1,11 +1,14 @@
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const isNgrok = API_URL.includes('ngrok');
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    // Evita que ngrok devuelva la página de aviso; el backend debe permitir este header en CORS
+    ...(isNgrok && { 'ngrok-skip-browser-warning': 'true' }),
   },
 });
 
