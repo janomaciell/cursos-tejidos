@@ -38,6 +38,18 @@ class CourseAccessViewSet(viewsets.ReadOnlyModelViewSet):
         ).select_related('course').order_by('-purchased_at')
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def my_courses(request):
+    """Lista de cursos comprados por el usuario (Mis Cursos)."""
+    accesses = CourseAccess.objects.filter(
+        user=request.user,
+        is_active=True
+    ).select_related('course').order_by('-purchased_at')
+    serializer = CourseAccessSerializer(accesses, many=True)
+    return Response(serializer.data)
+
+
 def get_frontend_url():
     """Obtener la URL base del frontend.
     
@@ -79,9 +91,12 @@ def create_payment(request):
         frontend_url = get_frontend_url()
         return_url = f"{frontend_url}/cursos/{course.slug}"
 
-        # URL del webhook donde MP notifica el resultado
-        # Con ngrok, esta URL SÍ funcionará
-        notification_url = request.build_absolute_uri('/api/payments/webhook/')
+        # URL del webhook: tiene que ser pública (ngrok/dominio). MP no puede llamar a localhost.
+        backend_url = (getattr(settings, 'BACKEND_URL', None) or '').strip()
+        if backend_url:
+            notification_url = f"{backend_url.rstrip('/')}/api/payments/webhook/"
+        else:
+            notification_url = request.build_absolute_uri('/api/payments/webhook/')
 
         # Debug: mostrar exactamente qué URLs se envían a MP
         logger.info(f"[MP] Creating payment for course: {course.title}")
@@ -106,19 +121,19 @@ def create_payment(request):
             ip_address=get_client_ip(request)
         )
         
+        # Respuesta que debe devolver POST /payments/create/
+        # sandbox_init_point siempre debe ir para usar checkout de pruebas
         init_point = preference.get('init_point', '')
-        sandbox_url = preference.get('sandbox_init_point', '').strip()
-        # Si la API no devuelve sandbox_init_point (p. ej. con cierto token de prueba), forzar URL sandbox
-        if not sandbox_url and init_point and 'sandbox.' not in init_point:
-            sandbox_url = init_point.replace('www.mercadopago', 'sandbox.mercadopago')
-            logger.info(f"[MP] Forced sandbox URL (API did not return sandbox_init_point)")
+        sandbox_init_point = (preference.get('sandbox_init_point') or '').strip()
+        if not sandbox_init_point:
+            sandbox_init_point = init_point
         logger.info(f"[MP] Transaction created: {transaction.id} - preference: {preference['preference_id']}")
-        logger.info(f"[MP] Checkout URL: sandbox={bool(sandbox_url)}")
+        logger.info(f"[MP] sandbox_init_point: {bool(sandbox_init_point)}")
         
         return Response({
             'preference_id': preference['preference_id'],
             'init_point': init_point,
-            'sandbox_init_point': sandbox_url or init_point,
+            'sandbox_init_point': sandbox_init_point,
             'transaction_id': transaction.id
         }, status=status.HTTP_201_CREATED)
     

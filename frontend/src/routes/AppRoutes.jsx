@@ -8,6 +8,7 @@ import CourseCatalog from '../pages/public/CourseCatalog';
 import CourseDetailPublic from '../pages/public/CourseDetailPublic';
 import Login from '../pages/public/Login';
 import Register from '../pages/public/Register';
+import PaymentResult from '../pages/public/PaymentResult';
 
 // Private Pages
 import Dashboard from '../pages/private/Dashboard';
@@ -41,6 +42,11 @@ const AppRoutes = () => {
           </PublicRoute>
         } 
       />
+
+      {/* Mercado Pago redirige aquí después del pago; debe estar protegida para llamar al backend */}
+      <Route path="/payment-success" element={<PrivateRoute><PaymentResult /></PrivateRoute>} />
+      <Route path="/payment-failure" element={<PrivateRoute><PaymentResult /></PrivateRoute>} />
+      <Route path="/payment-pending" element={<PrivateRoute><PaymentResult /></PrivateRoute>} />
 
       {/* Private Routes */}
       <Route 

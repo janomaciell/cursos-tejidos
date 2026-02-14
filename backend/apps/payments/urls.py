@@ -11,6 +11,7 @@ router.register(r'access', views.CourseAccessViewSet, basename='access')
 
 urlpatterns = [
     path('create/', views.create_payment, name='create-payment'),
+    path('my-courses/', views.my_courses, name='my-courses'),
     path('check-preference/<str:preference_id>/', views.check_preference_status, name='check_preference_status'),
     path('webhook/', mercadopago_webhook, name='mercadopago-webhook'),
     path('', include(router.urls)),

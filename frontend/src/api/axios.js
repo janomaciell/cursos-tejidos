@@ -34,10 +34,15 @@ api.interceptors.response.use(
 
     // Si el token expiró, intentar refrescarlo
     if (error.response?.status === 401 && !originalRequest._retry) {
+      const hadToken = !!localStorage.getItem('access_token');
       originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem('refresh_token');
+        if (!refreshToken) {
+          // Sin token: usuario en página pública; no redirigir
+          return Promise.reject(error);
+        }
         const response = await axios.post(`${API_URL}/token/refresh/`, {
           refresh: refreshToken,
         });
@@ -48,11 +53,13 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch (refreshError) {
-        // Si falla el refresh, limpiar tokens y redirigir al login
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        // Solo redirigir al login si el usuario estaba autenticado (tenía token)
+        if (hadToken) {
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       }
     }

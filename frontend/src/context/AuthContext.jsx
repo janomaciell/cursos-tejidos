@@ -67,7 +67,17 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true, user: data.user };
     } catch (error) {
-      const message = error.response?.data?.message || 'Error al registrarse';
+      // La API devuelve serializer.errors: { campo: ["mensaje"] } o string
+      const data = error.response?.data;
+      let message = data?.message || 'Error al registrarse';
+      if (data && typeof data === 'object' && !data.message) {
+        const parts = [];
+        for (const [field, msgs] of Object.entries(data)) {
+          const text = Array.isArray(msgs) ? msgs.join(' ') : msgs;
+          if (text) parts.push(text);
+        }
+        if (parts.length) message = parts.join('. ');
+      }
       return { success: false, error: message };
     }
   };

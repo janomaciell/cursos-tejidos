@@ -6,8 +6,8 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section">
-          <h3>E-Learning Costura</h3>
-          <p>Aprende las mejores técnicas de costura y tejido con nuestros cursos especializados.</p>
+          <h3>Tejiendo con Andy</h3>
+          <p>Enseñamos costura desde cero con método práctico y acompañamiento. Transformá hilos en proyectos reales.</p>
         </div>
 
         <div className="footer-section">
@@ -30,7 +30,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2025 E-Learning Costura. Todos los derechos reservados.</p>
+        <p>&copy; 2025 Tejiendo con Andy. Todos los derechos reservados.</p>
       </div>
     </footer>
   );

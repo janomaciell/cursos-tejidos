@@ -22,6 +22,7 @@ const CoursePlayer = () => {
   const loadCourseData = async () => {
     try {
       setLoading(true);
+      // courseId en la URL es el ID numérico; el backend acepta tanto id como slug en /courses/{id}/
       const [courseData, modulesData, progressData] = await Promise.all([
         coursesAPI.getCourseBySlug(courseId),
         coursesAPI.getCourseModules(courseId),
@@ -29,18 +30,19 @@ const CoursePlayer = () => {
       ]);
 
       setCourse(courseData);
-      setModules(modulesData);
+      setModules(Array.isArray(modulesData) ? modulesData : []);
 
-      // Crear mapa de progreso
+      // Crear mapa de progreso (la API puede devolver lista o { results: [] })
+      const progressList = Array.isArray(progressData) ? progressData : (progressData?.results ?? []);
       const progressMap = {};
-      progressData.forEach((p) => {
+      progressList.forEach((p) => {
         progressMap[p.lesson] = p;
       });
       setProgress(progressMap);
 
-      // Seleccionar primera lección no completada o la primera
-      const firstIncomplete = findFirstIncompleteLesson(modulesData, progressMap);
-      setCurrentLesson(firstIncomplete || modulesData[0]?.lessons[0] || null);
+      const modulesList = Array.isArray(modulesData) ? modulesData : [];
+      const firstIncomplete = findFirstIncompleteLesson(modulesList, progressMap);
+      setCurrentLesson(firstIncomplete || modulesList[0]?.lessons?.[0] || null);
     } catch (error) {
       console.error('Error al cargar curso:', error);
       navigate('/mis-cursos');
@@ -124,10 +126,20 @@ const CoursePlayer = () => {
     return <Loader fullScreen />;
   }
 
-  if (!course || !currentLesson) {
+  if (!course) {
     return (
       <div className="player-error">
         <h2>Error al cargar el curso</h2>
+        <button onClick={() => navigate('/mis-cursos')}>Volver a Mis Cursos</button>
+      </div>
+    );
+  }
+
+  if (!currentLesson) {
+    return (
+      <div className="player-error">
+        <h2>Este curso no tiene lecciones aún</h2>
+        <p>El contenido se publicará pronto.</p>
         <button onClick={() => navigate('/mis-cursos')}>Volver a Mis Cursos</button>
       </div>
     );

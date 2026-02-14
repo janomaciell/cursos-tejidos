@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { FiCheck, FiX, FiClock } from 'react-icons/fi';
 import { coursesAPI } from '../../api/courses';
 import { usePayment } from '../../hooks/usePayment';
 import { useAuth } from '../../hooks/useAuth';
@@ -133,7 +134,7 @@ const CourseDetailPublic = () => {
           <div className="payment-result-content">
             {paymentResult.status === 'approved' && (
               <>
-                <span className="icon">✅</span>
+                <span className="icon"><FiCheck /></span>
                 <div className="message">
                   <strong>¡Pago Aprobado!</strong>
                   <p>{paymentResult.message}</p>
@@ -143,7 +144,7 @@ const CourseDetailPublic = () => {
             
             {paymentResult.status === 'rejected' && (
               <>
-                <span className="icon">❌</span>
+                <span className="icon"><FiX /></span>
                 <div className="message">
                   <strong>Pago Rechazado</strong>
                   <p>{paymentResult.message}</p>
@@ -153,7 +154,7 @@ const CourseDetailPublic = () => {
             
             {paymentResult.status === 'pending' && (
               <>
-                <span className="icon">⏳</span>
+                <span className="icon"><FiClock /></span>
                 <div className="message">
                   <strong>Pago Pendiente</strong>
                   <p>{paymentResult.message}</p>
@@ -165,7 +166,7 @@ const CourseDetailPublic = () => {
               className="dismiss-btn"
               onClick={handleDismissPaymentResult}
             >
-              ✕
+              <FiX />
             </button>
           </div>
         </div>

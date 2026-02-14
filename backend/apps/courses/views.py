@@ -31,7 +31,7 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
         return CourseListSerializer
     
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'featured']:
             return [AllowAny()]
         return [IsAuthenticated()]
     

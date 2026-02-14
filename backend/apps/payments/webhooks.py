@@ -4,6 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.utils import timezone
 import json
 import logging
+import re
 from .models import Transaction, CourseAccess
 from .mercadopago import MercadoPagoService
 from apps.users.models import User
@@ -37,49 +38,88 @@ def mercadopago_webhook(request):
         # Obtener información completa del pago desde la API de MP
         payment_info = mp_service.get_payment_info(payment_id)
 
-        # Intentar buscar la transacción existente por preference_id
-        # (la creamos en create_payment cuando el usuario inició el pago)
-        external_reference = payment_info.get("external_reference", "")
-        # external_reference tiene formato: "user_{user_id}_course_{course_id}"
-        transaction = Transaction.objects.filter(
-            mp_preference_id=payment_info.get("preference_id", "")
-        ).first()
+        # ------------------------------------------------------------------
+        # Resolver user / course a partir de metadata y external_reference
+        # ------------------------------------------------------------------
+        external_reference = payment_info.get("external_reference", "") or ""
+        metadata = payment_info.get("metadata", {}) or {}
 
-        if transaction:
-            # La transacción ya existe, solo actualizar el payment_id
-            transaction.mp_payment_id = str(payment_id)
-        else:
-            # FIX: si por alguna razón no existe (edge case),
-            # recrearla con user y course extraídos del metadata del pago.
-            metadata = payment_info.get("metadata", {})
-            user_id = metadata.get("user_id")
-            course_id = metadata.get("course_id")
+        meta_user_id = metadata.get("user_id")
+        meta_course_id = metadata.get("course_id")
 
-            if not user_id or not course_id:
-                logger.error(f"Webhook pago {payment_id}: no se encontró user_id o course_id en metadata")
-                return JsonResponse(
-                    {"status": "error", "message": "Metadata incompleta"},
-                    status=400
+        ref_user_id = None
+        ref_course_id = None
+        if external_reference:
+            # external_reference esperado: "user_{user_id}_course_{course_id}"
+            match = re.match(r"user_(\d+)_course_(\d+)", str(external_reference).strip())
+            if match:
+                ref_user_id, ref_course_id = int(match.group(1)), int(match.group(2))
+
+        user_id = meta_user_id or ref_user_id
+        course_id = meta_course_id or ref_course_id
+
+        if not user_id or not course_id:
+            logger.error(
+                f"Webhook pago {payment_id}: no se pudo resolver user_id/course_id "
+                f"(metadata={metadata}, external_reference={external_reference})"
+            )
+            return JsonResponse(
+                {"status": "error", "message": "No se pudo resolver usuario/curso del pago"},
+                status=400,
+            )
+
+        try:
+            user = User.objects.get(id=user_id)
+            course = Course.objects.get(id=course_id)
+        except (User.DoesNotExist, Course.DoesNotExist) as e:
+            logger.error(f"Webhook pago {payment_id}: usuario o curso no encontrado - {e}")
+            return JsonResponse(
+                {"status": "error", "message": "Usuario o curso no encontrado"},
+                status=400,
+            )
+
+        # ------------------------------------------------------------------
+        # Buscar/crear la transacción correcta
+        # ------------------------------------------------------------------
+        pref_id = payment_info.get("preference_id") or ""
+        transaction = None
+
+        # 1) Intentar por preference_id + usuario + curso (flujo normal)
+        if pref_id:
+            transaction = (
+                Transaction.objects.filter(
+                    mp_preference_id=pref_id,
+                    user=user,
+                    course=course,
                 )
+                .order_by("-created_at")
+                .first()
+            )
 
-            try:
-                user = User.objects.get(id=user_id)
-                course = Course.objects.get(id=course_id)
-            except (User.DoesNotExist, Course.DoesNotExist) as e:
-                logger.error(f"Webhook pago {payment_id}: usuario o curso no encontrado - {e}")
-                return JsonResponse(
-                    {"status": "error", "message": "Usuario o curso no encontrado"},
-                    status=400
+        # 2) Si no está, tomar la última transacción pendiente de ese user/curso
+        if not transaction:
+            transaction = (
+                Transaction.objects.filter(
+                    user=user,
+                    course=course,
+                    status="pending",
                 )
+                .order_by("-created_at")
+                .first()
+            )
 
+        # 3) Si sigue sin encontrarse, crear una nueva usando los datos del pago
+        if not transaction:
             transaction = Transaction(
                 user=user,
                 course=course,
-                mp_payment_id=str(payment_id),
-                mp_preference_id=payment_info.get("preference_id", ""),
+                mp_preference_id=pref_id,
                 amount=payment_info.get("transaction_amount", 0),
-                status='pending',
+                status="pending",
             )
+
+        # En todos los casos, asociar el payment_id actual
+        transaction.mp_payment_id = str(payment_id)
 
         # Actualizar campos del pago
         mp_status = payment_info.get("status")

@@ -37,6 +37,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 class CourseListSerializer(serializers.ModelSerializer):
     total_lessons = serializers.ReadOnlyField()
     total_students = serializers.ReadOnlyField()
+    cover_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
@@ -44,18 +45,37 @@ class CourseListSerializer(serializers.ModelSerializer):
                  'difficulty', 'duration_hours', 'total_lessons', 'total_students', 
                  'is_featured', 'created_at')
 
+    def get_cover_image(self, obj):
+        """URL absoluta de la imagen para que funcione con ngrok y distintos orígenes."""
+        if not obj.cover_image:
+            return None
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.cover_image.url)
+        return obj.cover_image.url
+
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     modules = ModuleSerializer(many=True, read_only=True)
     total_lessons = serializers.ReadOnlyField()
     total_students = serializers.ReadOnlyField()
     has_access = serializers.SerializerMethodField()
+    cover_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
         fields = ('id', 'title', 'slug', 'description', 'short_description', 'cover_image', 
                  'price', 'difficulty', 'duration_hours', 'modules', 'total_lessons', 
                  'total_students', 'is_featured', 'has_access', 'created_at')
+
+    def get_cover_image(self, obj):
+        """URL absoluta de la imagen para que funcione con ngrok y distintos orígenes."""
+        if not obj.cover_image:
+            return None
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.cover_image.url)
+        return obj.cover_image.url
 
     def get_has_access(self, obj):
         request = self.context.get('request')

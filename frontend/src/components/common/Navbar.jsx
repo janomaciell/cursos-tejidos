@@ -1,42 +1,64 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { FiUser, FiLogOut, FiBookOpen, FiShoppingCart } from 'react-icons/fi';
+import { FiUser, FiLogOut, FiBookOpen, FiMenu, FiX } from 'react-icons/fi';
 import './Navbar.css';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
     navigate('/');
+    setMenuOpen(false);
   };
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <nav className="navbar">
+      {menuOpen && (
+        <button
+          type="button"
+          className="navbar-backdrop"
+          aria-label="Cerrar menú"
+          onClick={closeMenu}
+        />
+      )}
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo" onClick={closeMenu}>
           <FiBookOpen className="logo-icon" />
-          <span>E-Learning Costura</span>
+          <span>Tejiendo con Andy</span>
         </Link>
 
-        <ul className="navbar-menu">
-          <li><Link to="/">Inicio</Link></li>
-          <li><Link to="/cursos">Cursos</Link></li>
+        <button
+          type="button"
+          className="navbar-toggle"
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <FiX /> : <FiMenu />}
+        </button>
+
+        <ul className={`navbar-menu ${menuOpen ? 'navbar-menu--open' : ''}`}>
+          <li><Link to="/" onClick={closeMenu}>Inicio</Link></li>
+          <li><Link to="/cursos" onClick={closeMenu}>Cursos</Link></li>
           
           {isAuthenticated ? (
             <>
-              <li><Link to="/mis-cursos">Mis Cursos</Link></li>
+              <li><Link to="/mis-cursos" onClick={closeMenu}>Mis Cursos</Link></li>
               <li className="navbar-dropdown">
-                <button className="dropdown-toggle">
+                <button className="dropdown-toggle" type="button">
                   <FiUser />
                   <span>{user?.first_name || 'Usuario'}</span>
                 </button>
                 <ul className="dropdown-menu">
-                  <li><Link to="/perfil">Mi Perfil</Link></li>
-                  <li><Link to="/historial">Historial de Compras</Link></li>
+                  <li><Link to="/perfil" onClick={closeMenu}>Mi Perfil</Link></li>
+                  <li><Link to="/historial" onClick={closeMenu}>Historial de Compras</Link></li>
                   <li>
-                    <button onClick={handleLogout} className="logout-btn">
+                    <button type="button" onClick={handleLogout} className="logout-btn">
                       <FiLogOut /> Cerrar Sesión
                     </button>
                   </li>
@@ -45,8 +67,8 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <li><Link to="/login" className="btn-login">Iniciar Sesión</Link></li>
-              <li><Link to="/register" className="btn-register">Registrarse</Link></li>
+              <li><Link to="/login" className="btn-login" onClick={closeMenu}>Iniciar Sesión</Link></li>
+              <li><Link to="/register" className="btn-register" onClick={closeMenu}>Registrarse</Link></li>
             </>
           )}
         </ul>

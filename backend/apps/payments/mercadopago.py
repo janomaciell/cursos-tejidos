@@ -18,22 +18,20 @@ class MercadoPagoService:
         self.sdk = mercadopago.SDK(token)
 
     def create_preference(self, course, user, return_url, notification_url):
-        """Crear preferencia de pago en Mercado Pago (Checkout Pro)."""
+        """Crear preferencia de pago en Mercado Pago (Checkout Pro).
         
-        # Asegurar que return_url tenga un valor válido
-        # Prioridad: 1. return_url pasado, 2. FRONTEND_URL de settings, 3. localhost
-        if return_url and return_url.strip():
-            base_url = return_url.strip().rstrip('/')
+        return_url puede ser la página del curso (ej. /cursos/slug) para uso en el front.
+        Las back_urls (success/failure/pending) se construyen siempre desde la URL base
+        del frontend, no desde return_url, para evitar rutas como /cursos/slug/payment-success.
+        """
+        # URL base del frontend (origen de las rutas /payment-success, etc.)
+        frontend_url = getattr(settings, 'FRONTEND_URL', '').strip()
+        if frontend_url:
+            base_url = frontend_url.rstrip('/')
         else:
-            # Intentar obtener de settings
-            frontend_url = getattr(settings, 'FRONTEND_URL', '').strip()
-            if frontend_url:
-                base_url = frontend_url.rstrip('/')
-            else:
-                # Fallback final
-                base_url = "http://localhost:5173"
+            base_url = "http://localhost:5173"
         
-        logger.info(f"[MP] Using base_url for back_urls: {base_url}")
+        logger.info(f"[MP] Using base_url for back_urls: {base_url} (return_url ignored for back_urls)")
         
         preference_data = {
             "items": [
@@ -54,8 +52,7 @@ class MercadoPagoService:
                 "failure": f"{base_url}/payment-failure",
                 "pending": f"{base_url}/payment-pending",
             },
-            # Sin auto_return: con el SDK actual MP devuelve 400 "back_url.success must be defined".
-            # El usuario vuelve con el botón "Volver al sitio" de MP.
+            "auto_return": "approved",
             "notification_url": notification_url,
             "statement_descriptor": "CURSO COSTURA",
             "external_reference": f"user_{user.id}_course_{course.id}",
@@ -68,7 +65,7 @@ class MercadoPagoService:
         try:
             logger.info(f"[MP] Creating preference for course: {course.title}")
             logger.info(f"[MP] Notification URL: {notification_url}")
-            logger.info(f"[MP] Return URL: {base_url}")
+            logger.info(f"[MP] Back URLs: success={base_url}/payment-success, etc.")
             
             preference_response = self.sdk.preference().create(preference_data)
 
@@ -83,10 +80,20 @@ class MercadoPagoService:
             
             logger.info(f"[MP] ✓ Preference created: {preference['id']}")
 
+            init_point = preference["init_point"]
+            sandbox_init_point = (preference.get("sandbox_init_point") or "").strip()
+            # Si MP no devuelve sandbox_init_point → estás con token de PRODUCCIÓN.
+            # Para sandbox real usa "Credenciales de prueba" en el panel de MP.
+            if not sandbox_init_point and init_point and "sandbox." not in init_point:
+                sandbox_init_point = init_point.replace("www.mercadopago", "sandbox.mercadopago")
+                logger.warning("[MP] sandbox_init_point no venía en la respuesta (token producción?). Usando URL sandbox derivada.")
+            if not sandbox_init_point:
+                sandbox_init_point = init_point
+
             return {
                 "preference_id": preference["id"],
-                "init_point": preference["init_point"],
-                "sandbox_init_point": preference.get("sandbox_init_point", ""),
+                "init_point": init_point,
+                "sandbox_init_point": sandbox_init_point,
             }
         except Exception as e:
             logger.error(f"[MP] Error creating preference: {str(e)}")

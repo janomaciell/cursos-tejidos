@@ -1,3 +1,4 @@
+import logging
 from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -33,6 +34,8 @@ def register(request):
             }
         }, status=status.HTTP_201_CREATED)
     
+    # Log para depuración (ver en consola del backend qué falló)
+    logging.getLogger(__name__).warning('Register validation errors: %s', serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

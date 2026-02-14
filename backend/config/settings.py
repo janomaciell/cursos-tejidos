@@ -145,6 +145,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + ['ngrok-skip-browser-warning']
 
 # FRONTEND URL (para back_urls de Mercado Pago)
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:5173')
+# BACKEND URL pública (ngrok o dominio). MP necesita notification_url accesible desde internet.
+BACKEND_URL = config('BACKEND_URL', default='').strip() or None
 
 # MERCADO PAGO
 MERCADOPAGO_ACCESS_TOKEN = config('MERCADOPAGO_ACCESS_TOKEN', default='')
