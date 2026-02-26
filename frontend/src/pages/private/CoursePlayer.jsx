@@ -17,6 +17,7 @@ import {
   FiEdit3,
   FiLayers,
   FiInfo,
+  FiMenu,
 } from 'react-icons/fi';
 import gsap from 'gsap';
 import './CoursePlayer.css';
@@ -39,10 +40,10 @@ const getResourceIcon = (type) => {
 
 /* Tabs — mismos íconos que el HTML */
 const TABS = [
-  { id: 'overview',  label: 'Overview',  icon: FiInfo },
-  { id: 'resources', label: 'Resources', icon: FiFolder },
-  { id: 'notes',     label: 'Notes',     icon: FiEdit3 },
-  { id: 'qa',        label: 'Q&A',       icon: FiMessageSquare },
+  { id: 'overview',  label: 'Descripción',  icon: FiInfo },
+  { id: 'resources', label: 'Recursos',     icon: FiFolder },
+  { id: 'notes',     label: 'Notas',        icon: FiEdit3 },
+  { id: 'qa',        label: 'Preguntas',    icon: FiMessageSquare },
 ];
 
 /* ─── Componente ───────────────────────────────────────────────────── */
@@ -214,7 +215,7 @@ const CoursePlayer = () => {
       <div className="error-icon">📚</div>
       <h2>No se pudo cargar el contenido</h2>
       <p>No pudimos obtener la información del curso.</p>
-      <button onClick={() => navigate('/mis-cursos')} className="error-btn">Volver a Mis Cursos</button>
+      <button onClick={() => navigate('/mis-cursos')} className="error-btn">Volver a mis cursos</button>
     </div>
   );
 
@@ -248,7 +249,7 @@ const CoursePlayer = () => {
 
         {/* Center: pct label + progress track + trophy */}
         <div className="cp-header-center">
-          <span className="cp-pct-label">{overallPct}% Complete</span>
+          <span className="cp-pct-label">{overallPct}% Completado</span>
           <div className="cp-track">
             <div className="cp-track-fill" style={{ width: `${overallPct}%` }} />
           </div>
@@ -262,20 +263,16 @@ const CoursePlayer = () => {
             className="cp-open-sb-btn"
             onClick={() => setSidebarOpen(true)}
             aria-label="Abrir contenido del curso"
-            title="Course Content"
+            title="Contenido del curso"
           >
-            <FiLayers />
+            <FiMenu />
           </button>
 
           <button className="cp-dashboard-btn" onClick={() => navigate('/mis-cursos')}>
             <FiLayers />
-            <span>Dashboard</span>
+            <span>Panel</span>
           </button>
-          <div className="cp-divider" />
-          <div className="cp-avatar-wrap">
-            <div className="cp-avatar" />
-            <span className="cp-avatar-dot" />
-          </div>
+
         </div>
       </header>
 
@@ -310,7 +307,7 @@ const CoursePlayer = () => {
                     : currentLesson.title}
                 </h1>
                 <p className="cp-lesson-sub">
-                  {currentModule ? currentModule.title : 'Sección'} • Lesson {lessonIdx} of {totalInModule}
+                  {currentModule ? currentModule.title : 'Sección'} • Lección {lessonIdx} de {totalInModule}
                 </p>
               </div>
               <button
@@ -318,7 +315,7 @@ const CoursePlayer = () => {
                 onClick={goToNextLesson}
                 disabled={isLastLesson()}
               >
-                <span>Next Lesson</span>
+                <span>Siguiente Lección</span>
                 <FiChevronRight />
               </button>
             </div>
@@ -345,10 +342,10 @@ const CoursePlayer = () => {
             {/* ─ Tab Overview ─ */}
             {activeTab === 'overview' && (
               <div className="cp-prose">
-                <h3 className="cp-prose-h3">About this lesson</h3>
+                <h3 className="cp-prose-h3">Sobre esta lección</h3>
                 <p className="cp-prose-p">
                   {currentLesson.description ||
-                    "In this lesson, we dive deep into the fundamental principles of grid systems in digital design. You'll learn how to establish a solid structure for your UI, ensuring consistency and scalability across different screen sizes."}
+                    "En esta lección exploramos los conceptos fundamentales del contenido del curso. Seguí el material y avanzá a tu propio ritmo."}
                 </p>
 
                 {/* Grid 2 columnas — réplica exacta del HTML */}
@@ -358,12 +355,12 @@ const CoursePlayer = () => {
                   <div className="cp-ov-card">
                     <div className="cp-ov-card-hd">
                       <div className="cp-ov-icon blue">💡</div>
-                      <h4>What you'll learn</h4>
+                      <h4>Qué vas a aprender</h4>
                     </div>
                     <ul className="cp-ov-list">
                       {(currentLesson.learning_points?.length > 0
                         ? currentLesson.learning_points
-                        : ['The 8pt grid system explained', 'Setting up columns and gutters', 'Responsive grid behavior']
+                        : ['Conceptos fundamentales de la lección', 'Aplicación práctica paso a paso', 'Recursos y materiales de apoyo']
                       ).map((p, i) => (
                         <li key={i}>
                           <span className="cp-ov-check">✓</span>
@@ -377,12 +374,12 @@ const CoursePlayer = () => {
                   <div className="cp-ov-card">
                     <div className="cp-ov-card-hd">
                       <div className="cp-ov-icon purple">🎓</div>
-                      <h4>Prerequisites</h4>
+                      <h4>Requisitos previos</h4>
                     </div>
                     <ul className="cp-ov-list prereq">
                       {(currentLesson.prerequisites?.length > 0
                         ? currentLesson.prerequisites
-                        : ['Basic understanding of Figma', 'Completed "Layout Basics" module']
+                        : ['Haber visto las lecciones anteriores', 'Materiales del módulo actual completados']
                       ).map((p, i) => (
                         <li key={i}>
                           <span className="cp-ov-arrow">›</span>
@@ -398,7 +395,7 @@ const CoursePlayer = () => {
             {activeTab === 'resources' && (
               <div className="cp-resources">
                 {resources.length === 0
-                  ? <div className="cp-empty"><FiFolder style={{ width: 32, height: 32, opacity: 0.3 }} /><p>No hay materiales para esta lección.</p></div>
+                  ? <div className="cp-empty"><FiFolder style={{ width: 32, height: 32, opacity: 0.3 }} /><p>No hay recursos para esta lección.</p></div>
                   : resources.map(res => {
                       const { icon, cls, label } = getResourceIcon(res.file_type || res.type);
                       const downloadUrl = res.file_url || res.url || '#';
@@ -431,7 +428,7 @@ const CoursePlayer = () => {
             {activeTab === 'notes' && (
               <div className="cp-empty">
                 <FiEdit3 style={{ width: 32, height: 32, opacity: 0.3 }} />
-                <p>Las notas se guardan automáticamente mientras avanzas en el curso.</p>
+                <p>Tus notas se guardarán automáticamente a medida que avancés en el curso.</p>
               </div>
             )}
 
@@ -439,7 +436,7 @@ const CoursePlayer = () => {
             {activeTab === 'qa' && (
               <div className="cp-empty">
                 <FiMessageSquare style={{ width: 32, height: 32, opacity: 0.3 }} />
-                <p>Las preguntas y respuestas del instructor aparecerán aquí.</p>
+                <p>Las preguntas y respuestas con el instructor aparecerán aquí.</p>
               </div>
             )}
           </div>
@@ -451,8 +448,8 @@ const CoursePlayer = () => {
 
           {/* Sidebar header */}
           <div className="cp-sb-hd">
-            <h3 className="cp-sb-title">Course Content</h3>
-            <p className="cp-sb-meta">{modules.length} Chapters • {totalLessons} Lessons</p>
+            <h3 className="cp-sb-title">Contenido del curso</h3>
+            <p className="cp-sb-meta">{modules.length} Módulos • {totalLessons} Lecciones</p>
           </div>
 
           {/* Módulos (scrollable) */}
@@ -471,7 +468,7 @@ const CoursePlayer = () => {
                     onClick={() => !isModLocked && toggleModule(module.id)}
                   >
                     <div className="cp-mod-info">
-                      <span className="cp-mod-label">Module {idx + 1}</span>
+                      <span className="cp-mod-label">Módulo {idx + 1}</span>
                       <span className="cp-mod-name">{module.title}</span>
                     </div>
                     {/* expand_more / expand_less / lock */}
@@ -516,7 +513,7 @@ const CoursePlayer = () => {
                                 {lesson.title}
                               </span>
                               <span className="cp-l-dur">
-                                {lesson.duration_minutes || '—'}:00{isCurrent ? ' • Playing' : ''}
+                                {lesson.duration_minutes || '—'}:00{isCurrent ? ' • Reproduciendo' : ''}
                               </span>
                             </div>
                           </button>
@@ -529,13 +526,7 @@ const CoursePlayer = () => {
             })}
           </div>
 
-          {/* Sticky footer — Ask Instructor */}
-          <div className="cp-sb-footer">
-            <button className="cp-ask-btn">
-              <FiHelpCircle />
-              Ask Instructor
-            </button>
-          </div>
+
         </aside>
       </div>
 

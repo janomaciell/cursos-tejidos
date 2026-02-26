@@ -7,46 +7,38 @@
 
 /* ─── Tokens (espejo exacto de MyCourses) ───────────────────────────── */
 :root {
-  /* Paleta — azul del HTML de referencia */
-  --primary: #0d6cf2;
-  --primary-dark: #0b5bc9;
-  --primary-light: rgba(13, 108, 242, 0.08);
-  --primary-mid: rgba(13, 108, 242, 0.15);
-  --primary-shadow: 0 4px 12px rgba(13, 108, 242, 0.25);
-  --primary-shadow-h: 0 8px 24px rgba(13, 108, 242, 0.38);
+  /* Paleta — marca naranja/rojo */
+  --primary-color: #fc5c0d;
+  --primary-dark: #c2412d;
+  --primary-light: rgba(252, 92, 13, 0.08);
+  --primary-mid: rgba(252, 92, 13, 0.15);
+  --primary-shadow: 0 4px 12px rgba(252, 92, 13, 0.25);
+  --primary-shadow-h: 0 8px 24px rgba(252, 92, 13, 0.38);
 
   /* Estados */
-  --success: #22c55e;
-  --success-bg: #f0fdf4;
-  --success-border: #bbf7d0;
+  --success: #10b981;
+  --success-bg: #d1fae5;
+  --success-border: #6ee7b7;
 
   /* Superficies */
   --white: #ffffff;
-  --bg: #f5f7f8;
-  /* background-light del HTML */
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-sidebar: #f8fafc;
-  /* bg-slate-50 del aside */
-  --border: #e2e8f0;
-  /* border-slate-200 */
-  --border-subtle: #f1f5f9;
-  /* border-slate-100 */
+  --surface-sidebar: #f9fafb;
+  --border: #e5e7eb;
+  --border-subtle: #f3f4f6;
 
   /* Texto */
-  --text-1: #0f172a;
-  /* slate-900 */
-  --text-2: #475569;
-  /* slate-600 */
-  --text-3: #94a3b8;
-  /* slate-400 */
-  --text-sidebar: #334155;
-  /* slate-700 */
+  --text-1: #1f2937;
+  --text-2: #4b5563;
+  --text-3: #9ca3af;
+  --text-sidebar: #374151;
 
   /* Tipografía */
   --font-body: 'Inter', sans-serif;
   --font-display: 'Playfair Display', serif;
 
-  /* Layout — exacto al HTML: header 65px, sidebar 25% */
+  /* Layout */
   --header-h: 65px;
   --sidebar-w: 25%;
 
@@ -58,8 +50,8 @@
   --radius-pill: 9999px;
 
   /* Sombras */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 *,
@@ -129,8 +121,8 @@
 }
 
 .cp-back-btn:hover {
-  background: #f1f5f9;
-  color: var(--text-1);
+  background: var(--primary-light);
+  color: var(--primary-color);
 }
 
 .cp-back-btn svg {
@@ -198,11 +190,11 @@
   flex-shrink: 0;
 }
 
-/* h-2 w-full rounded-full bg-slate-200 overflow-hidden */
+/* h-2 w-full rounded-full bg-gray-200 overflow-hidden */
 .cp-track {
   flex: 1;
   height: 8px;
-  background: #e2e8f0;
+  background: #e5e7eb;
   border-radius: var(--radius-pill);
   overflow: hidden;
 }
@@ -210,7 +202,7 @@
 /* bg-primary */
 .cp-track-fill {
   height: 100%;
-  background: var(--primary);
+  background: var(--primary-color);
   border-radius: var(--radius-pill);
   transition: width 0.6s ease;
 }
@@ -219,8 +211,8 @@
 .cp-trophy-icon {
   width: 22px;
   height: 22px;
-  color: var(--primary);
-  fill: var(--primary);
+  color: var(--primary-color);
+  fill: var(--primary-color);
   /* filled trophy */
   flex-shrink: 0;
 }
@@ -253,8 +245,8 @@
 }
 
 .cp-dashboard-btn:hover {
-  background: #f1f5f9;
-  color: var(--text-1);
+  background: var(--primary-light);
+  color: var(--primary-color);
 }
 
 .cp-dashboard-btn svg {
@@ -292,24 +284,24 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #cbd5e1 center/cover no-repeat;
+  background: #d1d5db center/cover no-repeat;
   background-image: url('https://i.pravatar.cc/80?img=5');
   border: 2px solid transparent;
   transition: border-color 0.15s;
 }
 
 .cp-avatar-wrap:hover .cp-avatar {
-  border-color: var(--primary);
+  border-color: var(--primary-color);
 }
 
-/* Green status dot — bottom-0 right-0, size-3, bg-green-500, border-white */
+/* Punto de estado verde */
 .cp-avatar-dot {
   position: absolute;
   bottom: 0;
   right: 0;
   width: 11px;
   height: 11px;
-  background: #22c55e;
+  background: #10b981;
   border: 2px solid var(--surface);
   border-radius: 50%;
 }
@@ -420,7 +412,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: rgba(13, 108, 242, 0.9);
+  background: rgba(252, 92, 13, 0.9);
   border: none;
   color: #fff;
   display: flex;
@@ -430,7 +422,7 @@
   cursor: pointer;
   pointer-events: all;
   backdrop-filter: blur(4px);
-  box-shadow: 0 0 0 0 rgba(13, 108, 242, 0.4), 0 20px 40px rgba(13, 108, 242, 0.3);
+  box-shadow: 0 0 0 0 rgba(252, 92, 13, 0.4), 0 20px 40px rgba(252, 92, 13, 0.3);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -487,7 +479,7 @@
 
 .cp-scrubber-fill {
   height: 100%;
-  background: var(--primary);
+  background: var(--primary-color);
   border-radius: var(--radius-pill);
   position: relative;
 }
@@ -542,7 +534,7 @@
 }
 
 .cp-vbtn:hover {
-  color: var(--primary);
+  color: var(--primary-color);
 }
 
 /* Speed button — hover:bg-white/10 px-2 py-1 rounded text-sm font-medium */
@@ -628,7 +620,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.8rem 1.5rem;
-  background: var(--primary);
+  background: var(--primary-color);
   color: #fff;
   border: none;
   border-radius: var(--radius-xl);
@@ -701,8 +693,8 @@
 }
 
 .cp-tab.active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
 }
 
 .cp-tab svg {
@@ -710,9 +702,9 @@
   height: 18px;
 }
 
-/* Resources count badge — bg-slate-100 text-slate-600 rounded-full */
+/* Badge contador de recursos */
 .cp-tab-count {
-  background: #f1f5f9;
+  background: #f3f4f6;
   color: var(--text-2);
   font-size: 0.7rem;
   font-weight: 700;
@@ -722,7 +714,7 @@
 
 .cp-tab.active .cp-tab-count {
   background: var(--primary-light);
-  color: var(--primary);
+  color: var(--primary-color);
 }
 
 /* ── Prose (Overview tab) ── */
@@ -753,17 +745,18 @@
   margin: 2rem 0;
 }
 
-/* Cards — bg-slate-50 p-5 rounded-xl border border-slate-100 */
+/* Tarjetas de overview */
 .cp-ov-card {
-  background: #f8fafc;
+  background: #f9fafb;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   padding: 1.25rem;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .cp-ov-card:hover {
   box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
 }
 
 .cp-ov-card-hd {
@@ -786,11 +779,11 @@
 }
 
 .cp-ov-icon.blue {
-  background: #dbeafe;
+  background: rgba(252, 92, 13, 0.10);
 }
 
 .cp-ov-icon.purple {
-  background: #ede9fe;
+  background: rgba(194, 65, 45, 0.10);
 }
 
 .cp-ov-card-hd h4 {
@@ -816,9 +809,9 @@
   line-height: 1.5;
 }
 
-/* check icon — text-green-500 text-[18px] mt-0.5 */
+/* Ícono check — verde de marca */
 .cp-ov-check {
-  color: #22c55e;
+  color: #10b981;
   font-size: 0.85rem;
   font-weight: 700;
   flex-shrink: 0;
@@ -851,11 +844,11 @@
 }
 
 .cp-res-row:hover {
-  background: #f8fafc;
+  background: #f9fafb;
 }
 
 .cp-res-row:hover .cp-res-dl {
-  color: var(--primary);
+  color: var(--primary-color);
 }
 
 .cp-res-icon {
@@ -1021,13 +1014,13 @@
 }
 
 .cp-mod-btn:hover:not(.active) {
-  background: #f8fafc;
+  background: #f9fafb;
 }
 
-/* Module activo — bg-slate-100 border-l-4 border-primary */
+/* Módulo activo */
 .cp-mod-btn.active {
-  background: #f1f5f9;
-  border-left-color: var(--primary);
+  background: rgba(252, 92, 13, 0.05);
+  border-left-color: var(--primary-color);
 }
 
 .cp-mod-info {
@@ -1050,7 +1043,7 @@
 
 /* Active module label — text-primary */
 .cp-mod-btn.active .cp-mod-label {
-  color: var(--primary);
+  color: var(--primary-color);
 }
 
 /* Module title — font-bold text-slate-700 group-hover:text-primary */
@@ -1066,7 +1059,7 @@
 }
 
 .cp-mod-btn:not(.active):hover .cp-mod-name {
-  color: var(--primary);
+  color: var(--primary-color);
 }
 
 .cp-mod-btn.active .cp-mod-name {
@@ -1088,7 +1081,7 @@
 /* ── Lessons (expanded) ──
    bg-slate-50                                               */
 .cp-lessons {
-  background: #f8fafc;
+  background: #f9fafb;
 }
 
 /* Lesson row —
@@ -1116,9 +1109,8 @@
 }
 
 .cp-lesson-row.current {
-  background: #eff6ff;
-  /* bg-blue-50 */
-  border-left-color: var(--primary);
+  background: rgba(252, 92, 13, 0.06);
+  border-left-color: var(--primary-color);
 }
 
 .cp-lesson-row.locked {
@@ -1137,7 +1129,7 @@
   justify-content: center;
 }
 
-/* check_circle filled green */
+/* Lección completada */
 .cp-s-done {
   display: flex;
   align-items: center;
@@ -1145,7 +1137,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #22c55e;
+  background: #10b981;
   color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
@@ -1159,7 +1151,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--primary);
+  background: var(--primary-color);
   color: #fff;
   font-size: 0.6rem;
   animation: pulse-play 2s ease-in-out infinite;
@@ -1211,7 +1203,7 @@
 
 /* Hover: group-hover:text-primary */
 .cp-lesson-row:not(.current):not(.locked):hover .cp-l-name {
-  color: var(--primary);
+  color: var(--primary-color);
 }
 
 /* Completada — line-through decoration-slate-400/50 */
@@ -1224,7 +1216,7 @@
 /* Activa — font-bold text-primary */
 .cp-l-name.current {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary-color);
 }
 
 /* Duración — text-xs text-slate-400 / text-primary/70 */
@@ -1234,8 +1226,7 @@
 }
 
 .cp-lesson-row.current .cp-l-dur {
-  color: rgba(13, 108, 242, 0.7);
-  /* text-primary/70 */
+  color: rgba(252, 92, 13, 0.7);
 }
 
 /* ── Sidebar footer — sticky bottom ── */
@@ -1274,8 +1265,8 @@
 }
 
 .cp-ask-btn:hover {
-  background: #f8fafc;
-  color: var(--text-1);
+  background: var(--primary-light);
+  color: var(--primary-color);
 }
 
 .cp-ask-btn svg {
@@ -1317,7 +1308,7 @@
 
 .error-btn {
   padding: 0.75rem 2rem;
-  background: var(--primary);
+  background: var(--primary-color);
   color: #fff;
   border: none;
   border-radius: var(--radius-pill);
@@ -1392,7 +1383,8 @@
     padding: 0 1rem;
   }
 
-  .cp-dashboard-btn span {
+  /* En mobile el botón ← ya lleva a mis-cursos, ocultamos el de Panel */
+  .cp-dashboard-btn {
     display: none;
   }
 
@@ -1438,6 +1430,6 @@
 }
 
 button:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
