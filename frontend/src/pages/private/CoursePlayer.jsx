@@ -12,9 +12,6 @@ import {
   FiAward,
   FiDownload,
   FiFolder,
-  FiMessageSquare,
-  FiHelpCircle,
-  FiEdit3,
   FiLayers,
   FiInfo,
   FiMenu,
@@ -42,8 +39,6 @@ const getResourceIcon = (type) => {
 const TABS = [
   { id: 'overview',  label: 'Descripción',  icon: FiInfo },
   { id: 'resources', label: 'Recursos',     icon: FiFolder },
-  { id: 'notes',     label: 'Notas',        icon: FiEdit3 },
-  { id: 'qa',        label: 'Preguntas',    icon: FiMessageSquare },
 ];
 
 /* ─── Componente ───────────────────────────────────────────────────── */
@@ -424,21 +419,6 @@ const CoursePlayer = () => {
               </div>
             )}
 
-            {/* ─ Tab Notes ─ */}
-            {activeTab === 'notes' && (
-              <div className="cp-empty">
-                <FiEdit3 style={{ width: 32, height: 32, opacity: 0.3 }} />
-                <p>Tus notas se guardarán automáticamente a medida que avancés en el curso.</p>
-              </div>
-            )}
-
-            {/* ─ Tab Q&A ─ */}
-            {activeTab === 'qa' && (
-              <div className="cp-empty">
-                <FiMessageSquare style={{ width: 32, height: 32, opacity: 0.3 }} />
-                <p>Las preguntas y respuestas con el instructor aparecerán aquí.</p>
-              </div>
-            )}
           </div>
         </main>
 
