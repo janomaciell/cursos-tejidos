@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.conf import settings
 from .models import Course, Module, Lesson, LessonProgress
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -49,9 +50,18 @@ class CourseListSerializer(serializers.ModelSerializer):
         """URL absoluta de la imagen para que funcione con ngrok y distintos orígenes."""
         if not obj.cover_image:
             return None
+        
+        # Usar BACKEND_URL si está configurado (para ngrok/producción)
+        if hasattr(settings, 'BACKEND_URL') and settings.BACKEND_URL:
+            base_url = settings.BACKEND_URL.rstrip('/')
+            return f"{base_url}{obj.cover_image.url}"
+        
+        # Fallback: usar request.build_absolute_uri si hay request
         request = self.context.get('request')
         if request:
             return request.build_absolute_uri(obj.cover_image.url)
+        
+        # Último fallback: URL relativa
         return obj.cover_image.url
 
 
@@ -72,9 +82,18 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         """URL absoluta de la imagen para que funcione con ngrok y distintos orígenes."""
         if not obj.cover_image:
             return None
+        
+        # Usar BACKEND_URL si está configurado (para ngrok/producción)
+        if hasattr(settings, 'BACKEND_URL') and settings.BACKEND_URL:
+            base_url = settings.BACKEND_URL.rstrip('/')
+            return f"{base_url}{obj.cover_image.url}"
+        
+        # Fallback: usar request.build_absolute_uri si hay request
         request = self.context.get('request')
         if request:
             return request.build_absolute_uri(obj.cover_image.url)
+        
+        # Último fallback: URL relativa
         return obj.cover_image.url
 
     def get_has_access(self, obj):

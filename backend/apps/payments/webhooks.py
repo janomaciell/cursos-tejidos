@@ -79,13 +79,16 @@ def mercadopago_webhook(request):
             )
 
         # ------------------------------------------------------------------
-        # Buscar/crear la transacción correcta
+        # Buscar/crear la transacción correcta (idempotente: MP puede enviar el webhook 2+ veces)
         # ------------------------------------------------------------------
         pref_id = payment_info.get("preference_id") or ""
         transaction = None
 
-        # 1) Intentar por preference_id + usuario + curso (flujo normal)
-        if pref_id:
+        # 0) Si ya existe una transacción con este payment_id, usarla (evita UNIQUE constraint)
+        transaction = Transaction.objects.filter(mp_payment_id=str(payment_id)).first()
+
+        # 1) Si no, intentar por preference_id + usuario + curso (flujo normal)
+        if not transaction and pref_id:
             transaction = (
                 Transaction.objects.filter(
                     mp_preference_id=pref_id,

@@ -1,10 +1,14 @@
 import logging
+from django.conf import settings
+from django.db import models
 from rest_framework import status, generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 from .serializers import (
     UserRegistrationSerializer, 
     UserLoginSerializer, 
@@ -58,6 +62,72 @@ def login(request):
         }, status=status.HTTP_200_OK)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def google_auth(request):
+    """Inicio de sesión o registro con Google (id_token)."""
+    credential = request.data.get('credential')
+    if not credential:
+        return Response(
+            {'message': 'Falta el token de Google.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    client_id = getattr(settings, 'GOOGLE_CLIENT_ID', '').strip()
+    if not client_id:
+        logging.getLogger(__name__).error('GOOGLE_CLIENT_ID no configurado')
+        return Response(
+            {'message': 'Login con Google no configurado.'},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
+        )
+    try:
+        idinfo = id_token.verify_oauth2_token(
+            credential,
+            google_requests.Request(),
+            client_id
+        )
+        if idinfo['iss'] not in ('accounts.google.com', 'https://accounts.google.com'):
+            return Response(
+                {'message': 'Token de Google inválido.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        email = idinfo.get('email')
+        if not email:
+            return Response(
+                {'message': 'Google no proporcionó email.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        name = idinfo.get('name') or ''
+        parts = name.strip().split(None, 1)
+        first_name = parts[0] if parts else ''
+        last_name = parts[1] if len(parts) > 1 else ''
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                'first_name': first_name or email.split('@')[0],
+                'last_name': last_name,
+                'is_active': True,
+            }
+        )
+        if created:
+            user.set_unusable_password()
+            user.save()
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'message': 'Login con Google exitoso',
+            'user': UserSerializer(user).data,
+            'tokens': {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }
+        }, status=status.HTTP_200_OK)
+    except ValueError as e:
+        logging.getLogger(__name__).warning('Google token verification failed: %s', e)
+        return Response(
+            {'message': 'Token de Google inválido o expirado.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['POST'])

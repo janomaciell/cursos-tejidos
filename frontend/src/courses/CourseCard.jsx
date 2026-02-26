@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FiClock, FiUsers, FiBook } from 'react-icons/fi';
 import Card from '../components/common/Card';
+import NgrokImage from '../components/common/NgrokImage';
 import './CourseCard.css';
 
 const CourseCard = ({ course }) => {
@@ -33,7 +34,10 @@ const CourseCard = ({ course }) => {
     <Card hover className="course-card">
       <Link to={`/cursos/${course.slug}`} className="course-card-link">
         <div className="course-image">
-          <img src={course.cover_image} alt={course.title} />
+          <NgrokImage 
+            src={course.cover_image}
+            alt={course.title}
+          />
           {course.is_featured && (
             <span className="featured-badge">Destacado</span>
           )}

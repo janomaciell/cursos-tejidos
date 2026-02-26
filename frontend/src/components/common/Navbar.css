@@ -35,9 +35,11 @@
   transform: translateY(-1px);
 }
 
-.logo-icon {
-  font-size: 1.8rem;
-  color: #fc5c0d;
+.navbar-logo-img {
+  height: 44px;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
 /* Botón hamburguesa: oculto en desktop */
@@ -287,7 +289,7 @@
     justify-content: center;
   }
 
-  .navbar-logo span {
-    font-size: 1.15rem;
+  .navbar-logo-img {
+    height: 38px;
   }
 }

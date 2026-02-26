@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { FiCheck, FiX, FiClock } from 'react-icons/fi';
+import { FiCheck, FiX, FiClock, FiAlertCircle, FiArrowRight } from 'react-icons/fi';
 import { coursesAPI } from '../../api/courses';
 import { usePayment } from '../../hooks/usePayment';
 import { useAuth } from '../../hooks/useAuth';
 import CourseDetail from '../../courses/CourseDetail';
 import Loader from '../../components/common/Loader';
+import gsap from 'gsap';
 import './CourseDetailPublic.css';
 
 const CourseDetailPublic = () => {
@@ -19,6 +20,7 @@ const CourseDetailPublic = () => {
   const [hasAccess, setHasAccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [paymentResult, setPaymentResult] = useState(null);
+  const bannerRef = useRef(null);
 
   useEffect(() => {
     loadCourseDetail();
@@ -29,6 +31,26 @@ const CourseDetailPublic = () => {
       cancelPolling();
     };
   }, [slug]);
+
+  useEffect(() => {
+    // Animar banner de resultado de pago
+    if (paymentResult && bannerRef.current) {
+      gsap.fromTo(bannerRef.current,
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.4)' }
+      );
+    }
+  }, [paymentResult]);
+
+  useEffect(() => {
+    // Animar entrada del contenido
+    if (!loading && course) {
+      gsap.fromTo('.course-detail-page',
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5, ease: 'power2.out' }
+      );
+    }
+  }, [loading, course]);
 
   const loadCourseDetail = async () => {
     try {
@@ -81,7 +103,8 @@ const CourseDetailPublic = () => {
         setHasAccess(true);
         setPaymentResult({ 
           status: 'approved',
-          message: '¡Pago aprobado! Ya tienes acceso al curso.' 
+          message: '¡Pago aprobado! Ya tienes acceso al curso.',
+          title: '¡Felicitaciones!'
         });
         
         // Recargar para mostrar el contenido del curso
@@ -89,16 +112,22 @@ const CourseDetailPublic = () => {
       } else if (result.status === 'rejected') {
         setPaymentResult({ 
           status: 'rejected',
-          message: 'El pago fue rechazado. Por favor intenta con otro medio de pago.' 
+          message: 'El pago fue rechazado. Por favor intenta con otro medio de pago.',
+          title: 'Pago Rechazado'
         });
       } else if (result.status === 'timeout') {
         setPaymentResult({ 
           status: 'pending',
-          message: 'No pudimos verificar el pago automáticamente. Por favor revisa tu email o sección "Mis Cursos".' 
+          message: 'No pudimos verificar el pago automáticamente. Por favor revisa tu email o la sección "Mis Cursos".',
+          title: 'Pago Pendiente'
         });
       }
     } else {
-      alert(`Error: ${result.error}`);
+      setPaymentResult({
+        status: 'error',
+        message: result.error || 'Ocurrió un error al procesar el pago. Por favor intenta nuevamente.',
+        title: 'Error en el Pago'
+      });
     }
 
     /* Opción 2: Redirigir en la misma ventana (comentado)
@@ -108,9 +137,67 @@ const CourseDetailPublic = () => {
   };
 
   const handleDismissPaymentResult = () => {
-    setPaymentResult(null);
-    // Limpiar parámetros de URL
-    navigate(`/cursos/${slug}`, { replace: true });
+    // Animar salida del banner
+    gsap.to(bannerRef.current, {
+      y: -100,
+      opacity: 0,
+      duration: 0.4,
+      ease: 'power2.in',
+      onComplete: () => {
+        setPaymentResult(null);
+        // Limpiar parámetros de URL
+        navigate(`/cursos/${slug}`, { replace: true });
+      }
+    });
+  };
+
+  const getPaymentIcon = (status) => {
+    switch (status) {
+      case 'approved':
+        return <FiCheck />;
+      case 'rejected':
+      case 'error':
+        return <FiX />;
+      case 'pending':
+        return <FiClock />;
+      default:
+        return <FiAlertCircle />;
+    }
+  };
+
+  const getPaymentAction = (status) => {
+    switch (status) {
+      case 'approved':
+        return {
+          text: 'Ver Contenido',
+          onClick: () => {
+            handleDismissPaymentResult();
+            // Scroll al contenido del curso
+            const contentSection = document.querySelector('.course-content-section');
+            if (contentSection) {
+              contentSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        };
+      case 'rejected':
+      case 'error':
+        return {
+          text: 'Intentar Nuevamente',
+          onClick: () => {
+            handleDismissPaymentResult();
+            handlePurchase();
+          }
+        };
+      case 'pending':
+        return {
+          text: 'Ir a Mis Cursos',
+          onClick: () => {
+            navigate('/mis-cursos');
+          }
+        };
+      default:
+        return null;
+    }
   };
 
   if (loading) {
@@ -119,59 +206,72 @@ const CourseDetailPublic = () => {
 
   if (!course) {
     return (
-      <div className="course-not-found">
-        <h2>Curso no encontrado</h2>
-        <p>El curso que buscas no existe o ha sido eliminado.</p>
+      <div className="course-detail-page">
+        <div className="course-not-found">
+          <div className="not-found-icon">
+            <FiAlertCircle />
+          </div>
+          <h2>Curso no encontrado</h2>
+          <p>El curso que buscas no existe o ha sido eliminado.</p>
+          <button 
+            className="back-to-catalog-btn"
+            onClick={() => navigate('/cursos')}
+          >
+            <FiArrowRight style={{ transform: 'rotate(180deg)' }} />
+            Volver al Catálogo
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="course-detail-page">
-      {/* Mostrar resultado del pago si existe */}
+      {/* Banner de resultado del pago */}
       {paymentResult && (
-        <div className={`payment-result-banner ${paymentResult.status}`}>
-          <div className="payment-result-content">
-            {paymentResult.status === 'approved' && (
-              <>
-                <span className="icon"><FiCheck /></span>
-                <div className="message">
-                  <strong>¡Pago Aprobado!</strong>
-                  <p>{paymentResult.message}</p>
-                </div>
-              </>
-            )}
-            
-            {paymentResult.status === 'rejected' && (
-              <>
-                <span className="icon"><FiX /></span>
-                <div className="message">
-                  <strong>Pago Rechazado</strong>
-                  <p>{paymentResult.message}</p>
-                </div>
-              </>
-            )}
-            
-            {paymentResult.status === 'pending' && (
-              <>
-                <span className="icon"><FiClock /></span>
-                <div className="message">
-                  <strong>Pago Pendiente</strong>
-                  <p>{paymentResult.message}</p>
-                </div>
-              </>
-            )}
-            
-            <button 
-              className="dismiss-btn"
-              onClick={handleDismissPaymentResult}
-            >
-              <FiX />
-            </button>
+        <div 
+          ref={bannerRef}
+          className={`payment-result-banner ${paymentResult.status}`}
+        >
+          <div className="payment-banner-container">
+            <div className="payment-result-content">
+              <div className="payment-icon-wrapper">
+                <span className="payment-icon">
+                  {getPaymentIcon(paymentResult.status)}
+                </span>
+                <span className="icon-pulse"></span>
+              </div>
+              
+              <div className="payment-message">
+                <h3 className="payment-title">{paymentResult.title}</h3>
+                <p className="payment-description">{paymentResult.message}</p>
+              </div>
+
+              <div className="payment-actions">
+                {getPaymentAction(paymentResult.status) && (
+                  <button
+                    className="payment-action-btn"
+                    onClick={getPaymentAction(paymentResult.status).onClick}
+                  >
+                    {getPaymentAction(paymentResult.status).text}
+                    <FiArrowRight />
+                  </button>
+                )}
+              </div>
+              
+              <button 
+                className="dismiss-btn"
+                onClick={handleDismissPaymentResult}
+                aria-label="Cerrar notificación"
+              >
+                <FiX />
+              </button>
+            </div>
           </div>
         </div>
       )}
 
+      {/* Contenido del curso */}
       <CourseDetail
         course={course}
         hasAccess={hasAccess}

@@ -10,13 +10,14 @@ from apps.payments.models import CourseAccess
 from .models import VideoToken
 from .cloudflare import CloudflareStreamService
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_video_token(request, lesson_id):
     """Generar token de acceso para un video"""
     lesson = get_object_or_404(Lesson, id=lesson_id)
     user = request.user
-    
+
     # Verificar si es preview o tiene acceso
     if not lesson.is_preview:
         has_access = CourseAccess.objects.filter(
@@ -24,32 +25,35 @@ def get_video_token(request, lesson_id):
             course=lesson.module.course,
             is_active=True
         ).exists()
-        
+
         if not has_access:
             return Response(
                 {'error': 'No tienes acceso a este video'},
                 status=status.HTTP_403_FORBIDDEN
             )
-    
+
     try:
-        # Generar token con Cloudflare
         cf_service = CloudflareStreamService()
-        video_url = cf_service.get_video_url(lesson.video_id, signed=True)
-        
-        # Guardar token en BD para referencia
+        video_url = cf_service.get_video_url(lesson.video_id)
+        embed_url = cf_service.get_embed_url(lesson.video_id)
+
         expires_at = timezone.now() + timedelta(hours=2)
-        video_token = VideoToken.objects.create(
+
+        # Guardar token en BD (solo si hay token en la URL)
+        token_value = video_url.split('token=')[-1] if 'token=' in video_url else lesson.video_id
+        VideoToken.objects.create(
             lesson=lesson,
-            token=video_url.split('token=')[-1] if 'token=' in video_url else '',
+            token=token_value,
             expires_at=expires_at
         )
-        
+
         return Response({
-            'video_url': video_url,
+            'video_id': lesson.video_id,
+            'embed_url': embed_url,
             'expires_at': expires_at,
             'lesson_title': lesson.title
         })
-    
+
     except Exception as e:
         return Response(
             {'error': f'Error al generar token: {str(e)}'},
@@ -63,25 +67,24 @@ def get_video_info(request, lesson_id):
     """Obtener información del video"""
     lesson = get_object_or_404(Lesson, id=lesson_id)
     user = request.user
-    
-    # Verificar acceso
+
     if not lesson.is_preview:
         has_access = CourseAccess.objects.filter(
             user=user,
             course=lesson.module.course,
             is_active=True
         ).exists()
-        
+
         if not has_access:
             return Response(
                 {'error': 'No tienes acceso a este video'},
                 status=status.HTTP_403_FORBIDDEN
             )
-    
+
     try:
         cf_service = CloudflareStreamService()
         video_info = cf_service.get_video_info(lesson.video_id)
-        
+
         return Response({
             'video_id': lesson.video_id,
             'title': lesson.title,
@@ -89,7 +92,7 @@ def get_video_info(request, lesson_id):
             'thumbnail': video_info.get('thumbnail', ''),
             'status': video_info.get('status', {}).get('state', 'unknown')
         })
-    
+
     except Exception as e:
         return Response(
             {'error': f'Error al obtener info del video: {str(e)}'},

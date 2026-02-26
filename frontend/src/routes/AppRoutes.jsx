@@ -9,6 +9,7 @@ import CourseDetailPublic from '../pages/public/CourseDetailPublic';
 import Login from '../pages/public/Login';
 import Register from '../pages/public/Register';
 import PaymentResult from '../pages/public/PaymentResult';
+import ComoFunciona from '../pages/public/ComoFunciona';
 
 // Private Pages
 import Dashboard from '../pages/private/Dashboard';
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/cursos" element={<CourseCatalog />} />
       <Route path="/cursos/:slug" element={<CourseDetailPublic />} />
+      <Route path="/como-funciona" element={<ComoFunciona />} />
       
       <Route 
         path="/login" 

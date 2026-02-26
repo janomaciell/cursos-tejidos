@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { FiUser, FiLogOut, FiBookOpen, FiMenu, FiX } from 'react-icons/fi';
+import { FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -29,8 +29,7 @@ const Navbar = () => {
       )}
       <div className="navbar-container">
         <Link to="/" className="navbar-logo" onClick={closeMenu}>
-          <FiBookOpen className="logo-icon" />
-          <span>Tejiendo con Andy</span>
+          <img src="/img/logoheader.png" alt="Tejiendo con Andy" className="navbar-logo-img" />
         </Link>
 
         <button

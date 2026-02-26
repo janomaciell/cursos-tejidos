@@ -1,29 +1,43 @@
 .video-player {
-    width: 100%;
-    background: #000;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .video-element {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
-  .video-player-loading,
-  .video-player-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    background: #1f2937;
-    color: white;
-    border-radius: 12px;
-  }
-  
-  .video-player-error p {
-    color: #ef4444;
-    font-size: 1.125rem;
-  }
+  width: 100%;
+  background: #000;
+  border-radius: 12px;
+  overflow: visible; /* allow control overlays to be visible */
+}
+
+.video-element {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: 100%;
+  display: block;
+  border: 0;
+  object-fit: contain; /* ensure video content fits without zoom */
+}
+
+/* El componente Stream de Cloudflare renderiza un iframe interno */
+.video-player iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+.video-player-loading,
+.video-player-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: #1f2937;
+  color: white;
+  border-radius: 12px;
+  gap: 1rem;
+}
+
+.video-player-error p {
+  color: #ef4444;
+  font-size: 1.1rem;
+  font-weight: 500;
+}

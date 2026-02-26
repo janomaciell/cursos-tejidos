@@ -1,28 +1,60 @@
-/* Importar tipografías */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+/* Importar tipografías mejoradas - más legibles para personas mayores */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-/* Variables */
+/* Variables mejoradas */
 :root {
+  /* Primarios */
   --primary-color: #fc5c0d;
   --accent-color: #fe6308;
   --secondary-color: #c2412d;
-  --background-soft: #e4c4b5;
-  --text-primary: #fc5c0d;
+  --tertiary-color: #ff8a4c;
+  
+  /* Fondos y neutros */
   --white: #ffffff;
+  --background-soft: #e4c4b5;
+  --cream-light: #fff5f0;
+  --cream: #ffeee5;
+  --cream-warm: #f5e6dc;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e5e5e5;
+  
+  /* Texto - mejorado para legibilidad */
   --text-dark: #2d2d2d;
-  --font-display: 'Cormorant Garamond', serif;
-  --font-body: 'Montserrat', sans-serif;
+  --text-ink: #1a1a1a;
+  --text-medium: #4a4a4a;
+  --text-light: #6b6b6b;
+  --text-on-accent: #ffffff;
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.2);
+  
+  /* Fuentes - más legibles */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
   --font-urbanist: 'Urbanist', sans-serif;
   
-  /* Urbanist section variables */
-  --urbanist-main-bg: #b9dcff;
-  --urbanist-sub-bg: #f2fbfe;
-  --urbanist-text: #070f36;
-  --urbanist-title: #8dc9f4;
+  /* Urbanist section */
+  --urbanist-main-bg: #fff58c;
+  --urbanist-sub-bg: #fbf1ed;
+  --urbanist-text: #9c4e23;
+  --urbanist-title: #9c4e23;
+  
+  /* Espaciado */
+  --section-padding: 8rem 5%;
 }
 
 /* Reset y base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .home-page {
   min-height: 100vh;
   background: var(--white);
@@ -32,12 +64,33 @@
   line-height: 1.6;
 }
 
-/* Secciones con reveal: estado inicial para GSAP */
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Secciones animadas - no recortar */
+.mission-section,
+.experience-section,
+.courses-grid-section,
+.how-it-works-section,
+.benefits-section,
+.testimonials-section,
+.cta-final-section,
+.video-intro-section,
+.credentials-section,
+.guarantee-section {
+  overflow: visible;
+}
+
 .home-reveal {
   will-change: opacity, transform;
 }
 
-/* Hero Section with Thread Animation */
+/* ===================================
+   HERO SECTION
+   =================================== */
+
 .hero-section {
   min-height: 100vh;
   display: flex;
@@ -52,17 +105,15 @@
   overflow: hidden;
 }
 
-/* Overlay oscuro para legibilidad del texto sobre la imagen naranja */
 .hero-section::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
   z-index: 0;
   pointer-events: none;
 }
 
-/* Canvas for thread animation */
 #threadCanvas {
   position: absolute;
   top: 0;
@@ -82,36 +133,36 @@
 }
 
 .hero-subtitle {
-  font-family: var(--font-urbanist);
-  font-size: 1.15rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 1rem;
-  letter-spacing: 3px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .hero-title {
-  font-family: var(--font-urbanist);
-  font-size: clamp(2.8rem, 7vw, 6rem);
-  font-weight: 700;
-  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  color: var(--white);
   margin-bottom: 2rem;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .hero-description {
-  font-family: var(--font-urbanist);
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 700px;
-  margin: 0 auto 3rem;
-  line-height: 1.75;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.35);
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 800px;
+  margin: 0 auto 3.5rem;
+  line-height: 1.8;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .hero-buttons {
@@ -119,12 +170,13 @@
   gap: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .btn-primary,
 .btn-secondary {
   padding: 1.2rem 3rem;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   border-radius: 50px;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -132,63 +184,96 @@
   cursor: pointer;
   font-family: var(--font-body);
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-/* Botones en hero: contraste sobre fondo oscuro */
 .hero-section .btn-primary {
-  background: var(--primary-color);
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), 0 10px 30px rgba(252, 92, 13, 0.35);
+  background: var(--white);
+  color: var(--primary-color);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .hero-section .btn-primary:hover {
-  background: var(--secondary-color);
+  background: var(--text-ink);
+  color: var(--white);
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 15px 40px rgba(252, 92, 13, 0.4);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 
-.hero-section .btn-secondary {
+.btn-play-video {
   background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  color: var(--white);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  padding: 1.2rem 2.5rem;
+  font-size: 1.05rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  text-decoration: none;
 }
 
-.hero-section .btn-secondary:hover {
+.btn-play-video:hover {
   background: rgba(255, 255, 255, 0.95);
   color: var(--primary-color);
-  border-color: #ffffff;
+  border-color: var(--white);
   transform: translateY(-3px);
 }
 
-/* Estilos base de botones (resto de la página) */
-.btn-primary {
-  background: var(--primary-color);
-  color: var(--white);
-  box-shadow: 0 10px 30px rgba(252, 92, 13, 0.3);
+.btn-play-video svg {
+  width: 20px;
+  height: 20px;
 }
 
-.btn-primary:hover {
-  background: var(--secondary-color);
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(252, 92, 13, 0.4);
+/* ===================================
+   TRUST BANNER
+   =================================== */
+
+.trust-banner {
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 2rem 5%;
 }
 
-.btn-secondary {
-  background: transparent;
+.trust-items {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.trust-item svg {
+  width: 24px;
+  height: 24px;
   color: var(--primary-color);
-  border: 2px solid var(--primary-color);
 }
 
-.btn-secondary:hover {
-  background: var(--primary-color);
-  color: var(--white);
-  transform: translateY(-3px);
-}
+/* ===================================
+   MISSION SECTION
+   =================================== */
 
-/* Mission Section */
 .mission-section {
-  padding: 8rem 5%;
+  padding: var(--section-padding);
   background: var(--white);
 }
 
@@ -198,28 +283,28 @@
 }
 
 .mission-content h2 {
-  font-family: var(--font-urbanist);
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 2rem;
+  color: var(--text-ink);
+  margin-bottom: 2.5rem;
   line-height: 1.2;
   text-align: center;
   letter-spacing: -0.02em;
 }
 
 .mission-content h2 .highlight {
-  color: var(--secondary-color);
+  color: var(--primary-color);
   font-style: italic;
 }
 
 .mission-content p {
-  font-family: var(--font-urbanist);
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--text-dark);
-  margin-bottom: 1.5rem;
-  line-height: 1.8;
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-medium);
+  margin-bottom: 2rem;
+  line-height: 1.9;
   text-align: center;
   max-width: 900px;
   margin-left: auto;
@@ -229,70 +314,288 @@
 .mission-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  margin-top: 4rem;
-  max-width: 1000px;
+  gap: 2.5rem;
+  margin-top: 5rem;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .stat-item {
   text-align: center;
-  padding: 2rem;
-  background: linear-gradient(135deg, #fff5f0 0%, var(--background-soft) 100%);
-  border-radius: 25px;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+  border-radius: 20px;
+  border: 2px solid var(--gray-100);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
 }
 
 .stat-item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(252, 92, 13, 0.12);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.stat-item:hover::before {
+  transform: scaleX(1);
 }
 
 .stat-number {
-  font-family: var(--font-urbanist);
-  font-size: 3.2rem;
+  font-family: var(--font-display);
+  font-size: 3.5rem;
   font-weight: 700;
   color: var(--primary-color);
   display: block;
   margin-bottom: 0.5rem;
+  line-height: 1;
 }
 
 .stat-label {
-  font-family: var(--font-urbanist);
-  font-size: 1rem;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
   font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: 0.5px;
+}
+
+/* ===================================
+   VIDEO INTRO SECTION
+   =================================== */
+
+.video-intro-section {
+  padding: var(--section-padding);
+  background: linear-gradient(135deg, var(--cream-light) 0%, var(--white) 100%);
+}
+
+.video-intro-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.video-content h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  color: var(--text-ink);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.video-intro-text {
+  font-size: 1.15rem;
+  color: var(--text-medium);
+  line-height: 1.9;
+  margin-bottom: 2.5rem;
+}
+
+.video-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.highlight-point {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.05rem;
+  font-weight: 500;
   color: var(--text-dark);
 }
 
-/* Experience Section */
-.experience-section {
-  padding: 8rem 5%;
-  background: linear-gradient(135deg, var(--background-soft) 0%, #f5e6dc 100%);
+.highlight-point svg {
+  width: 24px;
+  height: 24px;
+  color: var(--primary-color);
+  flex-shrink: 0;
 }
 
-.section-title {
-  font-family: var(--font-urbanist);
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
-  font-weight: 700;
+.video-player-wrapper {
+  position: relative;
+}
+
+.video-placeholder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.video-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-button-home-public {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background: var(--white);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.play-button-home-public:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: var(--primary-color);
+}
+
+.play-button-home-public svg {
+  width: 32px;
+  height: 32px;
   color: var(--primary-color);
+  margin-left: 4px;
+}
+
+.play-button-home-public:hover svg {
+  color: var(--white);
+}
+
+/* ===================================
+   CREDENTIALS SECTION
+   =================================== */
+
+.credentials-section {
+  padding: 4rem 5%;
+  background: var(--primary-color);
+}
+
+.credentials-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+}
+
+.credential-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.credential-item:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-5px);
+}
+
+.credential-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--white);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.credential-icon svg {
+  width: 30px;
+  height: 30px;
+  color: var(--primary-color);
+}
+
+.credential-text h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.25rem;
+  line-height: 1;
+}
+
+.credential-text p {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ===================================
+   EXPERIENCE SECTION
+   =================================== */
+
+.experience-section {
+  padding: var(--section-padding);
+  background: var(--white);
+}
+
+.section-title-how-it-works-public {
+  font-family: var(--font-urbanist);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  color: var(--text-ink);
   text-align: center;
   margin-bottom: 1rem;
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
-.section-subtitle {
-  font-family: var(--font-urbanist);
+.section-title-cursos,
+.section-title-testimonials-public,
+.section-title-benefits-public {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  color: var(--text-ink);
   text-align: center;
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--secondary-color);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle,
+.section-subtitle-testimonials-public,
+.section-subtitle-benefits-public {
+  
+  font-family: var(--font-body);
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-medium);
   margin-bottom: 4rem;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .experience-grid {
@@ -300,16 +603,16 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
+  gap: 2.5rem;
 }
 
 .experience-card {
-  background: var(--white);
-  padding: 3rem;
-  border-radius: 25px;
+  background: var(--gray-50);
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
   transition: all 0.4s ease;
   position: relative;
-  overflow: hidden;
+  border: 2px solid transparent;
 }
 
 .experience-card::before {
@@ -318,53 +621,429 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 5px;
+  height: 4px;
   background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
+  border-radius: 20px 20px 0 0;
+}
+
+.experience-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
 }
 
 .experience-card:hover::before {
   transform: scaleX(1);
 }
 
-.experience-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 60px rgba(252, 92, 13, 0.2);
-}
-
 .experience-icon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1.5rem;
 }
+
 .experience-icon svg {
-  width: 1em;
-  height: 1em;
+  width: 32px;
+  height: 32px;
+  color: var(--white);
 }
 
 .experience-card h3 {
-  font-family: var(--font-urbanist);
-  font-size: 1.6rem;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: var(--text-ink);
   margin-bottom: 1rem;
 }
 
 .experience-card p {
-  font-family: var(--font-urbanist);
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-dark);
-  line-height: 1.7;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-medium);
+  line-height: 1.8;
 }
 
-/* ============================================= */
-/* URBANIST SECTION - Horizontal Scroll Encapsulado */
-/* ============================================= */
+/* ===================================
+   COURSES SECTION
+   =================================== */
+
+.courses-grid-section {
+  padding: var(--section-padding);
+  background: linear-gradient(135deg, var(--cream-light) 0%, var(--white) 100%);
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.courses-grid--centered {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.courses-grid--centered .course-card {
+  flex: 0 1 360px;
+  max-width: 100%;
+}
+
+.courses-grid-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-dark);
+  padding: 3rem;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.course-card {
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  border: 2px solid var(--gray-100);
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary-color);
+}
+
+.course-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+}
+
+.course-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.course-card:hover .course-image-wrapper img {
+  transform: scale(1.08);
+}
+
+.course-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1.2rem;
+  background: var(--primary-color);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.course-content {
+  padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-ink);
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.course-description {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-medium);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  flex: 1;
+}
+
+.course-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
+}
+
+.course-duration,
+.course-students {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-medium);
+  font-weight: 500;
+}
+
+.course-duration svg,
+.course-students svg {
+  width: 18px;
+  height: 18px;
+  color: var(--primary-color);
+}
+
+.course-btn {
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  width: 100%;
+}
+
+.course-btn:hover {
+  background: var(--secondary-color);
+  transform: translateX(4px);
+  box-shadow: 0 6px 20px rgba(252, 92, 13, 0.3);
+}
+
+.view-all-courses {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  padding: 1.2rem 3rem;
+  font-size: 1.05rem;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-secondary:hover {
+  background: var(--primary-color);
+  color: var(--white);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(252, 92, 13, 0.3);
+}
+
+/* ===================================
+   HOW IT WORKS SECTION
+   =================================== */
+
+.how-it-works-section-public {
+  padding: var(--section-padding);
+  background: var(--white);
+}
+
+.steps-container-how-it-works-public {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 4rem;
+  position: relative;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  /* allow wrapping so items don't overflow on narrower screens */
+  flex-wrap: wrap;
+}
+
+.steps-container-how-it-works-public::before {
+  content: '';
+  position: absolute;
+  top: 60px;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  z-index: 0;
+  transform-origin: left;
+}
+
+.step-item-how-it-works-public {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive behaviour for the steps in the How It Works section */
+@media (max-width: 768px) {
+  .steps-container-how-it-works-public {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    margin-top: 2.5rem;
+  }
+
+  /* hide the decorative line on small screens to avoid layout issues */
+  .steps-container-how-it-works-public::before {
+    display: none;
+  }
+
+  .step-item-how-it-works-public {
+    flex: none;
+    width: 100%;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .step-icon-how-it-works-public {
+    width: 72px;
+    height: 72px;
+  }
+
+  .step-title-how-it-works-public { font-size: 1.25rem; }
+  .step-desc-how-it-works-public { font-size: 1rem; }
+}
+
+/* Additional mobile adjustments for the "Por qué elegirnos" / benefits area
+   keep cards from overflowing and ensure titles wrap nicely */
+@media (max-width: 768px) {
+  .benefits-grid-section-public {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 0 1rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .section-title-benefits-public {
+    font-size: 1.5rem;
+    max-width: 92%;
+    margin: 0 auto 1rem;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .benefit-item-public {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .benefit-icon-public {
+    width: 64px;
+    height: 64px;
+  }
+
+  .benefit-desc-public {
+    font-size: 1rem;
+  }
+}
+
+.step-icon-wrapper-how-it-works-public {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.step-icon-how-it-works-public {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 24px rgba(252, 92, 13, 0.3);
+}
+
+.step-item-how-it-works-public:hover .step-icon-how-it-works-public {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 32px rgba(252, 92, 13, 0.4);
+}
+
+.step-icon-how-it-works-public svg {
+  width: 40px;
+  height: 40px;
+  color: var(--white);
+}
+
+.step-number-how-it-works-public {
+  position: absolute;
+  top: -10px;
+  right: calc(50% - 60px);
+  width: 40px;
+  height: 40px;
+  background: var(--white);
+  border: 3px solid var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.step-title-how-it-works-public {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-ink);
+  margin-bottom: 0.75rem;
+}
+
+.step-desc-how-it-works-public {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-medium);
+  line-height: 1.6;
+}
+
+/* ===================================
+   URBANIST SECTION (mantener igual)
+   =================================== */
 
 .urbanist-section {
   position: relative;
@@ -376,7 +1055,6 @@
   position: relative;
   height: 100vh;
   overflow: hidden;
-  /* Tema inicial: amarillo (cambia al hacer scroll: verde → bordo → turquesa) */
   --urbanist-main-bg: #fff58c;
   --urbanist-sub-bg: #fbf1ed;
   --urbanist-text: #9c4e23;
@@ -430,12 +1108,6 @@
   left: min(40vw, 300px);
 }
 
-.urbanist-content .urbanist-text-3 {
-  position: absolute;
-  top: 50%;
-  right: 10vw;
-}
-
 .urbanist-panes-container {
   width: 300vw;
   display: flex;
@@ -476,277 +1148,115 @@
   object-fit: cover;
 }
 
+/* ===================================
+   BENEFITS SECTION
+   =================================== */
 
-/* ============================================= */
-/* END URBANIST SECTION */
-/* ============================================= */
-
-/* Section Container */
-.section-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-/* Cursos Grid */
-.courses-grid-section {
-  padding: 8rem 5%;
+.benefits-section-public {
+  padding: var(--section-padding);
   background: var(--white);
 }
 
-.courses-grid {
+.benefits-grid-section-public {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 3rem;
   margin-top: 4rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.courses-grid--centered {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 3rem;
-}
-
-.courses-grid--centered .course-card {
-  flex: 0 1 360px;
-  max-width: 100%;
-}
-
-.courses-grid-loading {
-  grid-column: 1 / -1;
+.benefit-item-public {
   text-align: center;
-  color: var(--text-dark);
-  padding: 3rem;
-  margin: 0;
-}
-
-.course-card {
-  background: linear-gradient(135deg, #fff5f0 0%, #ffeee5 100%);
-  padding: 3rem;
-  border-radius: 25px;
-  transition: all 0.4s ease;
-  cursor: pointer;
-  position: relative;
+  padding: 2.5rem 2rem;
+  background: var(--gray-50);
+  border-radius: 20px;
   border: 2px solid transparent;
+  transition: all 0.4s ease;
 }
 
-.course-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(252, 92, 13, 0.15);
+.benefit-item-public:hover {
   border-color: var(--primary-color);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
 }
 
-.course-badge {
-  display: inline-block;
-  padding: 0.5rem 1.2rem;
-  background: var(--primary-color);
-  color: var(--white);
-  font-family: var(--font-urbanist);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 1.5rem;
-}
-
-.course-title {
-  font-family: var(--font-urbanist);
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-}
-
-.course-description {
-  font-family: var(--font-urbanist);
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: var(--secondary-color);
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-  opacity: 0.95;
-}
-
-.course-meta {
-  margin-bottom: 2rem;
-}
-
-.course-duration {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.95rem;
-  color: var(--secondary-color);
-  font-weight: 600;
-}
-.course-duration svg {
-  flex-shrink: 0;
-  width: 1em;
-  height: 1em;
-}
-
-.course-btn {
-  background: transparent;
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
-  padding: 0.9rem 2rem;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-urbanist);
-}
-
-.course-btn:hover {
-  background: var(--primary-color);
-  color: var(--white);
-  transform: translateX(6px);
-  box-shadow: 0 8px 24px rgba(252, 92, 13, 0.25);
-}
-
-/* Cómo Funciona */
-.how-it-works-section {
-  padding: 8rem 5%;
-  background: linear-gradient(135deg, var(--background-soft) 0%, #f5e6dc 100%);
-}
-
-.steps-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-top: 4rem;
-  position: relative;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.steps-container::before {
-  content: '';
-  position: absolute;
-  top: 40px;
-  left: 10%;
-  right: 10%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
-  z-index: 0;
-}
-
-.step-item {
-  flex: 1;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.step-number {
+.benefit-icon-public {
   width: 80px;
   height: 80px;
-  background: var(--white);
-  border: 3px solid var(--primary-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-  font-family: var(--font-urbanist);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  transition: all 0.4s ease;
-}
-
-.step-item:hover .step-number {
-  background: var(--primary-color);
-  color: var(--white);
-  transform: scale(1.12);
-  box-shadow: 0 10px 30px rgba(252, 92, 13, 0.25);
-}
-
-.step-title {
-  font-family: var(--font-urbanist);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 0.5rem;
-}
-
-.step-desc {
-  font-family: var(--font-urbanist);
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--secondary-color);
-  opacity: 0.95;
-}
-
-/* Beneficios */
-.benefits-section {
-  padding: 8rem 5%;
-  background: var(--white);
-}
-
-.benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
-  margin-top: 4rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.benefit-item {
-  text-align: center;
-}
-
-.benefit-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #fff5f0 0%, var(--background-soft) 100%);
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
   font-size: 2rem;
-  color: var(--primary-color);
+  color: var(--white);
   transition: all 0.4s ease;
 }
 
-.benefit-item:hover .benefit-icon {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-  color: var(--white);
-  transform: scale(1.08) rotate(12deg);
-  box-shadow: 0 12px 32px rgba(252, 92, 13, 0.2);
+.benefit-item-public:hover .benefit-icon-public {
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 12px 32px rgba(252, 92, 13, 0.3);
 }
 
-.benefit-title {
-  font-family: var(--font-urbanist);
-  font-size: 1.35rem;
+.benefit-icon-public svg {
+  width: 36px;
+  height: 36px;
+}
+
+.section-title-benefits-public {
+  /* Title for the benefits section */
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 0.8rem;
+  color: var(--text-ink);
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
-.benefit-desc {
-  font-family: var(--font-urbanist);
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--secondary-color);
-  opacity: 0.95;
-  line-height: 1.6;
+.benefit-desc-public {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-medium);
+  line-height: 1.7;
 }
 
-/* Testimonios */
+/* Force single-column layout on small screens — placed after the desktop rules so it wins */
+@media (max-width: 768px) {
+  .benefits-grid-section-public {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+    padding: 0 1rem !important;
+    max-width: 920px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .benefits-grid-section-public > .benefit-item-public {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .section-title-benefits-public {
+    font-size: 1.5rem !important;
+    max-width: 92% !important;
+    margin: 0 auto 1rem !important;
+    word-wrap: break-word !important;
+    hyphens: auto !important;
+  }
+}
+
+/* ===================================
+   TESTIMONIALS SECTION
+   =================================== */
+
 .testimonials-section {
-  padding: 8rem 5%;
-  background: linear-gradient(135deg, var(--background-soft) 0%, #f5e6dc 100%);
+  padding: var(--section-padding);
+  background: linear-gradient(135deg, var(--cream-light) 0%, var(--cream-warm) 100%);
 }
 
 .testimonials-grid {
@@ -762,69 +1272,156 @@
 .testimonial-card {
   background: var(--white);
   padding: 3rem;
-  border-radius: 25px;
+  border-radius: 20px;
   position: relative;
   transition: all 0.4s ease;
-}
-
-.testimonial-card::before {
-  content: '"';
-  position: absolute;
-  top: -20px;
-  left: 30px;
-  font-family: var(--font-urbanist);
-  font-size: 8rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  opacity: 0.12;
-  line-height: 1;
+  border: 2px solid var(--gray-100);
 }
 
 .testimonial-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(252, 92, 13, 0.15);
-  transition: all 0.4s ease;
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary-color);
 }
 
-.quote-mark {
-  display: none;
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-color);
+}
+
+.testimonial-rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star-filled {
+  width: 20px;
+  height: 20px;
+  color: #fbbf24;
+  fill: #fbbf24;
 }
 
 .testimonial-text {
-  font-family: var(--font-urbanist);
+  font-family: var(--font-body);
   font-size: 1.05rem;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--text-dark);
-  line-height: 1.8;
+  line-height: 1.9;
   margin-bottom: 2rem;
   font-style: italic;
 }
 
 .testimonial-author-wrapper {
-  border-top: 2px solid rgba(252, 92, 13, 0.1);
+  border-top: 2px solid var(--gray-100);
   padding-top: 1rem;
 }
 
 .testimonial-author {
-  font-family: var(--font-urbanist);
-  font-size: 1.1rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 0.3rem;
+  color: var(--text-ink);
+  margin-bottom: 0.25rem;
 }
 
 .testimonial-role {
-  font-family: var(--font-urbanist);
-  font-size: 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
   font-weight: 500;
-  color: var(--secondary-color);
-  opacity: 0.9;
+  color: var(--text-medium);
 }
 
-/* CTA Final */
+/* ===================================
+   GUARANTEE SECTION
+   =================================== */
+
+.guarantee-section {
+  padding: 6rem 5%;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  text-align: center;
+}
+
+.guarantee-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.guarantee-icon {
+  width: 100px;
+  height: 100px;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.guarantee-icon svg {
+  width: 50px;
+  height: 50px;
+  color: var(--primary-color);
+}
+
+.guarantee-content h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.guarantee-content > p {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.8;
+  margin-bottom: 3rem;
+}
+
+.guarantee-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.guarantee-feature {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--white);
+}
+
+.guarantee-feature svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* ===================================
+   CTA FINAL SECTION
+   =================================== */
+
 .cta-final-section {
-  padding: 8rem 5%;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 50%, var(--secondary-color) 100%);
+  padding: var(--section-padding);
+  background: linear-gradient(135deg, var(--text-ink) 0%, #2d2d2d 50%, var(--text-dark) 100%);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -837,20 +1434,20 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(252,92,13,0.1) 0%, transparent 70%);
   animation: pulse 15s ease-in-out infinite;
 }
 
 .cta-final-content {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
 }
 
 .cta-final-title {
-  font-family: var(--font-urbanist);
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 700;
   color: var(--white);
   margin-bottom: 1.5rem;
@@ -859,19 +1456,23 @@
 }
 
 .cta-final-text {
-  font-family: var(--font-urbanist);
+  font-family: var(--font-body);
   font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--white);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 3rem;
-  opacity: 0.95;
-  line-height: 1.7;
+  line-height: 1.8;
+}
+
+.cta-final-text strong {
+  color: var(--white);
+  font-weight: 600;
 }
 
 .btn-cta-final {
-  background: var(--white);
-  color: var(--primary-color);
-  padding: 1.3rem 3.5rem;
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 1.4rem 4rem;
   font-size: 1.2rem;
   border-radius: 50px;
   font-weight: 700;
@@ -879,17 +1480,37 @@
   border: none;
   cursor: pointer;
   font-family: var(--font-body);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 32px rgba(252, 92, 13, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .btn-cta-final:hover {
-  background: var(--text-dark);
-  color: var(--white);
+  background: var(--accent-color);
   transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 16px 40px rgba(252, 92, 13, 0.5);
 }
 
-/* Animaciones */
+.cta-disclaimer {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.cta-disclaimer svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -910,29 +1531,25 @@
   }
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes pulse {
   0%, 100% {
     transform: scale(1) rotate(0deg);
   }
   50% {
-    transform: scale(1.1) rotate(180deg);
+    transform: scale(1.05) rotate(180deg);
   }
 }
 
-/* Responsive */
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
 @media (max-width: 1024px) {
   .mission-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .credentials-container {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -944,12 +1561,29 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .testimonials-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .guarantee-features {
+    grid-template-columns: 1fr;
+  }
+
+  .video-intro-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --section-padding: 4rem 1.5rem;
+  }
+
   .hero-section {
     padding: 6rem 5% 4rem;
   }
@@ -958,11 +1592,33 @@
     display: none;
   }
 
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-play-video {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .trust-items {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
   .mission-content h2 br {
     display: none;
   }
 
   .mission-stats {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .credentials-container {
     grid-template-columns: 1fr;
   }
 
@@ -992,26 +1648,12 @@
     grid-template-columns: 1fr;
   }
 
-  .hero-section,
-  .mission-section,
-  .experience-section,
-  .courses-grid-section,
-  .how-it-works-section,
-  .benefits-section,
-  .testimonials-section,
-  .cta-final-section {
-    padding: 4rem 1.5rem;
+  .guarantee-features {
+    grid-template-columns: 1fr;
+    text-align: left;
   }
 
-  .section-title {
-    margin-bottom: 2rem;
-  }
-
-  .course-card {
-    padding: 2rem;
-  }
-
-  /* Urbanist section mobile: imágenes completas en pantalla (sin recortes) */
+  /* Urbanist mobile */
   .urbanist-content h1 {
     font-size: 15vw;
   }
@@ -1038,17 +1680,9 @@
     translate: none;
     margin: 0 auto;
     padding-right: 2rem;
-    
   }
 
-  .urbanist-pane:nth-of-type(2) img {
-    width: min(78vw, 72vh);
-    height: min(78vw, 72vh);
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    translate: none;
-  }
-
+  .urbanist-pane:nth-of-type(2) img,
   .urbanist-pane:nth-of-type(3) img {
     width: min(78vw, 72vh);
     height: min(78vw, 72vh);
@@ -1058,7 +1692,7 @@
   }
 }
 
-/* Efectos de scroll suaves */
+/* Smooth scroll */
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;

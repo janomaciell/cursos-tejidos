@@ -1,0 +1,426 @@
+/* ComoFunciona.css - Página "Cómo funciona" - Estilos propios */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --cf-primary: #fc5c0d;
+  --cf-accent: #fe6308;
+  --cf-cream: #fff5f0;
+  --cf-cream-dark: #ffeee5;
+  --cf-white: #ffffff;
+  --cf-ink: #1a1a1a;
+  --cf-text: #2d2d2d;
+  --cf-text-muted: #4a4a4a;
+  --cf-gray-100: #f5f5f5;
+  --cf-gray-200: #e5e5e5;
+  --cf-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --cf-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --cf-font-display: 'Playfair Display', serif;
+  --cf-font-body: 'Inter', sans-serif;
+}
+
+.como-funciona-page {
+  min-height: 100vh;
+  background: var(--cf-white);
+  font-family: var(--cf-font-body);
+  color: var(--cf-text);
+  line-height: 1.6;
+}
+
+/* Header */
+.cf-header {
+  background: linear-gradient(135deg, var(--cf-primary) 0%, var(--cf-accent) 100%);
+  padding: 4rem 5% 5rem;
+  color: var(--cf-white);
+  text-align: center;
+}
+
+.cf-header-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cf-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  transition: opacity 0.2s;
+}
+
+.cf-back:hover {
+  opacity: 0.9;
+}
+
+.cf-back svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cf-main-title {
+  font-family: var(--cf-font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cf-main-subtitle {
+  font-size: 1.15rem;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+/* Contenedor común */
+.cf-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+/* Títulos de sección */
+.cf-section-title {
+  font-family: var(--cf-font-display);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--cf-ink);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.cf-section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--cf-text-muted);
+  margin-bottom: 3rem;
+  line-height: 1.65;
+}
+
+/* Video section */
+.cf-video-section {
+  padding: 5rem 5%;
+  background: linear-gradient(180deg, var(--cf-cream) 0%, var(--cf-white) 100%);
+}
+
+.cf-video-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cf-video-wrapper {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--cf-shadow-lg);
+  background: var(--cf-gray-100);
+}
+
+.cf-video-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.cf-video-poster {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--cf-primary) 0%, var(--cf-accent) 100%);
+  cursor: pointer;
+  transition: opacity 0.25s;
+}
+
+.cf-video-poster:hover {
+  opacity: 0.92;
+}
+
+.cf-video-play-icon {
+  width: 80px;
+  height: 80px;
+  color: var(--cf-white);
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.cf-video-placeholder-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Cursos y confianza */
+.cf-courses-trust-section {
+  padding: 5rem 0;
+  background: var(--cf-white);
+}
+
+.cf-block {
+  margin-bottom: 4rem;
+}
+
+.cf-block:last-child {
+  margin-bottom: 0;
+}
+
+.cf-block-title {
+  font-family: var(--cf-font-display);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 700;
+  color: var(--cf-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--cf-primary);
+}
+
+.cf-intro {
+  font-size: 1.1rem;
+  color: var(--cf-text-muted);
+  line-height: 1.8;
+  margin-bottom: 1.75rem;
+}
+
+.cf-steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cf-steps-list li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  color: var(--cf-text);
+  line-height: 1.75;
+}
+
+.cf-steps-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background: var(--cf-primary);
+  border-radius: 50%;
+}
+
+.cf-steps-list li strong {
+  color: var(--cf-ink);
+}
+
+/* Trust cards */
+.cf-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+  margin-top: 2rem;
+}
+
+.cf-trust-card {
+  background: var(--cf-gray-100);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 2px solid var(--cf-gray-200);
+  transition: all 0.3s ease;
+}
+
+.cf-trust-card:hover {
+  border-color: var(--cf-primary);
+  box-shadow: var(--cf-shadow);
+  transform: translateY(-3px);
+}
+
+.cf-trust-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--cf-cream-dark);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.cf-trust-icon svg {
+  width: 26px;
+  height: 26px;
+  color: var(--cf-primary);
+}
+
+.cf-trust-card h4 {
+  font-family: var(--cf-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cf-ink);
+  margin-bottom: 0.5rem;
+}
+
+.cf-trust-card p {
+  font-size: 0.98rem;
+  color: var(--cf-text-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Nosotros */
+.cf-nosotros-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, var(--cf-cream) 0%, var(--cf-white) 100%);
+}
+
+.cf-nosotros-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.cf-nosotros-content .cf-section-title {
+  text-align: left;
+}
+
+.cf-nosotros-content .cf-section-subtitle {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.cf-nosotros-lead {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--cf-primary);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.cf-nosotros-text {
+  font-size: 1.05rem;
+  color: var(--cf-text-muted);
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.cf-nosotros-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.cf-value {
+  display: inline-block;
+  padding: 0.5rem 1.1rem;
+  background: var(--cf-cream-dark);
+  color: var(--cf-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 50px;
+  border: 2px solid var(--cf-primary);
+  transition: all 0.25s;
+}
+
+.cf-value:hover {
+  background: var(--cf-primary);
+  color: var(--cf-white);
+  transform: translateY(-2px);
+}
+
+.cf-nosotros-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cf-nosotros-box {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(145deg, var(--cf-cream-dark) 0%, #e4c4b5 100%);
+  border-radius: 20px;
+  border: 3px solid var(--cf-primary);
+  box-shadow: var(--cf-shadow-lg);
+}
+
+/* CTA final */
+.cf-cta-section {
+  padding: 4rem 5%;
+  background: var(--cf-ink);
+  text-align: center;
+}
+
+.cf-cta-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cf-cta-title {
+  font-family: var(--cf-font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--cf-white);
+  margin-bottom: 0.75rem;
+}
+
+.cf-cta-text {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+}
+
+.cf-cta-btn {
+  background: var(--cf-primary);
+  color: var(--cf-white);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cf-cta-btn:hover {
+  background: var(--cf-accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cf-header {
+    padding: 3rem 5% 4rem;
+  }
+
+  .cf-video-section {
+    padding: 3rem 5%;
+  }
+
+  .cf-trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-nosotros-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .cf-nosotros-content .cf-section-title,
+  .cf-nosotros-content .cf-section-subtitle {
+    text-align: center;
+  }
+
+  .cf-nosotros-lead {
+    text-align: center;
+  }
+
+  .cf-nosotros-values {
+    justify-content: center;
+  }
+
+  .cf-nosotros-box {
+    max-width: 280px;
+  }
+}

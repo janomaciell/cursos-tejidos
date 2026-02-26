@@ -54,17 +54,35 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (userData) => {
+  const loginWithGoogle = async (credential) => {
     try {
-      const data = await authAPI.register(userData);
-      
+      const data = await authAPI.google(credential);
+
       localStorage.setItem('access_token', data.tokens.access);
       localStorage.setItem('refresh_token', data.tokens.refresh);
       localStorage.setItem('user', JSON.stringify(data.user));
-      
+
       setUser(data.user);
       setIsAuthenticated(true);
-      
+
+      return { success: true, user: data.user };
+    } catch (error) {
+      const message = error.response?.data?.message || 'Error al iniciar sesión con Google';
+      return { success: false, error: message };
+    }
+  };
+
+  const register = async (userData) => {
+    try {
+      const data = await authAPI.register(userData);
+
+      localStorage.setItem('access_token', data.tokens.access);
+      localStorage.setItem('refresh_token', data.tokens.refresh);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      setUser(data.user);
+      setIsAuthenticated(true);
+
       return { success: true, user: data.user };
     } catch (error) {
       // La API devuelve serializer.errors: { campo: ["mensaje"] } o string
@@ -110,6 +128,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     register,
+    loginWithGoogle,
     logout,
     updateUser
   };

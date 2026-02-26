@@ -31,6 +31,7 @@ class CourseAccessViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CourseAccessSerializer
     permission_classes = [IsAuthenticated]
     
+    
     def get_queryset(self):
         return CourseAccess.objects.filter(
             user=self.request.user,

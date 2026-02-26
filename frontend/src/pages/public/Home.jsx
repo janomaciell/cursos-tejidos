@@ -14,10 +14,17 @@ import {
   FiZap,
   FiHeart,
   FiUsers,
-  FiTrendingUp
+  FiTrendingUp,
+  FiShield,
+  FiVideo,
+  FiDownload,
+  FiMessageCircle,
+  FiPlay,
+  FiCheckCircle
 } from 'react-icons/fi';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import NgrokImage from '../../components/common/NgrokImage';
 import './Home.css';
 
 // Register GSAP plugins
@@ -157,28 +164,273 @@ const Home = () => {
     };
   }, []);
 
+  // Animaciones GSAP mejoradas
   useEffect(() => {
-    const revealSections = gsap.utils.toArray('.home-reveal');
     const triggers = [];
-    revealSections.forEach((section) => {
-      const tween = gsap.fromTo(section,
-        { opacity: 0, y: 50 },
+
+    // Hero content animation
+    const heroTl = gsap.timeline({ delay: 0.3 });
+    heroTl
+      .fromTo('.hero-subtitle', 
+        { opacity: 0, y: -20 }, 
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+      )
+      .fromTo('.hero-title', 
+        { opacity: 0, y: 30 }, 
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 
+        '-=0.3'
+      )
+      .fromTo('.hero-description', 
+        { opacity: 0, y: 20 }, 
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 
+        '-=0.4'
+      )
+      .fromTo('.hero-buttons > *', 
+        { opacity: 0, y: 20, scale: 0.95 }, 
+        { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.5, ease: 'back.out(1.2)' }, 
+        '-=0.3'
+      );
+
+    // Trust banner animation
+    gsap.fromTo('.trust-banner',
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.trust-banner',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    // Stats grid animation with counter effect
+    const statsItems = gsap.utils.toArray('.stat-item');
+    statsItems.forEach(item => {
+      gsap.fromTo(item,
+        { opacity: 0, y: 40, scale: 0.9 },
         {
           opacity: 1,
           y: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: 'back.out(1.3)',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          onStart: () => {
+            const numberEl = item.querySelector('.stat-number');
+            if (numberEl && numberEl.textContent.includes('+')) {
+              const targetNumber = parseInt(numberEl.textContent.replace('+', ''));
+              gsap.from({ val: 0 }, {
+                val: targetNumber,
+                duration: 1.5,
+                ease: 'power1.out',
+                onUpdate: function() {
+                  numberEl.textContent = Math.round(this.targets()[0].val) + '+';
+                }
+              });
+            }
+          }
+        }
+      );
+    });
+
+    // Mission section with parallax effect
+    const missionTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.mission-section',
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+    missionTl
+      .fromTo('.mission-content h2', 
+        { opacity: 0, y: 50 }, 
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+      )
+      .fromTo('.mission-content p', 
+        { opacity: 0, y: 30 }, 
+        { opacity: 1, y: 0, stagger: 0.15, duration: 0.6, ease: 'power2.out' }, 
+        '-=0.4'
+      );
+    if (missionTl.scrollTrigger) triggers.push(missionTl.scrollTrigger);
+
+    // Video section reveal
+    const videoTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.video-intro-section',
+        start: 'top 75%',
+        toggleActions: 'play none none none',
+      },
+    });
+    videoTl
+      .fromTo('.video-content', 
+        { opacity: 0, x: -50 }, 
+        { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' }
+      )
+      .fromTo('.video-player-wrapper', 
+        { opacity: 0, x: 50, scale: 0.95 }, 
+        { opacity: 1, x: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, 
+        '-=0.5'
+      );
+    if (videoTl.scrollTrigger) triggers.push(videoTl.scrollTrigger);
+
+    // Credentials with stagger
+    gsap.fromTo('.credential-item',
+      { opacity: 0, y: 30, rotateY: -15 },
+      {
+        opacity: 1,
+        y: 0,
+        rotateY: 0,
+        stagger: 0.12,
+        duration: 0.7,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.credentials-section',
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    // Experience cards with 3D effect
+    gsap.fromTo('.experience-card',
+      { opacity: 0, y: 50, rotateX: -10 },
+      {
+        opacity: 1,
+        y: 0,
+        rotateX: 0,
+        stagger: 0.15,
+        duration: 0.7,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.experience-section',
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    // Course cards with flip animation
+    const courseCards = gsap.utils.toArray('.course-card');
+    courseCards.forEach((card, index) => {
+      gsap.fromTo(card,
+        { opacity: 0, rotateY: -20, y: 50 },
+        {
+          opacity: 1,
+          rotateY: 0,
+          y: 0,
           duration: 0.8,
           ease: 'power2.out',
+          delay: index * 0.15,
           scrollTrigger: {
-            trigger: section,
+            trigger: card,
             start: 'top 85%',
             toggleActions: 'play none none none',
           },
         }
       );
-      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
     });
-    return () => triggers.forEach((t) => t.kill());
-  }, []);
+
+    // Steps with connection line animation
+    const stepsTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.how-it-works-section',
+        start: 'top 75%',
+        toggleActions: 'play none none none',
+      },
+    });
+    stepsTl
+      .fromTo('.steps-container::before', 
+        { scaleX: 0 }, 
+        { scaleX: 1, duration: 1.2, ease: 'power2.inOut' }
+      )
+      .fromTo('.step-item', 
+        { opacity: 0, scale: 0.8, y: 30 }, 
+        { opacity: 1, scale: 1, y: 0, stagger: 0.15, duration: 0.6, ease: 'back.out(1.3)' }, 
+        '-=0.8'
+      );
+    if (stepsTl.scrollTrigger) triggers.push(stepsTl.scrollTrigger);
+
+    // Benefits with bounce
+    gsap.fromTo('.benefit-item',
+      { opacity: 0, y: 40, scale: 0.85 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: 'elastic.out(1, 0.75)',
+        scrollTrigger: {
+          trigger: '.benefits-section',
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    // Testimonials with slide effect
+    gsap.fromTo('.testimonial-card',
+      { opacity: 0, x: -60 },
+      {
+        opacity: 1,
+        x: 0,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.testimonials-section',
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    // Guarantee section pulse
+    gsap.fromTo('.guarantee-content',
+      { opacity: 0, scale: 0.92 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.guarantee-section',
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    // CTA final with dramatic entrance
+    const ctaTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.cta-final-section',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+    ctaTl
+      .fromTo('.cta-final-content', 
+        { opacity: 0, scale: 0.9, y: 40 }, 
+        { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'power3.out' }
+      )
+      .fromTo('.btn-cta-final', 
+        { scale: 0.95 }, 
+        { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' }, 
+        '-=0.3'
+      );
+    if (ctaTl.scrollTrigger) triggers.push(ctaTl.scrollTrigger);
+
+    return () => triggers.forEach((t) => t && t.kill());
+  }, [loading]);
 
   const loadLatestCourses = async () => {
     try {
@@ -192,7 +444,7 @@ const Home = () => {
     }
   };
 
-  // Thread Animation Logic - Improved version with Verlet physics
+  // Thread Animation Logic - Mantener igual
   const initThreadAnimation = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -376,36 +628,43 @@ const Home = () => {
   };
 
   const steps = [
-    { number: '01', title: 'Inscribite', desc: 'Elegí tu curso ideal' },
-    { number: '02', title: 'Accedé', desc: 'A todo el contenido 24/7' },
-    { number: '03', title: 'Practicá', desc: 'Con proyectos reales' },
-    { number: '04', title: 'Consultá', desc: 'Soporte personalizado' },
-    { number: '05', title: 'Certificá', desc: 'Tu nueva habilidad' }
+    { number: '01', title: 'Inscribite', desc: 'Elegí tu curso ideal', icon: <FiBook /> },
+    { number: '02', title: 'Accedé', desc: 'A todo el contenido 24/7', icon: <FiVideo /> },
+    { number: '03', title: 'Practicá', desc: 'Con proyectos reales', icon: <FiEdit2 /> },
+    { number: '04', title: 'Consultá', desc: 'Soporte personalizado', icon: <FiHeadphones /> },
+    { number: '05', title: 'Certificá', desc: 'Tu nueva habilidad', icon: <FiAward /> }
   ];
 
   const benefits = [
-    { icon: <FiBook />, title: 'Clases paso a paso', desc: 'Videos HD detallados y fáciles de seguir' },
-    { icon: <FiClock />, title: 'Acceso de por vida', desc: 'Aprendé a tu ritmo, sin presiones' },
-    { icon: <FiHeadphones />, title: 'Soporte directo', desc: 'Resuelvo tus dudas personalmente' },
-    { icon: <FiCheck />, title: 'Proyectos prácticos', desc: 'Creá piezas profesionales desde día 1' },
-    { icon: <FiAward />, title: 'Certificado', desc: 'Validá tu aprendizaje oficialmente' }
+    { icon: <FiVideo />, title: 'Videos HD de calidad', desc: 'Clases grabadas profesionalmente con múltiples ángulos' },
+    { icon: <FiClock />, title: 'Acceso de por vida', desc: 'Aprendé a tu ritmo, sin presiones ni vencimientos' },
+    { icon: <FiDownload />, title: 'Material descargable', desc: 'PDFs, patrones y plantillas para imprimir' },
+    { icon: <FiMessageCircle />, title: 'Soporte directo', desc: 'Respondo todas tus dudas personalmente' },
+    { icon: <FiUsers />, title: 'Comunidad activa', desc: 'Conectá con otras alumnas apasionadas' },
+    { icon: <FiAward />, title: 'Certificado oficial', desc: 'Validá tu aprendizaje y habilidades' }
   ];
 
   const testimonials = [
     {
-      text: 'Nunca imaginé que podría hacer mis propias prendas. Andy explica todo con tanta claridad que me sentí acompañada en cada paso. Ahora tengo mi propio emprendimiento.',
+      text: 'Nunca imaginé que podría hacer mis propias prendas. Andy explica todo con tanta claridad que me sentí acompañada en cada paso. Ahora tengo mi propio emprendimiento y puedo trabajar desde casa.',
       author: 'María González',
-      role: 'Emprendedora textil'
+      role: 'Emprendedora textil',
+      rating: 5,
+      image: '/img/testimonial-1.jpg'
     },
     {
-      text: 'Empecé sin saber nada y ahora diseño mi propia ropa. Los cursos cambiaron mi vida completamente. La comunidad que Andy ha creado es increíble.',
+      text: 'A mis 58 años pensé que era demasiado tarde para aprender algo nuevo, pero los cursos son tan claros y fáciles de seguir que en 3 meses ya estaba haciendo ropa para toda mi familia. ¡Un sueño hecho realidad!',
       author: 'Laura Martínez',
-      role: 'Diseñadora independiente'
+      role: 'Diseñadora independiente',
+      rating: 5,
+      image: '/img/testimonial-2.jpg'
     },
     {
-      text: 'La moldería siempre me pareció imposible, pero con este método lo entendí perfectamente. ¡Ahora creo mis propios diseños y hago ropa a medida para toda mi familia!',
+      text: 'La moldería siempre me pareció imposible, pero con este método lo entendí perfectamente. Ahora creo mis propios diseños y hago ropa a medida. El mejor curso que tomé en mi vida.',
       author: 'Sofía Rodríguez',
-      role: 'Modista profesional'
+      role: 'Modista profesional',
+      rating: 5,
+      image: '/img/testimonial-3.jpg'
     }
   ];
 
@@ -442,6 +701,13 @@ const Home = () => {
     }
   ];
 
+  const credentials = [
+    { icon: <FiAward />, title: '15 años', subtitle: 'de experiencia' },
+    { icon: <FiUsers />, title: '50+', subtitle: 'alumnas graduadas' },
+    { icon: <FiStar />, title: '4.9/5', subtitle: 'calificación promedio' },
+    { icon: <FiCheckCircle />, title: '98%', subtitle: 'tasa de satisfacción' }
+  ];
+
   return (
     <div className="home-page">
       {/* Hero Section with Thread Animation */}
@@ -450,23 +716,45 @@ const Home = () => {
         <div className="hero-content">
           <p className="hero-subtitle">El Arte de Crear con tus Manos</p>
           <h1 className="hero-title">
-            Tejiendo con Andy:<br />Transforma Hilos en Sueños
+            Transformá Tus Sueños<br />en Realidad con Costura
           </h1>
           <p className="hero-description">
-            Descubre la magia de la costura en un espacio diseñado para que tu creatividad florezca. 
-            Aprende, crea y conecta en una experiencia que nutre el alma.
+            Aprende a coser de forma profesional con lecciones claras, paso a paso.<br />
+            Desde cero hasta crear tus propias prendas. Sin experiencia previa necesaria.
           </p>
           <div className="hero-buttons">
             <Link to="/cursos">
               <Button size="large" className="btn-primary">
-                Ver Cursos
+                Ver Cursos Disponibles
+                <FiArrowRight />
               </Button>
             </Link>
-            <Link to="/cursos">
-              <Button size="large" className="btn-primary">
-                Saber más
-              </Button>
+            <Link to="/como-funciona" className="btn-play-video">
+              <FiPlay />
+              <span>Ver cómo funciona</span>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Banner */}
+      <section className="trust-banner">
+        <div className="trust-items">
+          <div className="trust-item">
+            <FiShield />
+            <span>Garantía de 30 días</span>
+          </div>
+          <div className="trust-item">
+            <FiCheckCircle />
+            <span>50+ alumnas satisfechas</span>
+          </div>
+          <div className="trust-item">
+            <FiAward />
+            <span>Certificado incluido</span>
+          </div>
+          <div className="trust-item">
+            <FiClock />
+            <span>Acceso de por vida</span>
           </div>
         </div>
       </section>
@@ -487,7 +775,7 @@ const Home = () => {
             </p>
             <div className="mission-stats">
               <div className="stat-item">
-                <span className="stat-number">500+</span>
+                <span className="stat-number">50+</span>
                 <span className="stat-label">Alumnas Graduadas</span>
               </div>
               <div className="stat-item">
@@ -504,6 +792,58 @@ const Home = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Video Introduction Section - NUEVA */}
+      <section className="video-intro-section">
+        <div className="video-intro-container">
+          <div className="video-content">
+            <h2>Conocé a tu instructora</h2>
+            <p className="video-intro-text">
+              Hola, soy Andy. Llevo más de 15 años enseñando costura y ayudando a cientos de 
+              mujeres a descubrir su potencial creativo. Mi metodología está diseñada para que 
+              cualquier persona, sin importar su edad o experiencia, pueda aprender a coser de 
+              forma profesional.
+            </p>
+            <div className="video-highlights">
+              <div className="highlight-point">
+                <FiCheckCircle />
+                <span>Método probado por 50+ alumnas</span>
+              </div>
+              <div className="highlight-point">
+                <FiCheckCircle />
+                <span>Clases claras y fáciles de seguir</span>
+              </div>
+              <div className="highlight-point">
+                <FiCheckCircle />
+                <span>Soporte personalizado incluido</span>
+              </div>
+            </div>
+          </div>
+          <div className="video-player-wrapper">
+            <div className="video-placeholder">
+              <img src="/img/andy-instructor.jpg" alt="Andy - Instructora de costura" />
+              <button className="play-button-home-public">
+                <FiPlay />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Credentials Section - NUEVA */}
+      <section className="credentials-section">
+        <div className="credentials-container">
+          {credentials.map((cred, index) => (
+            <div key={index} className="credential-item">
+              <div className="credential-icon">{cred.icon}</div>
+              <div className="credential-text">
+                <h3>{cred.title}</h3>
+                <p>{cred.subtitle}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -524,15 +864,12 @@ const Home = () => {
         </div>
       </section>
 
-      
-
-
-      {/* Últimos cursos (reales, hasta 3) */}
+      {/* Últimos cursos */}
       <section className="courses-grid-section home-reveal">
         <div className="section-container">
-          <h2 className="section-title">Cursos Diseñados para Ti</h2>
+          <h2 className="section-title-cursos">Cursos Diseñados para Ti</h2>
           <p className="section-subtitle">
-            Los últimos cursos que sumamos para vos
+            Programas completos con todo lo que necesitas para dominar la costura
           </p>
           {loading ? (
             <div className="courses-grid courses-grid--centered">
@@ -546,43 +883,68 @@ const Home = () => {
             <div className={`courses-grid ${latestCourses.length < 3 ? 'courses-grid--centered' : ''}`}>
               {latestCourses.map((course) => (
                 <div key={course.id} className="course-card" data-index={course.id}>
-                  <div className="course-badge">{difficultyLabel(course.difficulty)}</div>
-                  <h3 className="course-title">{course.title}</h3>
-                  <p className="course-description">{course.short_description || course.title}</p>
-                  <div className="course-meta">
-                    <span className="course-duration"><FiClock /> {formatDuration(course.duration_hours)}</span>
+                  <div className="course-image-wrapper">
+                    <NgrokImage 
+                      src={course.cover_image}
+                      alt={course.title}
+                    />
+                    <div className="course-badge">{difficultyLabel(course.difficulty)}</div>
                   </div>
-                  <Link to={`/cursos/${course.slug}`}>
-                    <button type="button" className="course-btn">
-                      Ver más <FiArrowRight />
-                    </button>
-                  </Link>
+                  <div className="course-content">
+                    <h3 className="course-title">{course.title}</h3>
+                    <p className="course-description">{course.short_description || course.title}</p>
+                    <div className="course-meta">
+                      <span className="course-duration">
+                        <FiClock /> {formatDuration(course.duration_hours)}
+                      </span>
+                      <span className="course-students">
+                        <FiUsers /> 50+ alumnas
+                      </span>
+                    </div>
+                    <Link to={`/cursos/${course.slug}`}>
+                      <button type="button" className="course-btn">
+                        Ver detalles <FiArrowRight />
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
           )}
+          <div className="view-all-courses">
+            <Link to="/cursos">
+              <Button size="large" className="btn-secondary">
+                Ver Todos los Cursos
+                <FiArrowRight />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Cómo Funciona */}
-      <section className="how-it-works-section home-reveal">
+      <section className="how-it-works-section-public home-reveal">
         <div className="section-container">
-          <h2 className="section-title">Tu camino hacia la maestría</h2>
+          <h2 className="section-title-how-it-works-public">Tu camino hacia la maestría</h2>
           <p className="section-subtitle">
-            Un proceso probado paso a paso
+            Un proceso simple y comprobado, paso a paso
           </p>
-          <div className="steps-container">
+          <div className="steps-container-how-it-works-public">
             {steps.map((step, index) => (
-              <div key={index} className="step-item">
-                <div className="step-number">{step.number}</div>
-                <h3 className="step-title">{step.title}</h3>
-                <p className="step-desc">{step.desc}</p>
+              <div key={index} className="step-item-how-it-works-public">
+                <div className="step-icon-wrapper-how-it-works-public">
+                  <div className="step-icon-how-it-works-public">{step.icon}</div>
+                  <div className="step-number-how-it-works-public">{step.number}</div>
+                </div>
+                <h3 className="step-title-how-it-works-public">{step.title}</h3>
+                <p className="step-desc-how-it-works-public">{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
-{/* Nueva Sección - Urbanist con Scroll Horizontal */}
+
+      {/* Urbanist Section - Mantener igual */}
       <section className="urbanist-section">
         <div className="urbanist-wrapper">
           <svg className="urbanist-bg-gradient" width="100%" viewBox="0 0 1920 1300" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -608,21 +970,15 @@ const Home = () => {
               el ratón navideño, el pollito y muchos más. Desde las bases del tejido hasta los detalles que hacen
               que cada muñeco cobre vida.
             </p>
-
-
           </div>
           
           <div id="urbanist-panes-container" className="urbanist-panes-container">
             <div className="urbanist-pane">
               <img src="/img/ratonturquesa.png" alt="Peluche ratón navideño tejido a mano" />
             </div>
-
-
-
             <div className="urbanist-pane">
               <img src="/img/ratonnavidenoverde.png" alt="Peluche ratón navideño tejido a mano" />
             </div>
-
             <div className="urbanist-pane">
               <img src="/img/pollitosolo.png" alt="Peluche pollito tejido a mano" />
             </div>
@@ -632,16 +988,20 @@ const Home = () => {
           </div>
         </div>
       </section>
+
       {/* Beneficios */}
       <section className="benefits-section home-reveal">
         <div className="section-container">
-          <h2 className="section-title">Por qué elegirnos</h2>
-          <div className="benefits-grid">
+          <h2 className="section-title-benefits-public">Por qué elegirnos</h2>
+          <p className="section-subtitle-benefits-public">
+            Todo lo que necesitas para aprender está incluido
+          </p>
+          <div className="benefits-grid-section-public">
             {benefits.map((benefit, index) => (
-              <div key={index} className="benefit-item">
-                <div className="benefit-icon">{benefit.icon}</div>
-                <h3 className="benefit-title">{benefit.title}</h3>
-                <p className="benefit-desc">{benefit.desc}</p>
+              <div key={index} className="benefit-item-public">
+                <div className="benefit-icon-public">{benefit.icon}</div>
+                <h3 className="benefit-title-public">{benefit.title}</h3>
+                <p className="benefit-desc-public">{benefit.desc}</p>
               </div>
             ))}
           </div>
@@ -651,21 +1011,56 @@ const Home = () => {
       {/* Testimonios */}
       <section className="testimonials-section home-reveal">
         <div className="section-container">
-          <h2 className="section-title">Historias que inspiran</h2>
-          <p className="section-subtitle">
+          <h2 className="section-title-testimonials-public">Historias que inspiran</h2>
+          <p className="section-subtitle-testimonials-public">
             Las voces de quienes han transformado su vida
           </p>
           <div className="testimonials-grid">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="testimonial-card">
-                <div className="quote-mark">"</div>
+                <div className="testimonial-header">
+                  <img src={testimonial.image} alt={testimonial.author} className="testimonial-image" />
+                  <div className="testimonial-rating">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <FiStar key={i} className="star-filled" />
+                    ))}
+                  </div>
+                </div>
                 <p className="testimonial-text">{testimonial.text}</p>
                 <div className="testimonial-author-wrapper">
-                  <p className="testimonial-author">— {testimonial.author}</p>
+                  <p className="testimonial-author">{testimonial.author}</p>
                   <p className="testimonial-role">{testimonial.role}</p>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Guarantee Section - NUEVA */}
+      <section className="guarantee-section">
+        <div className="guarantee-content">
+          <div className="guarantee-icon">
+            <FiShield />
+          </div>
+          <h2>Garantía de Satisfacción de 30 Días</h2>
+          <p>
+            Estamos tan seguros de la calidad de nuestros cursos que ofrecemos una garantía de devolución 
+            total si no estás completamente satisfecha en los primeros 30 días. Sin preguntas, sin complicaciones.
+          </p>
+          <div className="guarantee-features">
+            <div className="guarantee-feature">
+              <FiCheckCircle />
+              <span>Prueba sin riesgo por 30 días</span>
+            </div>
+            <div className="guarantee-feature">
+              <FiCheckCircle />
+              <span>Devolución 100% del dinero</span>
+            </div>
+            <div className="guarantee-feature">
+              <FiCheckCircle />
+              <span>Proceso simple y rápido</span>
+            </div>
           </div>
         </div>
       </section>
@@ -675,13 +1070,18 @@ const Home = () => {
         <div className="cta-final-content">
           <h2 className="cta-final-title">¿Lista para comenzar tu transformación?</h2>
           <p className="cta-final-text">
-            Únete a cientos de mujeres que han descubierto el placer de crear con sus propias manos
+            Únete a cientos de mujeres que han descubierto el placer de crear con sus propias manos.<br />
+            <strong>Inscribite hoy y obtené acceso inmediato a todos los cursos.</strong>
           </p>
           <Link to="/register">
             <Button size="large" className="btn-cta-final">
-              Quiero inscribirme
+              Comenzar Ahora
+              <FiArrowRight />
             </Button>
           </Link>
+          <p className="cta-disclaimer">
+            <FiShield /> Garantía de 30 días · Acceso de por vida · Certificado incluido
+          </p>
         </div>
       </section>
     </div>

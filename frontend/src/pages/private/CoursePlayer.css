@@ -1,246 +1,1112 @@
+/* =====================================================================
+   CoursePlayer.css — Classic Professional Layout
+   Réplica 1:1 del HTML de referencia, tokens del sistema MyCourses
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ─── Tokens (espejo exacto de MyCourses) ───────────────────────────── */
+:root {
+  /* Paleta — azul del HTML de referencia */
+  --primary:          #0d6cf2;
+  --primary-dark:     #0b5bc9;
+  --primary-light:    rgba(13, 108, 242, 0.08);
+  --primary-mid:      rgba(13, 108, 242, 0.15);
+  --primary-shadow:   0 4px 12px rgba(13, 108, 242, 0.25);
+  --primary-shadow-h: 0 8px 24px rgba(13, 108, 242, 0.38);
+
+  /* Estados */
+  --success:          #22c55e;
+  --success-bg:       #f0fdf4;
+  --success-border:   #bbf7d0;
+
+  /* Superficies */
+  --white:            #ffffff;
+  --bg:               #f5f7f8;   /* background-light del HTML */
+  --surface:          #ffffff;
+  --surface-sidebar:  #f8fafc;   /* bg-slate-50 del aside */
+  --border:           #e2e8f0;   /* border-slate-200 */
+  --border-subtle:    #f1f5f9;   /* border-slate-100 */
+
+  /* Texto */
+  --text-1:           #0f172a;   /* slate-900 */
+  --text-2:           #475569;   /* slate-600 */
+  --text-3:           #94a3b8;   /* slate-400 */
+  --text-sidebar:     #334155;   /* slate-700 */
+
+  /* Tipografía */
+  --font-body:        'Inter', sans-serif;
+  --font-display:     'Playfair Display', serif;
+
+  /* Layout — exacto al HTML: header 65px, sidebar 25% */
+  --header-h:         65px;
+  --sidebar-w:        25%;
+
+  /* Radios */
+  --radius-sm:        4px;
+  --radius-md:        8px;
+  --radius-lg:        12px;
+  --radius-xl:        16px;
+  --radius-pill:      9999px;
+
+  /* Sombras */
+  --shadow-sm:        0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:        0 4px 16px rgba(0,0,0,0.10);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── Root page ─────────────────────────────────────────────────────── */
 .course-player-page {
-    min-height: 100vh;
-    background: #1f2937;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =====================================================================
+   HEADER
+   Réplica exacta: bg-white, border-b, flex items-center justify-between,
+   px-6 py-3, shrink-0, z-20
+   ===================================================================== */
+.cp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--header-h);
+  padding: 0 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 20;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+/* ── Izquierda ── */
+.cp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Back button — hover:bg-slate-100, rounded-lg */
+.cp-back-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.cp-back-btn:hover { background: #f1f5f9; color: var(--text-1); }
+.cp-back-btn svg { width: 22px; height: 22px; }
+
+/* Divider — h-6 w-px bg-slate-200 */
+.cp-divider {
+  width: 1px; height: 24px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* Curso info */
+.cp-course-info { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+
+/* text-lg font-bold — igual al HTML */
+.cp-course-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+  font-family: var(--font-body);
+}
+
+/* Chapter — text-xs font-medium text-slate-500 */
+.cp-course-chapter {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Centro: progress ── */
+/* flex-1 max-w-xl mx-12 items-center gap-4 */
+.cp-header-center {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  max-width: 480px;
+  margin: 0 3rem;
+  min-width: 0;
+}
+
+/* text-sm font-medium text-slate-700 */
+.cp-pct-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* h-2 w-full rounded-full bg-slate-200 overflow-hidden */
+.cp-track {
+  flex: 1;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+/* bg-primary */
+.cp-track-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--radius-pill);
+  transition: width 0.6s ease;
+}
+
+/* trophy icon — text-primary, fill variant */
+.cp-trophy-icon {
+  width: 22px; height: 22px;
+  color: var(--primary);
+  fill: var(--primary);   /* filled trophy */
+  flex-shrink: 0;
+}
+
+/* ── Derecha ── */
+.cp-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
+   text-slate-700 hover:bg-slate-100 */
+.cp-dashboard-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--text-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.cp-dashboard-btn:hover { background: #f1f5f9; color: var(--text-1); }
+.cp-dashboard-btn svg { width: 18px; height: 18px; }
+
+/* Button to open the sidebar on mobile (hidden on desktop) */
+.cp-open-sb-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 1.05rem;
+}
+.cp-open-sb-btn svg { width: 20px; height: 20px; }
+
+/* Avatar — rounded-full, ring hover */
+.cp-avatar-wrap {
+  position: relative;
+  cursor: pointer;
+}
+.cp-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: #cbd5e1 center/cover no-repeat;
+  background-image: url('https://i.pravatar.cc/80?img=5');
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+.cp-avatar-wrap:hover .cp-avatar { border-color: var(--primary); }
+
+/* Green status dot — bottom-0 right-0, size-3, bg-green-500, border-white */
+.cp-avatar-dot {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 11px; height: 11px;
+  background: #22c55e;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+}
+
+/* =====================================================================
+   BODY — flex row: main (flex-1) + aside (fixed 25% right)
+   ===================================================================== */
+.cp-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Main — flex-1, overflow-y-auto, bg-white, mr-[25%] ── */
+.cp-main {
+  padding-top: 3rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--surface);
+  /* Deja espacio para el sidebar fijo derecho */
+  margin-right: var(--sidebar-w);
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.cp-main::-webkit-scrollbar { width: 6px; }
+.cp-main::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+/* =====================================================================
+  VIDEO BLOCK
+  Reglas actualizadas: reducir pantalla de video al 75% y centrarla.
+  ===================================================================== */
+.cp-video-block {
+  /* Hacer el área de video más pequeña: 75% del ancho disponible y centrada
+    con un max-width para evitar que sea demasiado grande en pantallas muy anchas */
+  width: 75%;
+  max-width: 1100px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  position: relative;
+  flex-shrink: 0;
+  /* Allow video player controls or overlays that may position outside the
+     internal video element to remain visible instead of being clipped. */
+  overflow: visible;
+}
+
+/* Ensure the embedded video/iframe stays contained inside the block
+   and is not scaled/cropped. Use contain so the whole video fits
+   within the aspect-ratio box without zooming. The !important rules
+   here protect against other global rules (e.g. object-fit: cover)
+   that might be applied elsewhere. */
+.cp-video-block .video-player,
+.cp-video-block .video-player iframe,
+.cp-video-block .video-element,
+.cp-video-block video {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  transform: none !important;
+}
+
+/* Keep the actual player wrapper rounded and allow internal overflow
+   (some players render control overlays positioned outside the media
+   element). */
+.cp-video-block .video-player {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: visible;
+}
+
+/* Responsive: en pantallas pequeñas el video vuelve a ocupar el 100% */
+@media (max-width: 900px) {
+  .cp-video-block { width: 100%; margin: 0; }
+}
+
+/* ── Play button centrado ──
+   rounded-full size-20 bg-primary/90 text-white backdrop-blur-sm
+   hover:scale-110 shadow-2xl shadow-primary/40                      */
+.cp-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5;
+  pointer-events: none; /* el VideoPlayer maneja sus propios eventos */
+}
+.cp-play-btn {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(13, 108, 242, 0.9);
+  border: none;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  pointer-events: all;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 0 0 rgba(13,108,242,0.4), 0 20px 40px rgba(13,108,242,0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.cp-play-btn:hover { transform: scale(1.1); }
+.cp-play-btn svg   { width: 36px; height: 36px; margin-left: 3px; fill: #fff; }
+
+/* ── Controls overlay ──
+   inset-x-0 bottom-0, bg-gradient-to-t from-black/90 via-black/50 to-transparent,
+   opacity-0 group-hover:opacity-100 transition-opacity duration-300            */
+.cp-ctrl-overlay {
+  position: absolute;
+  inset-x: 0; bottom: 0;
+  padding: 1.5rem 1.5rem 1rem;
+  background: linear-gradient(to top,
+    rgba(0,0,0,0.90) 0%,
+    rgba(0,0,0,0.50) 55%,
+    transparent 100%
+  );
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+/* Mostrar al hover en el bloque padre */
+.cp-video-block:hover .cp-ctrl-overlay { opacity: 1; }
+
+/* Scrubber — h-1.5 rounded-full bg-white/30, hover h-2 */
+.cp-scrubber {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.3);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: height 0.15s;
+  position: relative;
+}
+.cp-scrubber:hover { height: 8px; }
+
+.cp-scrubber-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--radius-pill);
+  position: relative;
+}
+
+/* El thumb — size-4 bg-white rounded-full shadow-lg,
+   scale-0 group-hover:scale-100 */
+.cp-scrubber-thumb {
+  position: absolute;
+  right: -8px; top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.15s;
+}
+.cp-scrubber:hover .cp-scrubber-thumb { transform: translateY(-50%) scale(1); }
+
+/* Fila de botones de control */
+.cp-ctrl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+}
+.cp-ctrl-left, .cp-ctrl-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Botones de control — hover:text-primary */
+.cp-vbtn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center;
+  transition: color 0.15s;
+}
+.cp-vbtn:hover { color: var(--primary); }
+
+/* Speed button — hover:bg-white/10 px-2 py-1 rounded text-sm font-medium */
+.cp-speed {
+  padding: 0.25rem 0.6rem;
+  font-weight: 600;
+}
+.cp-speed:hover { background: rgba(255,255,255,0.12); }
+
+/* Time display */
+.cp-vtime {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  display: flex; align-items: center; gap: 0.35rem;
+}
+.cp-vtime-sep   { opacity: 0.5; }
+.cp-vtime-total { opacity: 0.7; }
+
+/* =====================================================================
+   BELOW VIDEO — contenido debajo del video
+   flex flex-col flex-1 max-w-5xl mx-auto w-full px-6 lg:px-10 py-8
+   ===================================================================== */
+.cp-below-video {
+  flex: 1;
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 2.5rem 3rem;
+}
+
+/* ── Title row ──
+   flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 */
+.cp-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.cp-title-block { display: flex; flex-direction: column; gap: 0.35rem; }
+
+/* text-2xl font-bold text-slate-900 mb-2 */
+.cp-lesson-h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  /* Usar Inter como el HTML de referencia */
+  font-family: var(--font-body);
+}
+
+/* text-slate-500 */
+.cp-lesson-sub {
+  font-size: 0.88rem;
+  color: var(--text-3);
+  font-weight: 500;
+}
+
+/* Next Lesson btn —
+   bg-primary hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold
+   shadow-lg shadow-primary/20 hover:shadow-primary/40               */
+.cp-next-lesson-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--primary-shadow);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cp-next-lesson-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+  box-shadow: var(--primary-shadow-h);
+  transform: translateY(-1px);
+}
+.cp-next-lesson-btn:hover:not(:disabled) svg { transform: translateX(3px); }
+.cp-next-lesson-btn:disabled {
+  background: #e2e8f0;
+  color: var(--text-3);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.cp-next-lesson-btn svg { width: 18px; height: 18px; transition: transform 0.2s; }
+
+/* ── Tabs ──
+   border-b border-slate-200 mb-8 / nav flex gap-8               */
+.cp-tabs-border {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.cp-tabs-nav {
+  display: flex;
+  gap: 2rem;
+}
+
+/* border-b-2 border-primary text-primary / border-transparent text-slate-500 */
+.cp-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 1rem 0.25rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--text-3);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.cp-tab:hover { color: var(--text-2); }
+.cp-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.cp-tab svg { width: 18px; height: 18px; }
+
+/* Resources count badge — bg-slate-100 text-slate-600 rounded-full */
+.cp-tab-count {
+  background: #f1f5f9;
+  color: var(--text-2);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.55rem;
+  border-radius: var(--radius-pill);
+}
+.cp-tab.active .cp-tab-count {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* ── Prose (Overview tab) ── */
+.cp-prose { /* prose dark:prose-invert max-w-none text-slate-600 */ }
+
+.cp-prose-h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 1rem;
+  font-family: var(--font-body);
+}
+
+.cp-prose-p {
+  font-size: 0.95rem;
+  color: var(--text-2);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+/* Grid 2 columnas — grid grid-cols-1 md:grid-cols-2 gap-6 my-8 */
+.cp-ov-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Cards — bg-slate-50 p-5 rounded-xl border border-slate-100 */
+.cp-ov-card {
+  background: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+  transition: box-shadow 0.2s;
+}
+.cp-ov-card:hover { box-shadow: var(--shadow-md); }
+
+.cp-ov-card-hd {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+/* p-2 rounded-lg — blue / purple */
+.cp-ov-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.cp-ov-icon.blue   { background: #dbeafe; }
+.cp-ov-icon.purple { background: #ede9fe; }
+
+.cp-ov-card-hd h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+/* ul space-y-2 text-sm */
+.cp-ov-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.cp-ov-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+/* check icon — text-green-500 text-[18px] mt-0.5 */
+.cp-ov-check {
+  color: #22c55e;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+/* arrow icon — text-slate-400 */
+.cp-ov-arrow {
+  color: var(--text-3);
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── Resources tab ── */
+.cp-resources {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cp-res-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.cp-res-row:hover { background: #f8fafc; }
+.cp-res-row:hover .cp-res-dl { color: var(--primary); }
+
+.cp-res-icon {
+  width: 38px; height: 38px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.cp-res-icon.pdf    { background: #fee2e2; }
+.cp-res-icon.zip    { background: #ede9fe; }
+.cp-res-icon.txt    { background: #e0f2fe; }
+.cp-res-icon.folder { background: #fef9c3; }
+.cp-res-icon.img    { background: #dcfce7; }
+
+.cp-res-info {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 0.1rem;
+}
+.cp-res-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-1);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cp-res-size { font-size: 0.72rem; color: var(--text-3); }
+
+.cp-res-dl {
+  color: var(--text-3);
+  font-size: 1rem;
+  display: flex; align-items: center;
+  text-decoration: none;
+  padding: 0.25rem;
+  transition: color 0.12s;
+}
+
+/* ── Empty state ── */
+.cp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  color: var(--text-3);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* =====================================================================
+   SIDEBAR — fixed right-0 top-[65px] bottom-0 w-[25%]
+   bg-slate-50, border-l border-slate-200, z-20
+   Réplica exacta del <aside> del HTML
+   ===================================================================== */
+.cp-sidebar {
+  position: fixed;
+  top: var(--header-h);
+  right: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  min-width: 240px;
+  max-width: 360px;
+  background: var(--surface-sidebar);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.04);
+}
+
+/* Sidebar header — p-4 border-b border-slate-200 */
+.cp-sb-hd {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* font-bold text-slate-900 mb-1 */
+.cp-sb-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 0.2rem;
+  font-family: var(--font-body);
+}
+
+/* text-xs text-slate-500 */
+.cp-sb-meta {
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+/* Scroll area — overflow-y-auto flex-1 sidebar-scroll pb-20 */
+.cp-sb-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 5rem; /* espacio para el footer sticky */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.cp-sb-scroll::-webkit-scrollbar { width: 6px; }
+.cp-sb-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+/* ── Module ── */
+.cp-module { border-bottom: 1px solid var(--border-subtle); }
+
+/* Module button —
+   w-full flex items-center justify-between p-4
+   bg-white hover:bg-slate-50 transition-colors group
+   Active: bg-slate-100 border-l-4 border-primary           */
+.cp-mod-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: none;
+  border-left: 4px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+  gap: 0.75rem;
+  transition: background 0.12s;
+  text-align: left;
+}
+.cp-mod-btn:hover:not(.active) {
+  background: #f8fafc;
+}
+/* Module activo — bg-slate-100 border-l-4 border-primary */
+.cp-mod-btn.active {
+  background: #f1f5f9;
+  border-left-color: var(--primary);
+}
+
+.cp-mod-info {
+  display: flex; flex-direction: column;
+  align-items: flex-start; gap: 0.18rem;
+  flex: 1; min-width: 0;
+}
+
+/* "Module N" label — text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 */
+.cp-mod-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+/* Active module label — text-primary */
+.cp-mod-btn.active .cp-mod-label { color: var(--primary); }
+
+/* Module title — font-bold text-slate-700 group-hover:text-primary */
+.cp-mod-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-sidebar);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 200px;
+  transition: color 0.12s;
+}
+.cp-mod-btn:not(.active):hover .cp-mod-name { color: var(--primary); }
+.cp-mod-btn.active .cp-mod-name { color: var(--text-1); }
+
+/* Chevron — expand_more / expand_less */
+.cp-mod-chevron {
+  font-size: 1rem;
+  color: var(--text-3);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.cp-mod-chevron.open { transform: rotate(180deg); }
+
+/* ── Lessons (expanded) ──
+   bg-slate-50                                               */
+.cp-lessons { background: #f8fafc; }
+
+/* Lesson row —
+   flex gap-3 p-3 pl-4 hover:bg-white transition-colors group
+   current:  bg-blue-50 border-l-2 border-primary
+   done:     (check_circle verde, strikethrough)
+   locked:   opacity-60                                     */
+.cp-lesson-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 1.25rem;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-align: left;
+  transition: background 0.12s;
+}
+.cp-lesson-row:hover:not(.current):not(.locked) { background: var(--surface); }
+.cp-lesson-row.current {
+  background: #eff6ff;     /* bg-blue-50 */
+  border-left-color: var(--primary);
+}
+.cp-lesson-row.locked { opacity: 0.6; cursor: default; }
+
+/* Status icon wrapper — mt-1 shrink-0 */
+.cp-lesson-status {
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* check_circle filled green */
+.cp-s-done {
+  display: flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* play_circle filled blue + animate-pulse */
+.cp-s-play {
+  display: flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.6rem;
+  animation: pulse-play 2s ease-in-out infinite;
+}
+@keyframes pulse-play {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+.cp-s-lock { font-size: 0.85rem; color: var(--text-3); }
+
+.cp-s-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+/* Lesson text */
+.cp-lesson-txt {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 0.15rem;
+}
+
+/* Nombre — text-sm font-medium text-slate-600 */
+.cp-l-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-sidebar);
+  line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: color 0.12s;
+}
+/* Hover: group-hover:text-primary */
+.cp-lesson-row:not(.current):not(.locked):hover .cp-l-name { color: var(--primary); }
+/* Completada — line-through decoration-slate-400/50 */
+.cp-l-name.strikethrough {
+  text-decoration: line-through;
+  text-decoration-color: rgba(100,116,139,0.45);
+  color: var(--text-3);
+}
+/* Activa — font-bold text-primary */
+.cp-l-name.current {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Duración — text-xs text-slate-400 / text-primary/70 */
+.cp-l-dur {
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+.cp-lesson-row.current .cp-l-dur {
+  color: rgba(13, 108, 242, 0.7); /* text-primary/70 */
+}
+
+/* ── Sidebar footer — sticky bottom ── */
+/* absolute bottom-0 w-full p-4 bg-white/90 backdrop-blur border-t */
+.cp-sb-footer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1rem;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+}
+
+/* Ask Instructor btn —
+   w-full flex items-center justify-center gap-2 py-3 rounded-lg
+   border border-slate-200 text-slate-700 font-bold text-sm
+   hover:bg-slate-50 transition-colors                       */
+.cp-ask-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-2);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.cp-ask-btn:hover { background: #f8fafc; color: var(--text-1); }
+.cp-ask-btn svg { width: 18px; height: 18px; }
+
+/* =====================================================================
+   ERROR STATE
+   ===================================================================== */
+.player-error {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; text-align: center;
+  padding: 3rem 2rem; gap: 1rem;
+  background: var(--bg);
+  font-family: var(--font-body);
+}
+.error-icon { font-size: 3rem; opacity: 0.6; }
+.player-error h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-1);
+}
+.player-error p { color: var(--text-2); font-size: 0.95rem; }
+.error-btn {
+  padding: 0.75rem 2rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  box-shadow: var(--primary-shadow);
+  margin-top: 0.5rem;
+}
+.error-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+/* =====================================================================
+   OVERLAY MÓVIL
+   ===================================================================== */
+.cp-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(3px);
+  z-index: 19;
+}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+/* Tablet — sidebar pasa a drawer */
+@media (max-width: 1024px) {
+  .cp-main { margin-right: 0; }
+
+  /* show the open-sidebar button on tablet/mobile */
+  .cp-open-sb-btn { display: inline-flex; }
+
+  .cp-sidebar {
+    top: 0; width: min(360px, 90vw);
+    transition: transform 0.3s ease;
+    transform: translateX(100%);
   }
-  
-  .player-container {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    height: calc(100vh - 80px);
+  .cp-sidebar.open { transform: translateX(0); }
+  .cp-overlay { display: block; }
+
+  .cp-header-center { display: none; } /* ocultar progreso en tablet */
+  .cp-ov-grid { grid-template-columns: 1fr; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .cp-header { padding: 0 1rem; }
+  .cp-dashboard-btn span { display: none; }
+  .cp-course-title { max-width: 160px; }
+  .cp-below-video { padding: 1.25rem 1rem 2rem; }
+  .cp-lesson-h1 { font-size: 1.15rem; }
+  .cp-tabs-nav { gap: 1rem; overflow-x: auto; }
+  .cp-tab { font-size: 0.8rem; }
+  .cp-title-row { flex-direction: column; }
+  .cp-next-lesson-btn { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
-  
-  .video-section {
-    display: flex;
-    flex-direction: column;
-    background: #111827;
-  }
-  
-  .video-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    background: #1f2937;
-    border-bottom: 1px solid #374151;
-  }
-  
-  .back-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: transparent;
-    border: none;
-    color: #9ca3af;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 0.5rem;
-    transition: color 0.3s;
-  }
-  
-  .back-button:hover {
-    color: white;
-  }
-  
-  .video-header h2 {
-    color: white;
-    font-size: 1.25rem;
-    margin: 0;
-  }
-  
-  .lesson-info {
-    padding: 2rem;
-    color: white;
-  }
-  
-  .lesson-info h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .lesson-info p {
-    color: #9ca3af;
-    line-height: 1.6;
-  }
-  
-  .video-controls {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    border-top: 1px solid #374151;
-    margin-top: auto;
-  }
-  
-  .nav-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: #6366f1;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .nav-button:hover {
-    background: #4f46e5;
-  }
-  
-  .nav-button:disabled {
-    background: #4b5563;
-    cursor: not-allowed;
-  }
-  
-  .sidebar {
-    background: #1f2937;
-    overflow-y: auto;
-    padding: 1.5rem;
-    border-left: 1px solid #374151;
-  }
-  
-  .sidebar h3 {
-    color: white;
-    font-size: 1.125rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid #374151;
-  }
-  
-  .modules-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .module-section h4 {
-    color: #f9fafb;
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  .lessons-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .lesson-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .lesson-item:hover {
-    background: #374151;
-  }
-  
-  .lesson-item.active {
-    background: #6366f1;
-  }
-  
-  .lesson-item.completed {
-    background: #065f46;
-  }
-  
-  .lesson-status {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #374151;
-    color: #9ca3af;
-    font-size: 0.75rem;
-  }
-  
-  .lesson-item.active .lesson-status {
-    background: white;
-    color: #6366f1;
-  }
-  
-  .lesson-item.completed .lesson-status {
-    background: white;
-  }
-  
-  .check-icon {
-    color: #10b981;
-  }
-  
-  .lock-icon {
-    color: #9ca3af;
-  }
-  
-  .lesson-details {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  
-  .lesson-title {
-    color: #d1d5db;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-  
-  .lesson-item.active .lesson-title {
-    color: white;
-    font-weight: 600;
-  }
-  
-  .lesson-duration {
-    color: #6b7280;
-    font-size: 0.75rem;
-  }
-  
-  .lesson-item.active .lesson-duration {
-    color: #e0e7ff;
-  }
-  
-  .player-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 80px);
-    text-align: center;
-    padding: 2rem;
-  }
-  
-  .player-error h2 {
-    color: #1f2937;
-    margin-bottom: 1rem;
-  }
-  
-  .player-error button {
-    padding: 0.75rem 1.5rem;
-    background: #6366f1;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  
-  @media (max-width: 1024px) {
-    .player-container {
-      grid-template-columns: 1fr;
-      height: auto;
-    }
-  
-    .sidebar {
-      border-left: none;
-      border-top: 1px solid #374151;
-    }
-  }
+}
+
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

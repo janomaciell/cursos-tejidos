@@ -157,6 +157,10 @@ MERCADOPAGO_WEBHOOK_SECRET = config('MERCADOPAGO_WEBHOOK_SECRET', default='')
 CLOUDFLARE_ACCOUNT_ID = config('CLOUDFLARE_ACCOUNT_ID', default='')
 CLOUDFLARE_API_TOKEN = config('CLOUDFLARE_API_TOKEN', default='')
 CLOUDFLARE_STREAM_URL = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/stream"
+CLOUDFLARE_CUSTOMER_SUBDOMAIN = config('CLOUDFLARE_CUSTOMER_SUBDOMAIN', default='')
+
+# GOOGLE OAUTH (login/registro con Google)
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='').strip()
 
 # EMAIL (opcional para recuperación de contraseña)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
