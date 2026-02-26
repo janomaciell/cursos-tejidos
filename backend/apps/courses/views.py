@@ -1,16 +1,18 @@
 from rest_framework import viewsets, status, generics, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.parsers import MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from .models import Course, Module, Lesson, LessonProgress
+from .models import Course, Module, Lesson, LessonProgress, LessonDocument
 from .serializers import (
     CourseListSerializer,
     CourseDetailSerializer,
     LessonProgressSerializer,
     ModuleSerializer,
-    LessonDetailSerializer
+    LessonDetailSerializer,
+    LessonDocumentSerializer,
 )
 from .filters import CourseFilter
 from apps.payments.models import CourseAccess
@@ -170,3 +172,62 @@ class LessonDetailView(generics.RetrieveAPIView):
         
         serializer = self.get_serializer(lesson)
         return Response(serializer.data)
+
+
+class LessonDocumentViewSet(viewsets.ModelViewSet):
+    """ViewSet para documentos adjuntos a lecciones.
+    
+    GET  /courses/lessons/<lesson_pk>/documents/         → lista (requiere acceso al curso)
+    POST /courses/lessons/<lesson_pk>/documents/         → subir archivo (admin)
+    GET  /courses/documents/<pk>/                        → detalle
+    DELETE /courses/documents/<pk>/                      → borrar (admin)
+    """
+    serializer_class = LessonDocumentSerializer
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get_queryset(self):
+        lesson_pk = self.kwargs.get('lesson_pk')
+        if lesson_pk:
+            return LessonDocument.objects.filter(lesson_id=lesson_pk)
+        return LessonDocument.objects.all()
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsAdminUser()]
+
+    def _check_lesson_access(self, request, lesson):
+        """Verifica que el usuario tenga acceso al curso de la lección."""
+        if lesson.is_preview:
+            return True
+        return CourseAccess.objects.filter(
+            user=request.user,
+            course=lesson.module.course,
+            is_active=True
+        ).exists()
+
+    def list(self, request, *args, **kwargs):
+        lesson_pk = self.kwargs.get('lesson_pk')
+        lesson = get_object_or_404(Lesson, pk=lesson_pk)
+        if not self._check_lesson_access(request, lesson):
+            return Response({'error': 'No tienes acceso a esta lección'}, status=status.HTTP_403_FORBIDDEN)
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        lesson_pk = self.kwargs.get('lesson_pk')
+        lesson = get_object_or_404(Lesson, pk=lesson_pk)
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save(lesson=lesson)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_destroy(self, instance):
+        # Borrar el archivo físico al eliminar el registro
+        if instance.file:
+            try:
+                instance.file.delete(save=False)
+            except Exception:
+                pass
+        instance.delete()

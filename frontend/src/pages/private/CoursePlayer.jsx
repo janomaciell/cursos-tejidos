@@ -24,12 +24,16 @@ import './CoursePlayer.css';
 /* ─── Helpers ──────────────────────────────────────────────────────── */
 const getResourceIcon = (type) => {
   switch (type) {
-    case 'pdf':    return { icon: '📄', cls: 'pdf',    label: 'PDF' };
-    case 'folder': return { icon: '📁', cls: 'folder', label: 'Carpeta' };
-    case 'txt':    return { icon: '📝', cls: 'txt',    label: 'Texto' };
-    case 'zip':    return { icon: '🗜️', cls: 'zip',    label: 'ZIP' };
-    case 'img':    return { icon: '🖼️', cls: 'img',    label: 'Imagen' };
-    default:       return { icon: '📎', cls: 'txt',    label: 'Archivo' };
+    case 'pdf':   return { icon: '📄', cls: 'pdf',    label: 'PDF' };
+    case 'excel': return { icon: '📊', cls: 'excel',  label: 'Excel' };
+    case 'word':  return { icon: '📝', cls: 'word',   label: 'Word' };
+    case 'ppt':   return { icon: '📑', cls: 'ppt',    label: 'PowerPoint' };
+    case 'folder':return { icon: '📁', cls: 'folder', label: 'Carpeta' };
+    case 'txt':   return { icon: '📋', cls: 'txt',    label: 'Texto' };
+    case 'zip':   return { icon: '🗜️', cls: 'zip',    label: 'ZIP' };
+    case 'img':   return { icon: '🖼️', cls: 'img',    label: 'Imagen' };
+    case 'video': return { icon: '🎬', cls: 'video',  label: 'Video' };
+    default:      return { icon: '📎', cls: 'txt',    label: 'Archivo' };
   }
 };
 
@@ -128,14 +132,14 @@ const CoursePlayer = () => {
 
   const loadResources = async (lessonId) => {
     try {
-      // const data = await coursesAPI.getLessonResources(lessonId);
-      // setResources(data);
-      setResources([
-        { id: 1, name: 'Lecture Slides.pdf',   type: 'pdf',    size: '2.4 MB', url: '#' },
-        { id: 2, name: 'Exercise Files.zip',    type: 'zip',    size: '14 MB',  url: '#' },
-        { id: 3, name: 'Instructor Notes.txt',  type: 'txt',    size: '12 KB',  url: '#' },
-      ]);
-    } catch (e) { setResources([]); }
+      const data = await coursesAPI.getLessonDocuments(lessonId);
+      // data puede ser array directo o { results: [...] }
+      const list = Array.isArray(data) ? data : (data?.results ?? []);
+      setResources(list);
+    } catch (e) {
+      console.warn('No se pudieron cargar los recursos:', e);
+      setResources([]);
+    }
   };
 
   /* ── Helpers ── */
@@ -391,25 +395,28 @@ const CoursePlayer = () => {
               </div>
             )}
 
-            {/* ─ Tab Resources ─ */}
             {activeTab === 'resources' && (
               <div className="cp-resources">
                 {resources.length === 0
                   ? <div className="cp-empty"><FiFolder style={{ width: 32, height: 32, opacity: 0.3 }} /><p>No hay materiales para esta lección.</p></div>
                   : resources.map(res => {
-                      const { icon, cls } = getResourceIcon(res.type);
+                      const { icon, cls, label } = getResourceIcon(res.file_type || res.type);
+                      const downloadUrl = res.file_url || res.url || '#';
+                      const sizeLabel   = res.size_display || res.size || '';
                       return (
                         <div key={res.id} className="cp-res-row">
                           <div className={`cp-res-icon ${cls}`}>{icon}</div>
                           <div className="cp-res-info">
                             <span className="cp-res-name">{res.name}</span>
-                            <span className="cp-res-size">{res.size}</span>
+                            <span className="cp-res-size">{sizeLabel}{sizeLabel && label ? ' • ' : ''}{label}</span>
                           </div>
                           <a
-                            href={res.url}
+                            href={downloadUrl}
                             download
+                            target="_blank"
+                            rel="noreferrer"
                             className="cp-res-dl"
-                            onClick={e => res.url === '#' && e.preventDefault()}
+                            onClick={e => downloadUrl === '#' && e.preventDefault()}
                           >
                             <FiDownload />
                           </a>
