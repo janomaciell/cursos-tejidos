@@ -41,5 +41,10 @@ export const coursesAPI = {
   updateLessonProgress: async (progressData) => {
     const response = await api.post('/courses/progress/', progressData);
     return response.data;
-  }
+  },
+
+  getLessonDocuments: async (lessonId) => {
+    const response = await api.get(`/courses/lessons/${lessonId}/documents/`);
+    return response.data;
+  },
 };

@@ -61,10 +61,18 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
+    TYPE_VIDEO    = 'video'
+    TYPE_DOCUMENT = 'document'
+    LESSON_TYPE_CHOICES = [
+        (TYPE_VIDEO,    'Video'),
+        (TYPE_DOCUMENT, 'Documento'),
+    ]
+
     module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lessons')
     title = models.CharField('Título', max_length=200)
     description = models.TextField('Descripción', blank=True)
-    video_id = models.CharField('ID del video', max_length=200, help_text='ID del video en Cloudflare Stream')
+    lesson_type = models.CharField('Tipo', max_length=20, choices=LESSON_TYPE_CHOICES, default=TYPE_VIDEO)
+    video_id = models.CharField('ID del video', max_length=200, blank=True, help_text='ID del video en Cloudflare Stream')
     duration_minutes = models.PositiveIntegerField('Duración (minutos)', default=0)
     order = models.PositiveIntegerField('Orden', default=0)
     is_preview = models.BooleanField('Vista previa gratis', default=False)
@@ -97,3 +105,45 @@ class LessonProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.lesson.title} - {self.progress_percentage}%"
+
+
+class LessonDocument(models.Model):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='documents')
+    title = models.CharField('Título', max_length=200, blank=True)
+    file = models.FileField('Archivo', upload_to='lessons/documents/')
+    created_at = models.DateTimeField('Fecha de subida', auto_now_add=True)
+
+    class Meta:
+        db_table = 'lesson_documents'
+        verbose_name = 'Documento de lección'
+        verbose_name_plural = 'Documentos de lecciones'
+        ordering = ['lesson', 'created_at']
+
+    # ── computed helpers ──────────────────────────────────────────────
+    @property
+    def name(self):
+        """Human-readable file name: use title if set, else the bare filename."""
+        if self.title:
+            return self.title
+        import os
+        return os.path.basename(self.file.name) if self.file else ''
+
+    @property
+    def file_type(self):
+        """Returns a short type key used by the frontend icon helper."""
+        import os
+        ext = os.path.splitext(self.file.name)[1].lower() if self.file else ''
+        mapping = {
+            '.pdf':  'pdf',
+            '.xls':  'excel', '.xlsx': 'excel',
+            '.doc':  'word',  '.docx': 'word',
+            '.ppt':  'ppt',   '.pptx': 'ppt',
+            '.zip':  'zip',   '.rar':  'zip',  '.7z': 'zip',
+            '.png':  'img',   '.jpg':  'img',  '.jpeg': 'img', '.gif': 'img', '.webp': 'img',
+            '.txt':  'txt',   '.csv':  'txt',
+            '.mp4':  'video', '.mkv':  'video', '.avi': 'video',
+        }
+        return mapping.get(ext, 'txt')
+
+    def __str__(self):
+        return f"{self.lesson.title} - {self.name}"
