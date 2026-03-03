@@ -9,7 +9,7 @@
   --accent-color: #fe6308;
   --secondary-color: #c2412d;
   --tertiary-color: #ff8a4c;
-  
+
   /* Fondos y neutros */
   --white: #ffffff;
   --background-soft: #e4c4b5;
@@ -19,31 +19,31 @@
   --gray-50: #fafafa;
   --gray-100: #f5f5f5;
   --gray-200: #e5e5e5;
-  
+
   /* Texto - mejorado para legibilidad */
   --text-dark: #2d2d2d;
   --text-ink: #1a1a1a;
   --text-medium: #4a4a4a;
   --text-light: #6b6b6b;
   --text-on-accent: #ffffff;
-  
+
   /* Sombras */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.2);
-  
+
   /* Fuentes - más legibles */
   --font-display: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
   --font-urbanist: 'Urbanist', sans-serif;
-  
+
   /* Urbanist section */
   --urbanist-main-bg: #fff58c;
   --urbanist-sub-bg: #fbf1ed;
   --urbanist-text: #9c4e23;
   --urbanist-title: #9c4e23;
-  
+
   /* Espaciado */
   --section-padding: 8rem 5%;
 }
@@ -109,7 +109,7 @@ html {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
   z-index: 0;
   pointer-events: none;
 }
@@ -585,7 +585,7 @@ html {
 .section-subtitle,
 .section-subtitle-testimonials-public,
 .section-subtitle-benefits-public {
-  
+
   font-family: var(--font-body);
   text-align: center;
   font-size: 1.2rem;
@@ -938,8 +938,13 @@ html {
     height: 72px;
   }
 
-  .step-title-how-it-works-public { font-size: 1.25rem; }
-  .step-desc-how-it-works-public { font-size: 1rem; }
+  .step-title-how-it-works-public {
+    font-size: 1.25rem;
+  }
+
+  .step-desc-how-it-works-public {
+    font-size: 1rem;
+  }
 }
 
 /* Additional mobile adjustments for the "Por qué elegirnos" / benefits area
@@ -1149,6 +1154,214 @@ html {
 }
 
 /* ===================================
+   URBANIST SECTION - MOBILE FIX
+   =================================== */
+
+@media (max-width: 768px) {
+  .urbanist-section {
+    overflow: hidden;
+  }
+
+  /* El wrapper tiene altura fija para que el SVG absolute se vea completo */
+  .urbanist-wrapper {
+    height: auto !important;
+    min-height: 100svh !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* El SVG ocupa exactamente el wrapper */
+  .urbanist-bg-gradient {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  /* Contenido de texto — flujo normal sobre el fondo */
+  .urbanist-content {
+    position: relative !important;
+    inset: auto !important;
+    padding: 2.5rem 1.5rem 1.5rem !important;
+    pointer-events: auto;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .urbanist-content h1 {
+    font-size: clamp(2rem, 10vw, 3.5rem) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.75rem;
+    padding-top: 0 !important;
+    word-break: break-word;
+  }
+
+  .urbanist-content p {
+    width: 100% !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .urbanist-content .urbanist-text-2 {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    margin-top: 0.5rem;
+  }
+
+  /* Paneles: grid 2 columnas, flex-grow para ocupar espacio restante */
+  .urbanist-panes-container {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+    height: auto !important;
+    flex: 1;
+    padding: 0 1rem 1.5rem !important;
+    position: relative !important;
+    z-index: 2;
+  }
+
+  /* Cada pane es una tarjeta con imagen que se ve completa */
+  .urbanist-pane {
+    position: relative !important;
+    height: auto !important;
+    min-height: 180px !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Imágenes — resetear todos los valores absolute y translate del desktop */
+  .urbanist-pane img,
+  .urbanist-pane:nth-of-type(1) img,
+  .urbanist-pane:nth-of-type(2) img,
+  .urbanist-pane:nth-of-type(3) img,
+  .urbanist-pane:nth-of-type(4) img {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    translate: none !important;
+    transform: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 180px !important;
+    max-width: 100% !important;
+    aspect-ratio: unset !important;
+    object-fit: cover !important;
+    border-radius: 14px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+}
+
+/* Tablet intermedia (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .urbanist-wrapper {
+    height: auto !important;
+    min-height: 100svh !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .urbanist-bg-gradient {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .urbanist-content {
+    position: relative !important;
+    inset: auto !important;
+    padding: 3rem 3rem 2rem !important;
+    pointer-events: auto;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .urbanist-content h1 {
+    font-size: clamp(3rem, 7vw, 5rem) !important;
+    padding-top: 0 !important;
+  }
+
+  .urbanist-content p {
+    width: 55% !important;
+    font-size: 1rem !important;
+  }
+
+  .urbanist-content .urbanist-text-2 {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 55% !important;
+    margin-top: 0.75rem;
+  }
+
+  .urbanist-panes-container {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1rem !important;
+    height: auto !important;
+    flex: 1;
+    padding: 0 2rem 2rem !important;
+    position: relative !important;
+    z-index: 2;
+  }
+
+  .urbanist-pane {
+    position: relative !important;
+    height: auto !important;
+    min-height: 220px !important;
+    display: flex !important;
+    align-items: stretch !important;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .urbanist-pane img,
+  .urbanist-pane:nth-of-type(1) img,
+  .urbanist-pane:nth-of-type(2) img,
+  .urbanist-pane:nth-of-type(3) img,
+  .urbanist-pane:nth-of-type(4) img {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    translate: none !important;
+    transform: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 220px !important;
+    max-width: 100% !important;
+    aspect-ratio: unset !important;
+    object-fit: cover !important;
+    border-radius: 14px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+}
+
+
+/* ===================================
    BENEFITS SECTION
    =================================== */
 
@@ -1236,7 +1449,7 @@ html {
     margin-right: auto !important;
   }
 
-  .benefits-grid-section-public > .benefit-item-public {
+  .benefits-grid-section-public>.benefit-item-public {
     min-width: 0;
     width: 100%;
   }
@@ -1383,7 +1596,7 @@ html {
   line-height: 1.2;
 }
 
-.guarantee-content > p {
+.guarantee-content>p {
   font-family: var(--font-body);
   font-size: 1.15rem;
   font-weight: 400;
@@ -1434,7 +1647,7 @@ html {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(252,92,13,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(252, 92, 13, 0.1) 0%, transparent 70%);
   animation: pulse 15s ease-in-out infinite;
 }
 
@@ -1515,6 +1728,7 @@ html {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -1525,6 +1739,7 @@ html {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1532,9 +1747,12 @@ html {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     transform: scale(1.05) rotate(180deg);
   }

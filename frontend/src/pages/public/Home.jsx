@@ -79,10 +79,14 @@ const Home = () => {
   useEffect(() => {
     // Initialize Urbanist section animation
     const initUrbanistAnimation = () => {
+      // En mobile y tablet, no aplicar el scroll horizontal animado
+      // Solo se aplica el layout estático via CSS
+      if (window.innerWidth <= 1024) return;
+
       const panes = gsap.utils.toArray(".urbanist-pane");
       const panesContainer = document.getElementById("urbanist-panes-container");
       const urbanistWrapper = document.querySelector(".urbanist-wrapper");
-      
+
       if (!panesContainer || panes.length === 0 || !urbanistWrapper) return;
 
       const containerWidth = panesContainer.offsetWidth;
