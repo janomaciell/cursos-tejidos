@@ -64,13 +64,54 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# DATABASE
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASE (Supabase PostgreSQL)
+DATABASE_URL = config('DATABASE_URL', default=None)
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=0,           # Sin pooling (requerido para Supabase)
+            conn_health_checks=True,
+            ssl_require=True,
+        )
     }
-}
+    DATABASES['default']['OPTIONS'] = {
+        'connect_timeout': 10,
+        'sslmode': 'require',
+        'options': '-c statement_timeout=30000',  # 30s timeout
+    }
+    # CRÍTICO: deshabilitar server-side cursors para Transaction/Session Pooler
+    DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
+
+    if DEBUG:
+        print("✓ Conectado a Supabase via DATABASE_URL")
+        print(f"✓ Host: {DATABASES['default']['HOST']}")
+        print(f"✓ Puerto: {DATABASES['default']['PORT']}")
+else:
+    # Fallback: variables individuales
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('SUPABASE_DB_NAME', default='postgres'),
+            'USER': config('SUPABASE_DB_USER', default='postgres'),
+            'PASSWORD': config('SUPABASE_DB_PASSWORD', default=''),
+            'HOST': config('SUPABASE_DB_HOST', default=''),
+            'PORT': config('SUPABASE_DB_PORT', default='5432'),
+            'OPTIONS': {
+                'connect_timeout': 10,
+                'sslmode': 'require',
+                'options': '-c statement_timeout=30000',
+            },
+            'CONN_MAX_AGE': 0,
+            'DISABLE_SERVER_SIDE_CURSORS': True,
+        }
+    }
+
+# Supabase client keys
+SUPABASE_URL = config('SUPABASE_URL', default='')
+SUPABASE_SERVICE_ROLE_KEY = config('SUPABASE_SERVICE_ROLE_KEY', default='')
+SUPABASE_ANON_KEY = config('SUPABASE_ANON_KEY', default='')
 
 
 # AUTH
