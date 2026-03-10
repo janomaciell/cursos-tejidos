@@ -51,6 +51,15 @@ export const usePayment = () => {
   };
 
   const createPayment = async (courseId, options = {}) => {
+    // ⚠️ IMPORTANTE: window.open() debe llamarse ANTES de cualquier await,
+    // de lo contrario el navegador lo bloquea como popup no solicitado.
+    // Abrimos una ventana en blanco sincrónicamente al detectar el clic del usuario,
+    // y luego le asignamos la URL real cuando el backend nos la devuelva.
+    let paymentWindow = null;
+    if (options.openInPopup) {
+      paymentWindow = window.open('about:blank', 'MercadoPago', 'width=800,height=600,scrollbars=yes');
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -60,19 +69,19 @@ export const usePayment = () => {
 
       console.log('[Payment] Preferencia creada:', paymentData);
 
-      // 2. Abrir Mercado Pago — usar siempre el init_point de producción
-      let paymentUrl = paymentData.init_point || paymentData.sandbox_init_point;
+      // 2. Obtener la URL de Mercado Pago
+      const paymentUrl = paymentData.init_point || paymentData.sandbox_init_point;
 
       if (options.openInPopup) {
-        // Abrir en popup
-        const paymentWindow = window.open(
-          paymentUrl,
-          'MercadoPago',
-          'width=800,height=600,scrollbars=yes'
-        );
-
-        if (!paymentWindow) {
-          throw new Error('El popup fue bloqueado. Por favor permite popups para este sitio.');
+        if (paymentWindow && !paymentWindow.closed) {
+          // Redirigir la ventana ya abierta a la URL de pago
+          paymentWindow.location.href = paymentUrl;
+        } else {
+          // El popup fue bloqueado de todas formas → fallback: redirigir en la misma pestaña
+          console.warn('[Payment] El popup fue bloqueado. Redirigiendo en la misma pestaña...');
+          localStorage.setItem('pending_payment_preference_id', paymentData.preference_id);
+          window.location.href = paymentUrl;
+          return { success: true, data: paymentData };
         }
 
         // 3. Iniciar polling mientras el usuario completa el pago
@@ -90,14 +99,16 @@ export const usePayment = () => {
         };
       } else {
         // Redirigir en la misma ventana
-        // Guardar preference_id en localStorage para poder hacer polling al volver
         localStorage.setItem('pending_payment_preference_id', paymentData.preference_id);
         window.location.href = paymentUrl;
-
         return { success: true, data: paymentData };
       }
 
     } catch (err) {
+      // Si hubo un error y quedó una ventana abierta en blanco, cerrarla
+      if (paymentWindow && !paymentWindow.closed) {
+        paymentWindow.close();
+      }
       const message = err.response?.data?.error || err.message || 'Error al crear el pago';
       setError(message);
       return { success: false, error: message };
