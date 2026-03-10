@@ -16,13 +16,13 @@ export const usePayment = () => {
 
       pollingIntervalRef.current = setInterval(async () => {
         attempts++;
-        
+
         console.log(`[Polling ${attempts}/${maxAttempts}] Consultando estado del pago...`);
 
         try {
           // Consultar el estado de la preferencia
           const data = await paymentsAPI.checkPreferenceStatus(preferenceId);
-          
+
           console.log('[Polling] Estado actual:', data.status);
 
           if (data.status === 'approved') {
@@ -57,15 +57,12 @@ export const usePayment = () => {
 
       // 1. Crear la preferencia de pago en el backend
       const paymentData = await paymentsAPI.createPayment(courseId);
-      
+
       console.log('[Payment] Preferencia creada:', paymentData);
 
-      // 2. Abrir Mercado Pago (en desarrollo forzar sandbox si hace falta)
-      let paymentUrl = paymentData.sandbox_init_point || paymentData.init_point;
-      if (import.meta.env.DEV && paymentUrl && !paymentUrl.includes('sandbox.')) {
-        paymentUrl = paymentUrl.replace('www.mercadopago', 'sandbox.mercadopago');
-      }
-      
+      // 2. Abrir Mercado Pago — usar siempre el init_point de producción
+      let paymentUrl = paymentData.init_point || paymentData.sandbox_init_point;
+
       if (options.openInPopup) {
         // Abrir en popup
         const paymentWindow = window.open(
@@ -86,17 +83,17 @@ export const usePayment = () => {
           paymentWindow.close();
         }
 
-        return { 
-          success: result.success, 
+        return {
+          success: result.success,
           status: result.status,
-          data: result.data || paymentData 
+          data: result.data || paymentData
         };
       } else {
         // Redirigir en la misma ventana
         // Guardar preference_id en localStorage para poder hacer polling al volver
         localStorage.setItem('pending_payment_preference_id', paymentData.preference_id);
         window.location.href = paymentUrl;
-        
+
         return { success: true, data: paymentData };
       }
 
@@ -114,14 +111,14 @@ export const usePayment = () => {
    */
   const checkPendingPayment = async () => {
     const preferenceId = localStorage.getItem('pending_payment_preference_id');
-    
+
     if (!preferenceId) {
       return null;
     }
 
     try {
       const data = await paymentsAPI.checkPreferenceStatus(preferenceId);
-      
+
       // Si ya se procesó, limpiar localStorage
       if (data.status !== 'pending') {
         localStorage.removeItem('pending_payment_preference_id');
@@ -144,11 +141,11 @@ export const usePayment = () => {
     }
   };
 
-  return { 
-    createPayment, 
+  return {
+    createPayment,
     checkPendingPayment,
     cancelPolling,
-    loading, 
-    error 
+    loading,
+    error
   };
 };
