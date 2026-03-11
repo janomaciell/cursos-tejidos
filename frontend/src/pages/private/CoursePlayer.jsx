@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { coursesAPI } from '../../api/courses';
 import VideoPlayer from '../../courses/VideoPlayer';
 import Loader from '../../components/common/Loader';
@@ -45,6 +45,7 @@ const TABS = [
 const CoursePlayer = () => {
   const { courseId } = useParams();
   const navigate     = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [course, setCourse]                 = useState(null);
   const [modules, setModules]               = useState([]);
@@ -116,6 +117,24 @@ const CoursePlayer = () => {
       const progressMap  = {};
       progressList.forEach(p => { progressMap[p.lesson] = p; });
       setProgress(progressMap);
+
+      // Si hay un ?lesson= en la URL, intentar navegar a esa lección
+      const requestedLessonId = searchParams.get('lesson');
+      if (requestedLessonId) {
+        const allLessons = modulesList.flatMap(m => m.lessons || []);
+        const target = allLessons.find(l => String(l.id) === String(requestedLessonId));
+        if (target) {
+          // Verificar restricción secuencial
+          const idx = allLessons.findIndex(l => l.id === target.id);
+          const prevLesson = idx > 0 ? allLessons[idx - 1] : null;
+          const canAccess = idx === 0 || (prevLesson && progressMap[prevLesson.id]?.completed);
+          if (canAccess) {
+            setCurrentLesson(target);
+            return;
+          }
+        }
+      }
+
       const firstIncomplete = findFirstIncomplete(modulesList, progressMap);
       setCurrentLesson(firstIncomplete || modulesList[0]?.lessons?.[0] || null);
     } catch (error) {

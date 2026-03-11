@@ -15,7 +15,7 @@ const CourseCatalog = () => {
   const [filters, setFilters] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [activeView, setActiveView] = useState('grid'); // 'grid' o 'list'
+  const [activeView, setActiveView] = useState('grid');
   const heroRef = useRef(null);
   const searchRef = useRef(null);
 
@@ -24,30 +24,25 @@ const CourseCatalog = () => {
   }, [filters, searchTerm]);
 
   useEffect(() => {
-    // Animaciones de entrada
     const tl = gsap.timeline({ delay: 0.2 });
     
-    // Hero animation
     tl.fromTo('.catalog-hero-content',
       { opacity: 0, y: 40 },
       { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
     );
 
-    // Stats cards stagger
     tl.fromTo('.stat-card',
       { opacity: 0, y: 30, scale: 0.95 },
       { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.6, ease: 'back.out(1.2)' },
       '-=0.5'
     );
 
-    // Search bar
     tl.fromTo('.search-section',
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
       '-=0.4'
     );
 
-    // Sidebar and content
     tl.fromTo('.catalog-sidebar',
       { opacity: 0, x: -30 },
       { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' },
@@ -67,10 +62,16 @@ const CourseCatalog = () => {
   const loadCourses = async () => {
     try {
       setLoading(true);
+
+      const cleanFilters = Object.fromEntries(
+        Object.entries(filters).filter(([_, v]) => v !== '' && v !== false && v != null)
+      );
+
       const params = {
-        ...filters,
-        search: searchTerm
+        ...cleanFilters,
+        ...(searchTerm ? { search: searchTerm } : {})
       };
+
       const data = await coursesAPI.getAllCourses(params);
       setCourses(data.results || data);
     } catch (error) {
@@ -83,7 +84,6 @@ const CourseCatalog = () => {
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
     
-    // Animación suave al cambiar filtros
     gsap.fromTo('.catalog-content',
       { opacity: 0.5, y: 10 },
       { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
@@ -97,7 +97,6 @@ const CourseCatalog = () => {
   const toggleFilters = () => {
     setShowFilters(!showFilters);
     
-    // Animación del sidebar en mobile
     if (!showFilters) {
       gsap.fromTo('.catalog-sidebar',
         { x: -100, opacity: 0 },
@@ -122,7 +121,7 @@ const CourseCatalog = () => {
 
   return (
     <div className="catalog-page">
-      {/* Header mejorado */}
+      {/* Header */}
       <section className="catalog-hero" ref={heroRef}>
         <div className="hero-pattern"></div>
         <div className="catalog-hero-content">
@@ -141,7 +140,6 @@ const CourseCatalog = () => {
             Desde cero hasta nivel profesional. Encontrá el curso perfecto para tu nivel y objetivos.
           </p>
 
-          {/* Stats cards */}
           <div className="hero-stats">
             {stats.map((stat, index) => (
               <div key={index} className="stat-card">
@@ -156,7 +154,7 @@ const CourseCatalog = () => {
         </div>
       </section>
 
-      {/* Search mejorado con más opciones */}
+      {/* Search */}
       <section className="search-section" ref={searchRef}>
         <div className="search-wrapper">
           <div className="search-container">
@@ -208,7 +206,6 @@ const CourseCatalog = () => {
               )}
             </div>
 
-            {/* View toggle */}
             <div className="view-toggle">
               <button
                 className={`view-btn ${activeView === 'grid' ? 'active' : ''}`}
@@ -259,7 +256,6 @@ const CourseCatalog = () => {
             <CourseFilter onFilterChange={handleFilterChange} />
           </div>
 
-          {/* Reset filters button */}
           {Object.keys(filters).length > 0 && (
             <div className="sidebar-footer">
               <button 
@@ -315,7 +311,6 @@ const CourseCatalog = () => {
         </main>
       </div>
 
-      {/* Overlay para mobile */}
       {showFilters && (
         <div 
           className="sidebar-overlay"

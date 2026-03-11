@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiClock, FiUsers, FiBook, FiStar, FiPlay, FiCheckCircle, FiLock, FiAward, FiDownload, FiShield } from 'react-icons/fi';
 import Button from '../components/common/Button';
 import NgrokImage from '../components/common/NgrokImage';
@@ -8,7 +9,8 @@ import './CourseDetail.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CourseDetail = ({ course, hasAccess, onPurchase, loading }) => {
+const CourseDetail = ({ course, hasAccess, onPurchase, loading, progress = {} }) => {
+  const navigate = useNavigate();
   const heroRef = useRef(null);
   const contentRef = useRef(null);
 
@@ -53,6 +55,31 @@ const CourseDetail = ({ course, hasAccess, onPurchase, loading }) => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
+
+  /* Construye lista plana de todas las lecciones en orden */
+  const getAllLessonsOrdered = () => {
+    const all = [];
+    (course.modules || []).forEach(m =>
+      (m.lessons || []).forEach(l => all.push(l))
+    );
+    return all;
+  };
+
+  /* Verifica si una lección está desbloqueada:
+     La primera siempre está libre; las demás requieren que la anterior esté completada */
+  const isLessonUnlocked = (targetLesson) => {
+    const all = getAllLessonsOrdered();
+    const idx = all.findIndex(l => l.id === targetLesson.id);
+    if (idx <= 0) return true; // primera lección siempre accesible
+    const prev = all[idx - 1];
+    return progress[prev.id]?.completed === true;
+  };
+
+  const handleLessonClick = (lesson) => {
+    if (!hasAccess) return;
+    if (!isLessonUnlocked(lesson)) return; // bloqueada
+    navigate(`/curso/${course.id}/player?lesson=${lesson.id}`);
+  };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('es-AR', {
@@ -264,17 +291,25 @@ const CourseDetail = ({ course, hasAccess, onPurchase, loading }) => {
                     )}
                     
                     <div className="lessons-list">
-                      {module.lessons.map((lesson, lessonIndex) => (
+                      {module.lessons.map((lesson, lessonIndex) => {
+                        const unlocked = !hasAccess ? false : isLessonUnlocked(lesson);
+                        const clickable = hasAccess && unlocked;
+                        return (
                         <div 
                           key={lesson.id} 
-                          className={`lesson-item ${lesson.is_preview ? 'preview' : ''} ${hasAccess ? 'has-access' : ''}`}
+                          className={`lesson-item ${lesson.is_preview ? 'preview' : ''} ${hasAccess ? 'has-access' : ''} ${clickable ? 'clickable' : ''} ${hasAccess && !unlocked ? 'locked-sequential' : ''}`}
+                          onClick={() => handleLessonClick(lesson)}
+                          title={hasAccess && !unlocked ? 'Debés completar la lección anterior para desbloquear esta' : ''}
+                          style={{ cursor: clickable ? 'pointer' : 'default' }}
                         >
                           <div className="lesson-number">
                             {lessonIndex + 1}
                           </div>
                           
                           <div className="lesson-icon">
-                            {lesson.is_preview || hasAccess ? (
+                            {hasAccess && !unlocked ? (
+                              <FiLock />
+                            ) : lesson.is_preview || hasAccess ? (
                               <FiPlay />
                             ) : (
                               <FiLock />
@@ -300,7 +335,8 @@ const CourseDetail = ({ course, hasAccess, onPurchase, loading }) => {
                             )}
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 ))}

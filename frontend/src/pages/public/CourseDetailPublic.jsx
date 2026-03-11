@@ -20,6 +20,7 @@ const CourseDetailPublic = () => {
   const [hasAccess, setHasAccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [paymentResult, setPaymentResult] = useState(null);
+  const [lessonProgress, setLessonProgress] = useState({});
   const bannerRef = useRef(null);
 
   useEffect(() => {
@@ -58,10 +59,22 @@ const CourseDetailPublic = () => {
       const data = await coursesAPI.getCourseBySlug(slug);
       setCourse(data);
 
-      // Si está autenticado, verificar acceso
+      // Si está autenticado, verificar acceso y progreso
       if (isAuthenticated) {
         const accessData = await coursesAPI.checkCourseAccess(data.id);
         setHasAccess(accessData.has_access);
+
+        if (accessData.has_access) {
+          try {
+            const progressData = await coursesAPI.getLessonProgress(data.id);
+            const progressList = Array.isArray(progressData) ? progressData : (progressData?.results ?? []);
+            const progressMap = {};
+            progressList.forEach(p => { progressMap[p.lesson] = p; });
+            setLessonProgress(progressMap);
+          } catch (e) {
+            console.warn('No se pudo cargar el progreso:', e);
+          }
+        }
       }
     } catch (error) {
       console.error('Error al cargar curso:', error);
@@ -277,6 +290,7 @@ const CourseDetailPublic = () => {
         hasAccess={hasAccess}
         onPurchase={handlePurchase}
         loading={paymentLoading}
+        progress={lessonProgress}
       />
     </div>
   );

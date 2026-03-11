@@ -216,7 +216,10 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@elearning.com
 
 # SECURITY SETTINGS (Production)
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # ngrok ya maneja HTTPS externamente; activar SSL_REDIRECT causaría loops.
+    # En cambio, confiamos en el header que ngrok/proxy envía.
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # SECURE_SSL_REDIRECT = True  ← desactivado: el proxy (ngrok) ya redirige a HTTPS
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
