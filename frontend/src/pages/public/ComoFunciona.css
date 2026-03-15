@@ -1,426 +1,627 @@
-/* ComoFunciona.css - Página "Cómo funciona" - Estilos propios */
+/* ComoFunciona.css — Rediseño alineado al Home */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
-
-:root {
-  --cf-primary: #fc5c0d;
-  --cf-accent: #fe6308;
-  --cf-cream: #fff5f0;
-  --cf-cream-dark: #ffeee5;
-  --cf-white: #ffffff;
-  --cf-ink: #1a1a1a;
-  --cf-text: #2d2d2d;
-  --cf-text-muted: #4a4a4a;
-  --cf-gray-100: #f5f5f5;
-  --cf-gray-200: #e5e5e5;
-  --cf-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --cf-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
-  --cf-font-display: 'Playfair Display', serif;
-  --cf-font-body: 'Inter', sans-serif;
-}
-
-.como-funciona-page {
+/* ─── Hero ─── */
+.cf2-page {
   min-height: 100vh;
-  background: var(--cf-white);
-  font-family: var(--cf-font-body);
-  color: var(--cf-text);
-  line-height: 1.6;
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+  color: #2d2d2d;
 }
 
-/* Header */
-.cf-header {
-  background: linear-gradient(135deg, var(--cf-primary) 0%, var(--cf-accent) 100%);
-  padding: 4rem 5% 5rem;
-  color: var(--cf-white);
+.cf2-hero-section {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 5% 5rem;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1a0e 50%, #3d1f0a 100%);
+  overflow: hidden;
   text-align: center;
 }
 
-.cf-header-inner {
-  max-width: 800px;
+.cf2-hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 60% 40%, rgba(252, 92, 13, 0.25) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cf2-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
   margin: 0 auto;
+  opacity: 1;
 }
 
-.cf-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.95);
-  text-decoration: none;
-  font-size: 0.95rem;
+.cf2-hero-eyebrow {
+  font-size: 0.9rem;
   font-weight: 600;
-  margin-bottom: 2rem;
-  transition: opacity 0.2s;
-}
-
-.cf-back:hover {
-  opacity: 0.9;
-}
-
-.cf-back svg {
-  width: 20px;
-  height: 20px;
-}
-
-.cf-main-title {
-  font-family: var(--cf-font-display);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fc5c0d;
   margin-bottom: 1rem;
-  line-height: 1.2;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 
-.cf-main-subtitle {
+.cf2-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+
+.cf2-hero-desc {
   font-size: 1.15rem;
-  opacity: 0.95;
-  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Contenedor común */
-.cf-container {
-  max-width: 900px;
+.cf2-hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* ─── Trust Banner ─── */
+.cf2-trust-banner {
+  background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 100%);
+  padding: 1.25rem 5%;
+  border-bottom: 2px solid rgba(252,92,13,0.3);
+}
+
+.cf2-trust-items {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.cf2-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(255,255,255,0.92);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.cf2-trust-item svg {
+  color: #fc5c0d;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ─── Common containers ─── */
+.cf2-section-container {
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 5%;
 }
 
-/* Títulos de sección */
-.cf-section-title {
-  font-family: var(--cf-font-display);
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+.cf2-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
   font-weight: 700;
-  color: var(--cf-ink);
+  color: #1a1a1a;
   text-align: center;
   margin-bottom: 0.75rem;
 }
 
-.cf-section-subtitle {
+.cf2-section-subtitle {
   text-align: center;
-  font-size: 1.1rem;
-  color: var(--cf-text-muted);
+  font-size: 1.05rem;
+  color: #666;
   margin-bottom: 3rem;
   line-height: 1.65;
 }
 
-/* Video section */
-.cf-video-section {
-  padding: 5rem 5%;
-  background: linear-gradient(180deg, var(--cf-cream) 0%, var(--cf-white) 100%);
+/* ─── Pasos ─── */
+.cf2-steps-section {
+  padding: 5rem 0;
+  background: #fff;
 }
 
-.cf-video-container {
+.cf2-steps-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.cf2-step-item {
+  background: #fff5f0;
+  border: 2px solid #ffe4d6;
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  flex: 1 1 160px;
+  max-width: 200px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.cf2-step-item:hover {
+  border-color: #fc5c0d;
+  box-shadow: 0 8px 28px rgba(252,92,13,0.15);
+  transform: translateY(-5px);
+}
+
+.cf2-step-icon-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.25rem;
+}
+
+.cf2-step-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #fc5c0d, #fe6308);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 16px rgba(252,92,13,0.35);
+}
+
+.cf2-step-number {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #1a1a1a;
+  color: #fc5c0d;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.cf2-step-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.cf2-step-desc {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ─── Video ─── */
+.cf2-video-section {
+  padding: 5rem 5%;
+  background: linear-gradient(180deg, #fff5f0 0%, #fff 100%);
+}
+
+.cf2-video-container {
   max-width: 900px;
   margin: 0 auto;
-  text-align: center;
 }
 
-.cf-video-wrapper {
+.cf2-video-wrapper {
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: var(--cf-shadow-lg);
-  background: var(--cf-gray-100);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
 }
 
-.cf-video-placeholder {
+.cf2-video-poster {
+  aspect-ratio: 16/9;
   width: 100%;
-  aspect-ratio: 16 / 9;
-}
-
-.cf-video-poster {
-  width: 100%;
-  height: 100%;
+  background: linear-gradient(135deg, #fc5c0d 0%, #fe6308 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--cf-primary) 0%, var(--cf-accent) 100%);
+  gap: 1rem;
   cursor: pointer;
   transition: opacity 0.25s;
 }
 
-.cf-video-poster:hover {
-  opacity: 0.92;
+.cf2-video-poster:hover { opacity: 0.9; }
+
+.cf2-play-icon {
+  width: 72px;
+  height: 72px;
+  color: #fff;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
 }
 
-.cf-video-play-icon {
-  width: 80px;
-  height: 80px;
-  color: var(--cf-white);
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
-}
-
-.cf-video-placeholder-text {
+.cf2-video-poster span {
   font-size: 1.1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(255,255,255,0.95);
 }
 
-/* Cursos y confianza */
-.cf-courses-trust-section {
+/* ─── Beneficios ─── */
+.cf2-benefits-section {
   padding: 5rem 0;
-  background: var(--cf-white);
+  background: #fff;
 }
 
-.cf-block {
-  margin-bottom: 4rem;
-}
-
-.cf-block:last-child {
-  margin-bottom: 0;
-}
-
-.cf-block-title {
-  font-family: var(--cf-font-display);
-  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-  font-weight: 700;
-  color: var(--cf-primary);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 3px solid var(--cf-primary);
-}
-
-.cf-intro {
-  font-size: 1.1rem;
-  color: var(--cf-text-muted);
-  line-height: 1.8;
-  margin-bottom: 1.75rem;
-}
-
-.cf-steps-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.cf-steps-list li {
-  position: relative;
-  padding-left: 1.75rem;
-  margin-bottom: 1rem;
-  font-size: 1.05rem;
-  color: var(--cf-text);
-  line-height: 1.75;
-}
-
-.cf-steps-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.5rem;
-  width: 8px;
-  height: 8px;
-  background: var(--cf-primary);
-  border-radius: 50%;
-}
-
-.cf-steps-list li strong {
-  color: var(--cf-ink);
-}
-
-/* Trust cards */
-.cf-trust-grid {
+.cf2-benefits-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.75rem;
-  margin-top: 2rem;
 }
 
-.cf-trust-card {
-  background: var(--cf-gray-100);
-  padding: 2rem;
-  border-radius: 16px;
-  border: 2px solid var(--cf-gray-200);
+.cf2-benefit-card {
+  background: #fff5f0;
+  border: 2px solid #ffe4d6;
+  border-radius: 18px;
+  padding: 2rem 1.75rem;
   transition: all 0.3s ease;
 }
 
-.cf-trust-card:hover {
-  border-color: var(--cf-primary);
-  box-shadow: var(--cf-shadow);
-  transform: translateY(-3px);
+.cf2-benefit-card:hover {
+  border-color: #fc5c0d;
+  box-shadow: 0 8px 28px rgba(252,92,13,0.13);
+  transform: translateY(-4px);
 }
 
-.cf-trust-icon {
+.cf2-benefit-icon {
   width: 52px;
   height: 52px;
-  background: var(--cf-cream-dark);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #fc5c0d, #fe6308);
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  color: #fff;
+  font-size: 1.3rem;
+  margin-bottom: 1.1rem;
+  box-shadow: 0 4px 12px rgba(252,92,13,0.3);
 }
 
-.cf-trust-icon svg {
-  width: 26px;
-  height: 26px;
-  color: var(--cf-primary);
-}
-
-.cf-trust-card h4 {
-  font-family: var(--cf-font-display);
-  font-size: 1.25rem;
+.cf2-benefit-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: var(--cf-ink);
+  color: #1a1a1a;
   margin-bottom: 0.5rem;
 }
 
-.cf-trust-card p {
-  font-size: 0.98rem;
-  color: var(--cf-text-muted);
-  line-height: 1.65;
+.cf2-benefit-desc {
+  font-size: 0.93rem;
+  color: #666;
+  line-height: 1.6;
   margin: 0;
 }
 
-/* Nosotros */
-.cf-nosotros-section {
+/* ─── Andrea ─── */
+.cf2-andrea-section {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--cf-cream) 0%, var(--cf-white) 100%);
+  background: linear-gradient(180deg, #fff5f0 0%, #fff 100%);
 }
 
-.cf-nosotros-inner {
+.cf2-andrea-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 5%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: center;
 }
 
-.cf-nosotros-content .cf-section-title {
-  text-align: left;
-}
-
-.cf-nosotros-content .cf-section-subtitle {
-  text-align: left;
-  margin-bottom: 1.5rem;
-}
-
-.cf-nosotros-lead {
-  font-size: 1.4rem;
+.cf2-andrea-eyebrow {
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--cf-primary);
-  font-style: italic;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fc5c0d;
+  margin-bottom: 0.75rem;
+}
+
+.cf2-andrea-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
   margin-bottom: 1.5rem;
-  line-height: 1.4;
 }
 
-.cf-nosotros-text {
+.cf2-andrea-text {
   font-size: 1.05rem;
-  color: var(--cf-text-muted);
+  color: #555;
   line-height: 1.8;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
-.cf-nosotros-values {
+.cf2-andrea-values {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 2rem;
+  gap: 0.6rem;
+  margin-top: 1.75rem;
 }
 
-.cf-value {
+.cf2-value-tag {
   display: inline-block;
-  padding: 0.5rem 1.1rem;
-  background: var(--cf-cream-dark);
-  color: var(--cf-primary);
+  padding: 0.45rem 1rem;
+  background: #fff5f0;
+  color: #fc5c0d;
+  font-size: 0.88rem;
   font-weight: 600;
-  font-size: 0.95rem;
   border-radius: 50px;
-  border: 2px solid var(--cf-primary);
+  border: 2px solid #fc5c0d;
   transition: all 0.25s;
 }
 
-.cf-value:hover {
-  background: var(--cf-primary);
-  color: var(--cf-white);
+.cf2-value-tag:hover {
+  background: #fc5c0d;
+  color: #fff;
   transform: translateY(-2px);
 }
 
-.cf-nosotros-visual {
+.cf2-andrea-visual {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.cf-nosotros-box {
+.cf2-andrea-img {
   width: 100%;
-  max-width: 360px;
-  aspect-ratio: 4 / 5;
-  background: linear-gradient(145deg, var(--cf-cream-dark) 0%, #e4c4b5 100%);
-  border-radius: 20px;
-  border: 3px solid var(--cf-primary);
-  box-shadow: var(--cf-shadow-lg);
+  max-width: 400px;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 4px solid #fc5c0d;
+  box-shadow: 0 12px 40px rgba(252,92,13,0.2);
 }
 
-/* CTA final */
-.cf-cta-section {
-  padding: 4rem 5%;
-  background: var(--cf-ink);
+/* Fallback si la imagen no existe */
+.cf2-andrea-img[src="/img/andy-instructor.jpg"] {
+  background: linear-gradient(145deg, #fff5f0 0%, #e4c4b5 100%);
+}
+
+/* ─── Confianza cards ─── */
+.cf2-trust-section {
+  padding: 5rem 0;
+  background: #fff;
+}
+
+.cf2-trust-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.cf2-trust-card {
+  background: #fff5f0;
+  border: 2px solid #ffe4d6;
+  border-radius: 18px;
+  padding: 2rem 1.5rem;
   text-align: center;
+  transition: all 0.3s ease;
 }
 
-.cf-cta-inner {
-  max-width: 600px;
+.cf2-trust-card:hover {
+  border-color: #fc5c0d;
+  box-shadow: 0 8px 28px rgba(252,92,13,0.13);
+  transform: translateY(-4px);
+}
+
+.cf2-trust-card-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #fc5c0d, #fe6308);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.4rem;
+  margin: 0 auto 1rem;
+  box-shadow: 0 4px 14px rgba(252,92,13,0.3);
+}
+
+.cf2-trust-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.6rem;
+}
+
+.cf2-trust-card p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── FAQ ─── */
+.cf2-faq-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, #fff5f0 0%, #fff 100%);
+}
+
+.cf2-faq-container {
+  max-width: 780px;
+}
+
+.cf2-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cf2-faq-item {
+  background: #fff;
+  border: 2px solid #ffe4d6;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.cf2-faq-item:hover,
+.cf2-faq-open {
+  border-color: #fc5c0d;
+  box-shadow: 0 4px 18px rgba(252,92,13,0.1);
+}
+
+.cf2-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1a1a1a;
+  user-select: none;
+}
+
+.cf2-faq-question svg {
+  flex-shrink: 0;
+  color: #fc5c0d;
+  width: 20px;
+  height: 20px;
+}
+
+.cf2-faq-answer {
+  margin-top: 1rem;
+  font-size: 0.97rem;
+  color: #555;
+  line-height: 1.7;
+  padding-top: 1rem;
+  border-top: 1px solid #ffe4d6;
+}
+
+/* ─── CTA Final ─── */
+.cf2-cta-section {
+  padding: 6rem 5%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1a0e 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cf2-cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(252,92,13,0.2) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cf2-cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 660px;
   margin: 0 auto;
 }
 
-.cf-cta-title {
-  font-family: var(--cf-font-display);
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+.cf2-cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   font-weight: 700;
-  color: var(--cf-white);
-  margin-bottom: 0.75rem;
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
-.cf-cta-text {
+.cf2-cta-text {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 2rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.7;
+  margin-bottom: 2.25rem;
 }
 
-.cf-cta-btn {
-  background: var(--cf-primary);
-  color: var(--cf-white);
-  border: none;
-  display: inline-flex;
+.cf2-cta-disclaimer {
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  margin-top: 1.25rem;
 }
 
-.cf-cta-btn:hover {
-  background: var(--cf-accent);
+.cf2-cta-disclaimer svg {
+  color: #fc5c0d;
+  width: 16px;
+  height: 16px;
 }
 
-/* Responsive */
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .cf2-benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cf2-trust-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
-  .cf-header {
-    padding: 3rem 5% 4rem;
+  .cf2-hero-section {
+    padding: 5rem 5% 4rem;
+    min-height: 60vh;
   }
-
-  .cf-video-section {
-    padding: 3rem 5%;
+  .cf2-trust-items {
+    gap: 1.25rem;
   }
-
-  .cf-trust-grid {
+  .cf2-steps-grid {
+    gap: 1rem;
+  }
+  .cf2-step-item {
+    max-width: 160px;
+    flex: 1 1 140px;
+  }
+  .cf2-benefits-grid {
     grid-template-columns: 1fr;
   }
-
-  .cf-nosotros-inner {
+  .cf2-andrea-container {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-
-  .cf-nosotros-content .cf-section-title,
-  .cf-nosotros-content .cf-section-subtitle {
-    text-align: center;
+  .cf2-andrea-visual {
+    order: -1;
   }
-
-  .cf-nosotros-lead {
-    text-align: center;
-  }
-
-  .cf-nosotros-values {
-    justify-content: center;
-  }
-
-  .cf-nosotros-box {
+  .cf2-andrea-img {
     max-width: 280px;
+  }
+  .cf2-trust-cards {
+    grid-template-columns: 1fr;
+  }
+  .cf2-faq-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cf2-trust-items {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .cf2-steps-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cf2-step-item {
+    max-width: 100%;
+    width: 100%;
   }
 }

@@ -632,20 +632,20 @@ const Home = () => {
   };
 
   const steps = [
-    { number: '01', title: 'Inscribite', desc: 'Elegí tu curso ideal', icon: <FiBook /> },
-    { number: '02', title: 'Accedé', desc: 'A todo el contenido 24/7', icon: <FiVideo /> },
-    { number: '03', title: 'Practicá', desc: 'Con proyectos reales', icon: <FiEdit2 /> },
-    { number: '04', title: 'Consultá', desc: 'Soporte personalizado', icon: <FiHeadphones /> },
-    { number: '05', title: 'Certificá', desc: 'Tu nueva habilidad', icon: <FiAward /> }
+    { number: '01', title: 'Inscribite', desc: 'Elegí el proyecto que quieras empezar hoy.', icon: <FiBook /> },
+    { number: '02', title: 'Accedé', desc: 'Disfrutá de todo el contenido y videos las 24/7.', icon: <FiVideo /> },
+    { number: '03', title: 'Tejé', desc: 'Creá tus amigurumis con videos claros y guiados.', icon: <FiEdit2 /> },
+    { number: '04', title: 'Consultá', desc: 'Recibí soporte personalizado si tenés dudas.', icon: <FiHeadphones /> },
+    { number: '05', title: 'Emprendé', desc: 'Lucí, regalá o vendé tus creaciones con orgullo.', icon: <FiTrendingUp /> }
   ];
 
   const benefits = [
-    { icon: <FiVideo />, title: 'Videos HD de calidad', desc: 'Clases grabadas profesionalmente con múltiples ángulos' },
-    { icon: <FiClock />, title: 'Acceso de por vida', desc: 'Aprendé a tu ritmo, sin presiones ni vencimientos' },
-    { icon: <FiDownload />, title: 'Material descargable', desc: 'PDFs, patrones y plantillas para imprimir' },
-    { icon: <FiMessageCircle />, title: 'Soporte directo', desc: 'Respondo todas tus dudas personalmente' },
-    { icon: <FiUsers />, title: 'Comunidad activa', desc: 'Conectá con otras alumnas apasionadas' },
-    { icon: <FiAward />, title: 'Certificado oficial', desc: 'Validá tu aprendizaje y habilidades' }
+    { icon: <FiVideo />, title: 'Videos HD de calidad', desc: 'Clases grabadas con total nitidez para que veas cada detalle y no te pierdas ningún punto.' },
+    { icon: <FiClock />, title: 'Acceso de por vida', desc: 'Aprendé a tu ritmo, sin presiones ni vencimientos. Tu curso para siempre.' },
+    { icon: <FiDownload />, title: 'Material descargable', desc: 'PDFs con patrones detallados y guías de puntos listas para imprimir.' },
+    { icon: <FiMessageCircle />, title: 'Soporte directo', desc: 'Respondo todas tus dudas personalmente vía WhatsApp para que nunca te trabes.' },
+    { icon: <FiUsers />, title: 'Comunidad activa', desc: 'Conectá con otras tejedoras apasionadas, compartí tus logros y unite a nuestro grupo.' },
+    { icon: <FiAward />, title: 'Técnica Profesional', desc: 'Dominá el arte del crochet con métodos probados que garantizan resultados impecables.' }
   ];
 
   const testimonials = [
@@ -681,35 +681,35 @@ const Home = () => {
     {
       icon: <FiEdit2 />,
       title: 'Expresión Personal',
-      description: 'Aprende a materializar tus ideas en telas y puntadas. Cada proyecto es una oportunidad para expresar tu estilo único.'
+      description: 'Aprendé a materializar tus ideas con hilos y puntos. Cada proyecto es una oportunidad para expresar tu estilo único a través del tejido.'
     },
     {
       icon: <FiZap />,
       title: 'Independencia',
-      description: 'Imagina poder arreglar cualquier prenda, crear tu guardarropa ideal o incluso iniciar tu propio emprendimiento.'
+      description: 'Imaginá poder crear tus propios amigurumis, decorar tu hogar o incluso iniciar tu propio emprendimiento con tus creaciones.'
     },
     {
       icon: <FiHeart />,
       title: 'Terapia y Mindfulness',
-      description: 'Coser es meditativo. El ritmo de las puntadas y ver el progreso constante tiene un efecto calmante incomparable.'
+      description: 'Tejer es meditativo. El ritmo de los puntos y ver el progreso constante tiene un efecto calmante incomparable para tu mente.'
     },
     {
       icon: <FiUsers />,
       title: 'Conexión Humana',
-      description: 'Únete a una comunidad vibrante donde compartimos proyectos, resolvemos dudas y celebramos cada logro juntas.'
+      description: 'Unite a nuestra comunidad vibrante donde compartimos proyectos, resolvemos dudas y celebramos cada logro juntas en el mundo del crochet.'
     },
     {
       icon: <FiTrendingUp />,
       title: 'Crecimiento Constante',
-      description: 'Cada proyecto es un desafío que te empuja a mejorar. Verás tu progreso semana a semana en cada puntada.'
+      description: 'Cada proyecto es un desafío que te empuja a mejorar. Verás tu progreso semana a semana en cada vuelta de tu tejido.'
     }
   ];
 
   const credentials = [
-    { icon: <FiAward />, title: '15 años', subtitle: 'de experiencia' },
-    { icon: <FiUsers />, title: '50+', subtitle: 'alumnas graduadas' },
-    { icon: <FiStar />, title: '4.9/5', subtitle: 'calificación promedio' },
-    { icon: <FiCheckCircle />, title: '98%', subtitle: 'tasa de satisfacción' }
+    { icon: <FiAward />, title: '30 años', subtitle: 'de experiencia' },
+    { icon: <FiVideo />, title: '100% Online', subtitle: 'a tu ritmo' },
+    { icon: <FiHeadphones />, title: 'Soporte', subtitle: 'personalizado' },
+    { icon: <FiCheckCircle />, title: 'Acceso', subtitle: 'de por vida' }
   ];
 
   return (
@@ -720,11 +720,12 @@ const Home = () => {
         <div className="hero-content">
           <p className="hero-subtitle">El Arte de Crear con tus Manos</p>
           <h1 className="hero-title">
-            Transformá Tus Sueños<br />en Realidad con Costura
+            Transformá hilos en momentos mágicos <br /> con Crochet
           </h1>
           <p className="hero-description">
-            Aprende a coser de forma profesional con lecciones claras, paso a paso.<br />
-            Desde cero hasta crear tus propias prendas. Sin experiencia previa necesaria.
+            Aprendé a tejer amigurumis únicos con lecciones claras y
+            paso a paso. Desde el primer punto hasta crear tus propios personajes,
+            sin necesidad de experiencia previa.
           </p>
           <div className="hero-buttons">
             <Link to="/cursos">
@@ -745,19 +746,19 @@ const Home = () => {
       <section className="trust-banner">
         <div className="trust-items">
           <div className="trust-item">
-            <FiShield />
-            <span>Garantía de 30 días</span>
-          </div>
-          <div className="trust-item">
-            <FiCheckCircle />
-            <span>50+ alumnas satisfechas</span>
-          </div>
-          <div className="trust-item">
-            <FiAward />
-            <span>Certificado incluido</span>
+            <FiMessageCircle />
+            <span>Soporte directo por WhatsApp</span>
           </div>
           <div className="trust-item">
             <FiClock />
+            <span>Aprendizaje a tu propio ritmo</span>
+          </div>
+          <div className="trust-item">
+            <FiDownload />
+            <span>Patrones PDF descargables</span>
+          </div>
+          <div className="trust-item">
+            <FiCheckCircle />
             <span>Acceso de por vida</span>
           </div>
         </div>
@@ -769,30 +770,31 @@ const Home = () => {
           <div className="mission-content">
             <h2>No solo enseñamos a coser,<br /><span className="highlight">transformamos vidas</span></h2>
             <p>
-              En Tejiendo con Andy, creemos que la costura es mucho más que una habilidad técnica. 
-              Es una forma de expresión, un camino hacia la independencia creativa y económica, 
-              y una puerta hacia la confianza personal.
+              En Tejiendo con Andy, creemos que el crochet es mucho
+              más que una habilidad técnica. Es una forma de expresión, un camino hacia la
+              independencia creativa y económica, y una puerta hacia la confianza personal.
             </p>
             <p>
-              Cada puntada que aprendes es un paso hacia la autonomía. Cada proyecto completado 
-              es una victoria que construye tu autoestima. Y cada prenda que creas cuenta tu historia única.
+              Cada punto que aprendes es un paso hacia la autonomía. Cada proyecto
+              completado es una victoria que construye tu autoestima. Y cada amigurumi que
+              creas cuenta tu historia única.
             </p>
             <div className="mission-stats">
               <div className="stat-item">
-                <span className="stat-number">50+</span>
-                <span className="stat-label">Alumnas Graduadas</span>
+                <span className="stat-number">100%</span>
+                <span className="stat-label">Online y a tu ritmo</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">15</span>
+                <span className="stat-number">30</span>
                 <span className="stat-label">Años de Experiencia</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">98%</span>
-                <span className="stat-label">Satisfacción</span>
+                <span className="stat-number">♡</span>
+                <span className="stat-label">Soporte Personalizado</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">24/7</span>
-                <span className="stat-label">Acceso a Contenido</span>
+                <span className="stat-number">∞</span>
+                <span className="stat-label">Acceso de por vida</span>
               </div>
             </div>
           </div>
@@ -805,15 +807,18 @@ const Home = () => {
           <div className="video-content">
             <h2>Conocé a tu instructora</h2>
             <p className="video-intro-text">
-              Hola, soy Andy. Llevo más de 15 años enseñando costura y ayudando a cientos de 
-              mujeres a descubrir su potencial creativo. Mi metodología está diseñada para que 
-              cualquier persona, sin importar su edad o experiencia, pueda aprender a coser de 
-              forma profesional.
+              Soy Andrea, tengo 54 años y tejo desde que era chica. El tejido siempre fue parte de mi vida: primero como un aprendizaje familiar, luego como una pasión, y hoy como una forma de compartir, conectar y acompañar a otras personas.
+            </p>
+            <p className="video-intro-text">
+              Actualmente estoy creando cursos simples, claros y accesibles para todos. Creo profundamente que cualquiera puede aprender a tejer, sin importar la edad o la experiencia previa.
+            </p>
+            <p className="video-intro-text">
+              Para mí, tejer es un momento de calma, una pausa en el día. Mi deseo es que, a través de estos cursos, puedas aprender, crear y también regalarte ese momento tan especial para vos.
             </p>
             <div className="video-highlights">
               <div className="highlight-point">
                 <FiCheckCircle />
-                <span>Método probado por 50+ alumnas</span>
+                <span>30 años de experiencia enseñando</span>
               </div>
               <div className="highlight-point">
                 <FiCheckCircle />
@@ -871,9 +876,9 @@ const Home = () => {
       {/* Últimos cursos */}
       <section className="courses-grid-section home-reveal">
         <div className="section-container">
-          <h2 className="section-title-cursos">Cursos Diseñados para Ti</h2>
+          <h2 className="section-title-cursos">Cursos Diseñados para Tu Creatividad</h2>
           <p className="section-subtitle">
-            Programas completos con todo lo que necesitas para dominar la costura
+            Programas completos con todo lo que necesitas para dominar el arte del crochet y los amigurumis
           </p>
           {loading ? (
             <div className="courses-grid courses-grid--centered">
@@ -881,7 +886,7 @@ const Home = () => {
             </div>
           ) : latestCourses.length === 0 ? (
             <div className="courses-grid courses-grid--centered">
-              <p className="courses-grid-loading">Próximamente más cursos.</p>
+              <p className="courses-grid-loading">Próximamente más proyectos para seguir creando.</p>
             </div>
           ) : (
             <div className={`courses-grid ${latestCourses.length < 3 ? 'courses-grid--centered' : ''}`}>
@@ -918,7 +923,7 @@ const Home = () => {
           <div className="view-all-courses">
             <Link to="/cursos">
               <Button size="large" className="btn-secondary">
-                Ver Todos los Cursos
+                Ver Todos los Proyectos
                 <FiArrowRight />
               </Button>
             </Link>
@@ -962,17 +967,14 @@ const Home = () => {
           </svg>
           
           <div id="urbanist-content" className="urbanist-content">
-            <h1 style={{ fontSize: 'clamp(4vw, 100px, 7vw)' }}>Peluches tejidos con amor</h1>
+            <h1 style={{ fontSize: 'clamp(4vw, 100px, 7vw)' }}>Amigurumis con alma y diseño</h1>
 
             <p>
-              Cada uno de estos peluches está tejido a mano, punto por punto, con dedicación, paciencia y mucho
-              cariño. 
+              Cada uno de nuestros proyectos está diseñado para ser tejido a mano, punto por punto, con la dedicación y el cariño que solo lo artesanal puede brindar.
             </p>
 
             <p className="urbanist-text-2">
-              En nuestros cursos online vas a aprender a crear personajes como la vaca turquesa, el ratón tejido,
-              el ratón navideño, el pollito y muchos más. Desde las bases del tejido hasta los detalles que hacen
-              que cada muñeco cobre vida.
+              En nuestros cursos online vas a descubrir cómo dar vida a una gran variedad de personajes y diseños exclusivos. Te guiamos desde las bases fundamentales del crochet hasta los detalles más avanzados que hacen que cada muñeco tenga una personalidad única.
             </p>
           </div>
           
