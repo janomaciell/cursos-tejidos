@@ -22,8 +22,13 @@ const NgrokImage = ({ src, alt, className, ...rest }) => {
 
     const loadImage = async () => {
       try {
-        // Si la URL ya es relativa al backend (/media/...), dejarla tal cual.
-        const url = src;
+        // Importante: nuestro axios tiene baseURL = .../api
+        // Si src viene como "/media/..." y usamos api.get("/media/..."),
+        // Axios lo concatena y termina en ".../api/media/..." (404).
+        // Por eso, siempre normalizamos a una URL absoluta contra el baseURL.
+        const url = /^https?:\/\//i.test(src)
+          ? src
+          : new URL(src, api.defaults.baseURL).toString();
 
         const response = await api.get(url, {
           responseType: 'blob',
