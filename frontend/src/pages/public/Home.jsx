@@ -855,18 +855,20 @@ const Home = () => {
 
       {/* Experience Section */}
       <section className="experience-section home-reveal">
-        <h2 className="section-title">La experiencia de aprender costura</h2>
-        <p className="section-subtitle">
-          Más que técnicas, descubrirás una nueva forma de ver el mundo textil
-        </p>
-        <div className="experience-grid">
-          {experiences.map((exp, index) => (
-            <div key={index} className="experience-card">
-              <div className="experience-icon">{exp.icon}</div>
-              <h3>{exp.title}</h3>
-              <p>{exp.description}</p>
-            </div>
-          ))}
+        <div className="section-container">
+          <h2 className="section-title-experience-public">La experiencia de aprender costura</h2>
+          <p className="section-subtitle">
+            Más que técnicas, descubrirás una nueva forma de ver el mundo textil
+          </p>
+          <div className="experience-grid">
+            {experiences.map((exp, index) => (
+              <div key={index} className="experience-card">
+                <div className="experience-icon">{exp.icon}</div>
+                <h3>{exp.title}</h3>
+                <p>{exp.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

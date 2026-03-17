@@ -116,7 +116,7 @@ const CourseCatalog = () => {
   const stats = [
     { icon: <FiBookOpen />, value: courses.length || '10+', label: 'Cursos disponibles' },
     { icon: <FiTrendingUp />, value: '500+', label: 'Alumnas activas' },
-    { icon: <FiAward />, value: '100%', label: 'Con certificado' }
+    { icon: <FiAward />, value: '100%', label: 'Técnica Profesional' }
   ];
 
   return (
@@ -133,7 +133,7 @@ const CourseCatalog = () => {
           
           <h1 className="catalog-title">
             Explorá Nuestros<br />
-            <span className="title-accent">Cursos de Costura</span>
+            <span className="title-accent">Cursos de Tejido</span>  
           </h1>
           
           <p className="catalog-subtitle">
