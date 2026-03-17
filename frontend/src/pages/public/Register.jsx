@@ -75,18 +75,18 @@ const Register = () => {
   const features = [
     {
       icon: <FiClock />,
-      title: 'Acceso de por vida',
-      description: 'Aprende a tu ritmo sin vencimientos'
+      title: 'Aprendizaje a tu propio ritmo',
+      description: 'Accedé a todas las clases cuando quieras, las veces que necesites, sin horarios fijos ni presiones.'
     },
     {
       icon: <FiAward />,
-      title: 'Certificado incluido',
-      description: 'Valida tus nuevas habilidades'
+      title: 'Técnica Profesional',
+      description: 'Dominá el arte del crochet con métodos probados que garantizan resultados impecables, incluso si recién empezás.'
     },
     {
       icon: <FiShield />,
-      title: 'Garantía 30 días',
-      description: 'Prueba sin riesgo'
+      title: 'Soporte directo por WhatsApp',
+      description: 'No estás sola: te acompaño personalmente por WhatsApp para que resuelvas cualquier duda mientras tejés.'
     }
   ];
 

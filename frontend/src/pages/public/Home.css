@@ -436,10 +436,7 @@ html {
 .video-placeholder {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
   border-radius: 20px;
-  overflow: hidden;
-  box-shadow: var(--shadow-xl);
 }
 
 .video-placeholder img {

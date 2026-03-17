@@ -640,12 +640,12 @@ const Home = () => {
   ];
 
   const benefits = [
-    { icon: <FiVideo />, title: 'Videos HD de calidad', desc: 'Clases grabadas con total nitidez para que veas cada detalle y no te pierdas ningún punto.' },
-    { icon: <FiClock />, title: 'Acceso de por vida', desc: 'Aprendé a tu ritmo, sin presiones ni vencimientos. Tu curso para siempre.' },
-    { icon: <FiDownload />, title: 'Material descargable', desc: 'PDFs con patrones detallados y guías de puntos listas para imprimir.' },
-    { icon: <FiMessageCircle />, title: 'Soporte directo', desc: 'Respondo todas tus dudas personalmente vía WhatsApp para que nunca te trabes.' },
-    { icon: <FiUsers />, title: 'Comunidad activa', desc: 'Conectá con otras tejedoras apasionadas, compartí tus logros y unite a nuestro grupo.' },
-    { icon: <FiAward />, title: 'Técnica Profesional', desc: 'Dominá el arte del crochet con métodos probados que garantizan resultados impecables.' }
+    { icon: <FiMessageCircle />, title: 'Soporte directo por WhatsApp', desc: 'No estás sola: te acompaño personalmente por WhatsApp para que resuelvas cualquier duda mientras tejés.' },
+    { icon: <FiClock />, title: 'Aprendizaje a tu propio ritmo', desc: 'Accedé a todas las clases cuando quieras, las veces que necesites, sin horarios fijos ni presiones.' },
+    { icon: <FiDownload />, title: 'Patrones PDF descargables', desc: 'Incluye patrones en PDF listos para descargar e imprimir, con instrucciones claras para seguir punto a punto.' },
+    { icon: <FiClock />, title: 'Acceso de por vida', desc: 'Tu acceso nunca vence: podés volver a las lecciones cada vez que quieras repasar o practicar.' },
+    { icon: <FiUsers />, title: 'Comunidad exclusiva de tejedoras', desc: 'Compartí avances, logros y dudas con otras alumnas que aman el crochet tanto como vos.' },
+    { icon: <FiAward />, title: 'Técnica Profesional', desc: 'Dominá el arte del crochet con métodos probados que garantizan resultados impecables, incluso si recién empezás.' }
   ];
 
   const testimonials = [
@@ -832,10 +832,7 @@ const Home = () => {
           </div>
           <div className="video-player-wrapper">
             <div className="video-placeholder">
-              <img src="/img/andy-instructor.jpg" alt="Andy - Instructora de costura" />
-              <button className="play-button-home-public">
-                <FiPlay />
-              </button>
+              <img src="/img/andy-instructor.png" alt="Andy - Instructora de costura" />
             </div>
           </div>
         </div>
@@ -1025,7 +1022,8 @@ const Home = () => {
             {testimonials.map((testimonial, index) => (
               <div key={index} className="testimonial-card">
                 <div className="testimonial-header">
-                  <img src={testimonial.image} alt={testimonial.author} className="testimonial-image" />
+                {/*<img src={testimonial.image} alt={testimonial.author} className="testimonial-image" />*/}
+                
                   <div className="testimonial-rating">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <FiStar key={i} className="star-filled" />
@@ -1039,34 +1037,6 @@ const Home = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Guarantee Section - NUEVA */}
-      <section className="guarantee-section">
-        <div className="guarantee-content">
-          <div className="guarantee-icon">
-            <FiShield />
-          </div>
-          <h2>Garantía de Satisfacción de 30 Días</h2>
-          <p>
-            Estamos tan seguros de la calidad de nuestros cursos que ofrecemos una garantía de devolución 
-            total si no estás completamente satisfecha en los primeros 30 días. Sin preguntas, sin complicaciones.
-          </p>
-          <div className="guarantee-features">
-            <div className="guarantee-feature">
-              <FiCheckCircle />
-              <span>Prueba sin riesgo por 30 días</span>
-            </div>
-            <div className="guarantee-feature">
-              <FiCheckCircle />
-              <span>Devolución 100% del dinero</span>
-            </div>
-            <div className="guarantee-feature">
-              <FiCheckCircle />
-              <span>Proceso simple y rápido</span>
-            </div>
           </div>
         </div>
       </section>
@@ -1086,7 +1056,7 @@ const Home = () => {
             </Button>
           </Link>
           <p className="cta-disclaimer">
-            <FiShield /> Garantía de 30 días · Acceso de por vida · Certificado incluido
+            <FiMessageCircle /> Soporte directo por WhatsApp · Acceso de por vida · Patrones PDF descargables
           </p>
         </div>
       </section>

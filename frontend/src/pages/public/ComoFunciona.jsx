@@ -276,7 +276,7 @@ const ComoFunciona = () => {
             </div>
           </div>
           <div className="cf2-andrea-visual">
-            <img src="/img/andy-instructor.jpg" alt="Andrea - Instructora de Tejiendo con Andy" className="cf2-andrea-img" />
+            <img src="/img/andy-instructor.png" alt="Andrea - Instructora de Tejiendo con Andy" className="cf2-andrea-img" />
           </div>
         </div>
       </section>
