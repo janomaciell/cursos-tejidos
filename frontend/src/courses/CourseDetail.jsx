@@ -206,10 +206,7 @@ const CourseDetail = ({ course, hasAccess, onPurchase, loading, progress = {} })
                     <FiCheckCircle />
                     <span>Acceso de por vida</span>
                   </div>
-                  <div className="benefit-item">
-                    <FiCheckCircle />
-                  <span>Patrones PDF descargables</span>
-                  </div>
+
                   <div className="benefit-item">
                     <FiShield />
                     <span>Soporte directo por WhatsApp</span>

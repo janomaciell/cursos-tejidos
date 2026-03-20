@@ -642,7 +642,6 @@ const Home = () => {
   const benefits = [
     { icon: <FiMessageCircle />, title: 'Soporte directo por WhatsApp', desc: 'No estás sola: te acompaño personalmente por WhatsApp para que resuelvas cualquier duda mientras tejés.' },
     { icon: <FiClock />, title: 'Aprendizaje a tu propio ritmo', desc: 'Accedé a todas las clases cuando quieras, las veces que necesites, sin horarios fijos ni presiones.' },
-    { icon: <FiDownload />, title: 'Patrones PDF descargables', desc: 'Incluye patrones en PDF listos para descargar e imprimir, con instrucciones claras para seguir punto a punto.' },
     { icon: <FiClock />, title: 'Acceso de por vida', desc: 'Tu acceso nunca vence: podés volver a las lecciones cada vez que quieras repasar o practicar.' },
     { icon: <FiUsers />, title: 'Comunidad exclusiva de tejedoras', desc: 'Compartí avances, logros y dudas con otras alumnas que aman el crochet tanto como vos.' },
     { icon: <FiAward />, title: 'Técnica Profesional', desc: 'Dominá el arte del crochet con métodos probados que garantizan resultados impecables, incluso si recién empezás.' }
@@ -650,21 +649,21 @@ const Home = () => {
 
   const testimonials = [
     {
-      text: 'Nunca imaginé que podría hacer mis propias prendas. Andy explica todo con tanta claridad que me sentí acompañada en cada paso. Ahora tengo mi propio emprendimiento y puedo trabajar desde casa.',
+      text: 'Me anoté para aprender a tejer desde cero con el curso del Búho verde. Andy explica excelente. Lo recomiendo muchísimo para empezar.',
       author: 'María González',
-      role: 'Emprendedora textil',
+      role: 'Emprendedora textil',  
       rating: 5,
       image: '/img/testimonial-1.jpg'
     },
     {
-      text: 'A mis 58 años pensé que era demasiado tarde para aprender algo nuevo, pero los cursos son tan claros y fáciles de seguir que en 3 meses ya estaba haciendo ropa para toda mi familia. ¡Un sueño hecho realidad!',
+      text: 'Ya tenía una base de tejido, pero nunca me había animado a hacer un proyecto completo. Con el curso del Honguito, por primera vez logré terminar un amigurumi sin frustrarme. Las clases son súper claras.',
       author: 'Laura Martínez',
       role: 'Diseñadora independiente',
       rating: 5,
       image: '/img/testimonial-2.jpg'
     },
     {
-      text: 'La moldería siempre me pareció imposible, pero con este método lo entendí perfectamente. Ahora creo mis propios diseños y hago ropa a medida. El mejor curso que tomé en mi vida.',
+      text: 'Me sirvió mucho porque si te trabás en un punto, Andy te contesta por WhatsApp y lo sacás adelante. El video se ve con mucha claridad y por fin logré que las costuras me queden prolijas y no se note el relleno.',
       author: 'Sofía Rodríguez',
       role: 'Modista profesional',
       rating: 5,
@@ -753,10 +752,7 @@ const Home = () => {
             <FiClock />
             <span>Aprendizaje a tu propio ritmo</span>
           </div>
-          <div className="trust-item">
-            <FiDownload />
-            <span>Patrones PDF descargables</span>
-          </div>
+
           <div className="trust-item">
             <FiCheckCircle />
             <span>Acceso de por vida</span>
@@ -768,7 +764,7 @@ const Home = () => {
       <section className="mission-section home-reveal">
         <div className="mission-container">
           <div className="mission-content">
-            <h2>No solo enseñamos a coser,<br /><span className="highlight">transformamos vidas</span></h2>
+            <h2>No solo enseñamos a tejer,<br /><span className="highlight">transformamos hilos en sueños</span></h2>
             <p>
               En Tejiendo con Andy, creemos que el crochet es mucho
               más que una habilidad técnica. Es una forma de expresión, un camino hacia la
@@ -856,9 +852,9 @@ const Home = () => {
       {/* Experience Section */}
       <section className="experience-section home-reveal">
         <div className="section-container">
-          <h2 className="section-title-experience-public">La experiencia de aprender costura</h2>
+          <h2 className="section-title-experience-public">La experiencia de aprender crochet</h2>
           <p className="section-subtitle">
-            Más que técnicas, descubrirás una nueva forma de ver el mundo textil
+            Más que técnicas, descubrirás una nueva forma de ver el mundo del crochet
           </p>
           <div className="experience-grid">
             {experiences.map((exp, index) => (
@@ -1018,7 +1014,7 @@ const Home = () => {
         <div className="section-container">
           <h2 className="section-title-testimonials-public">Historias que inspiran</h2>
           <p className="section-subtitle-testimonials-public">
-            Las voces de quienes han transformado su vida
+            Lo que dicen quienes ya se animaron a tejer conmigo.
           </p>
           <div className="testimonials-grid">
             {testimonials.map((testimonial, index) => (
@@ -1058,7 +1054,7 @@ const Home = () => {
             </Button>
           </Link>
           <p className="cta-disclaimer">
-            <FiMessageCircle /> Soporte directo por WhatsApp · Acceso de por vida · Patrones PDF descargables
+            <FiMessageCircle /> Soporte directo por WhatsApp · Acceso de por vida
           </p>
         </div>
       </section>

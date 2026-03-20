@@ -203,10 +203,7 @@ const ComoFunciona = () => {
             <FiClock />
             <span>Aprendizaje a tu propio ritmo</span>
           </div>
-          <div className="cf2-trust-item">
-            <FiDownload />
-            <span>Patrones PDF descargables</span>
-          </div>
+
           <div className="cf2-trust-item">
             <FiCheckCircle />
             <span>Acceso de por vida</span>
@@ -353,7 +350,7 @@ const ComoFunciona = () => {
             </Button>
           </Link>
           <p className="cf2-cta-disclaimer">
-            <FiCheckCircle /> Soporte por WhatsApp · Acceso de por vida · Patrones PDF incluidos
+            <FiCheckCircle /> Soporte por WhatsApp · Acceso de por vida
           </p>
         </div>
       </section>
