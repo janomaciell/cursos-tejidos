@@ -85,9 +85,9 @@ if DATABASE_URL:
     DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
 
     if DEBUG:
-        print("✓ Conectado a Supabase via DATABASE_URL")
-        print(f"✓ Host: {DATABASES['default']['HOST']}")
-        print(f"✓ Puerto: {DATABASES['default']['PORT']}")
+        print("Conectado a Supabase via DATABASE_URL")
+        print(f"Host: {DATABASES['default']['HOST']}")
+        print(f"Puerto: {DATABASES['default']['PORT']}")
 else:
     # Fallback: variables individuales
     DATABASES = {
@@ -136,8 +136,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # MEDIA FILES
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = config('MEDIA_URL', default='/media/')
+_default_media_root = BASE_DIR.parent / 'frontend' / 'public' / 'media'
+MEDIA_ROOT = Path(config('MEDIA_ROOT', default=str(_default_media_root)))
+MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
 # DEFAULT PRIMARY KEY
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

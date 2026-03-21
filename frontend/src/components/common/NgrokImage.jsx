@@ -57,9 +57,17 @@ const NgrokImage = ({ src, alt, className, ...rest }) => {
     };
   }, [src]);
 
-  // Si hay error o aún no cargó, dejamos que el contenedor muestre solo el background.
+  // Si falla la portada remota, mostramos un fallback visible
+  // para evitar tarjetas vacías en producción.
   if (hasError || !imageSrc) {
-    return <div className={className} {...rest} />;
+    return (
+      <img
+        src="/img/logoheader.png"
+        alt={alt || 'Portada no disponible'}
+        className={className}
+        {...rest}
+      />
+    );
   }
 
   return (
