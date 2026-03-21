@@ -44,6 +44,7 @@ const Navbar = () => {
         <ul className={`navbar-menu ${menuOpen ? 'navbar-menu--open' : ''}`}>
           <li><Link to="/" onClick={closeMenu}>Inicio</Link></li>
           <li><Link to="/cursos" onClick={closeMenu}>Cursos</Link></li>
+          <li><Link to="/contacto" onClick={closeMenu}>Contacto</Link></li>
           
           {isAuthenticated ? (
             <>

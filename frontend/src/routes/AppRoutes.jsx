@@ -10,6 +10,7 @@ import Login from '../pages/public/Login';
 import Register from '../pages/public/Register';
 import PaymentResult from '../pages/public/PaymentResult';
 import ComoFunciona from '../pages/public/ComoFunciona';
+import Contact from '../pages/public/Contact';
 
 // Private Pages
 import Dashboard from '../pages/private/Dashboard';
@@ -26,6 +27,7 @@ const AppRoutes = () => {
       <Route path="/cursos" element={<CourseCatalog />} />
       <Route path="/cursos/:slug" element={<CourseDetailPublic />} />
       <Route path="/como-funciona" element={<ComoFunciona />} />
+      <Route path="/contacto" element={<Contact />} />
       
       <Route 
         path="/login" 

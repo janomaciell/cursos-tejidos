@@ -14,7 +14,7 @@ const Footer = () => {
           <h4>Enlaces Rápidos</h4>
           <ul>
             <li><a href="/cursos">Cursos</a></li>
-            <li><a href="/nosotros">Nosotros</a></li>
+            <li><a href="/como-funciona">Como Funciona</a></li>
             <li><a href="/contacto">Contacto</a></li>
           </ul>
         </div>
@@ -22,8 +22,8 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Contacto</h4>
           <ul className="contact-list">
-            <li><FiMail /> info@elearning.com</li>
-            <li><FiPhone /> +54 9 11 1234-5678</li>
+            <li><FiMail /> tejiendoconandy@gmail.com</li>
+            <li><FiPhone /> +54 9 2254538228</li>
             <li><FiMapPin /> Buenos Aires, Argentina</li>
           </ul>
         </div>

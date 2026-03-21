@@ -20,8 +20,11 @@ import {
   FiDownload,
   FiMessageCircle,
   FiPlay,
-  FiCheckCircle
+  FiCheckCircle,
+  FiPenTool,
+  FiMessageSquare
 } from 'react-icons/fi';
+import { GiSewingNeedle } from 'react-icons/gi';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import NgrokImage from '../../components/common/NgrokImage';
@@ -634,8 +637,8 @@ const Home = () => {
   const steps = [
     { number: '01', title: 'Inscribite', desc: 'Elegí el proyecto que quieras empezar hoy.', icon: <FiBook /> },
     { number: '02', title: 'Accedé', desc: 'Disfrutá de todo el contenido y videos las 24/7.', icon: <FiVideo /> },
-    { number: '03', title: 'Tejé', desc: 'Creá tus amigurumis con videos claros y guiados.', icon: <FiEdit2 /> },
-    { number: '04', title: 'Consultá', desc: 'Recibí soporte personalizado si tenés dudas.', icon: <FiHeadphones /> },
+    { number: '03', title: 'Tejé', desc: 'Creá tus amigurumis con videos claros y guiados.', icon: <GiSewingNeedle /> },
+    { number: '04', title: 'Consultá', desc: 'Recibí soporte personalizado si tenés dudas.', icon: <FiMessageSquare /> },
     { number: '05', title: 'Emprendé', desc: 'Lucí, regalá o vendé tus creaciones con orgullo.', icon: <FiTrendingUp /> }
   ];
 
