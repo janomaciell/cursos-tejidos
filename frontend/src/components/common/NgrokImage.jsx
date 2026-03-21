@@ -6,75 +6,58 @@ import api from '../../api/axios';
  * enviar el header `ngrok-skip-browser-warning` y evitar
  * que ngrok devuelva la página de advertencia en lugar de la imagen.
  */
+const makeFallbackSvg = (label = 'Curso') => {
+  const safeLabel = String(label || 'Curso').slice(0, 40);
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fc5c0d" />
+          <stop offset="100%" stop-color="#c2412d" />
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="750" fill="url(#bg)" />
+      <text x="600" y="350" text-anchor="middle" fill="#ffffff" font-size="52" font-family="Inter, Arial, sans-serif" font-weight="700">
+        Portada no disponible
+      </text>
+      <text x="600" y="430" text-anchor="middle" fill="#ffffff" opacity="0.9" font-size="40" font-family="Inter, Arial, sans-serif">
+        ${safeLabel}
+      </text>
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+};
+
 const NgrokImage = ({ src, alt, className, ...rest }) => {
   const [imageSrc, setImageSrc] = useState(null);
-  const [hasError, setHasError] = useState(false);
+  const [fallbackUsed, setFallbackUsed] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-    let objectUrl = null;
-
     if (!src) {
-      setImageSrc(null);
-      setHasError(false);
+      setImageSrc(makeFallbackSvg(alt));
+      setFallbackUsed(true);
       return;
     }
 
-    const loadImage = async () => {
-      try {
-        // Importante: nuestro axios tiene baseURL = .../api
-        // Si src viene como "/media/..." y usamos api.get("/media/..."),
-        // Axios lo concatena y termina en ".../api/media/..." (404).
-        // Por eso, siempre normalizamos a una URL absoluta contra el baseURL.
-        const url = /^https?:\/\//i.test(src)
-          ? src
-          : new URL(src, api.defaults.baseURL).toString();
+    const url = /^https?:\/\//i.test(src)
+      ? src
+      : new URL(src, api.defaults.baseURL).toString();
 
-        const response = await api.get(url, {
-          responseType: 'blob',
-        });
-
-        if (cancelled) return;
-
-        objectUrl = URL.createObjectURL(response.data);
-        setImageSrc(objectUrl);
-        setHasError(false);
-      } catch (error) {
-        if (!cancelled) {
-          setHasError(true);
-          setImageSrc(null);
-        }
-      }
-    };
-
-    loadImage();
-
-    return () => {
-      cancelled = true;
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
-      }
-    };
-  }, [src]);
-
-  // Si falla la portada remota, mostramos un fallback visible
-  // para evitar tarjetas vacías en producción.
-  if (hasError || !imageSrc) {
-    return (
-      <img
-        src="/img/logoheader.png"
-        alt={alt || 'Portada no disponible'}
-        className={className}
-        {...rest}
-      />
-    );
-  }
+    setImageSrc(url);
+    setFallbackUsed(false);
+  }, [src, alt]);
 
   return (
     <img
       src={imageSrc}
-      alt={alt}
+      alt={alt || 'Portada del curso'}
       className={className}
+      onError={() => {
+        if (!fallbackUsed) {
+          setImageSrc(makeFallbackSvg(alt));
+          setFallbackUsed(true);
+        }
+      }}
       {...rest}
     />
   );
