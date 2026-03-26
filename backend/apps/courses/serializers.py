@@ -19,13 +19,16 @@ class LessonDocumentSerializer(serializers.ModelSerializer):
     def get_file_url(self, obj):
         if not obj.file:
             return None
+        file_url = obj.file.url
+        # Si ya es URL absoluta (R2), devolverla directo
+        if file_url.startswith('http://') or file_url.startswith('https://'):
+            return file_url
         if hasattr(settings, 'BACKEND_URL') and settings.BACKEND_URL:
-            base_url = settings.BACKEND_URL.rstrip('/')
-            return f"{base_url}{obj.file.url}"
+            return f"{settings.BACKEND_URL.rstrip('/')}{file_url}"
         request = self.context.get('request')
         if request:
-            return request.build_absolute_uri(obj.file.url)
-        return obj.file.url
+            return request.build_absolute_uri(file_url)
+        return file_url
 
 
 # ── Lesson serializers ─────────────────────────────────────────────────────────
@@ -77,6 +80,10 @@ def _absolute_image_url(obj_url, settings, request):
     """Shared helper to build absolute cover-image URL."""
     if not obj_url:
         return None
+    # Si ya es URL absoluta (R2, S3, CDN), devolverla directo sin tocarla
+    if obj_url.startswith('http://') or obj_url.startswith('https://'):
+        return obj_url
+    # URL relativa — construir absoluta con BACKEND_URL o request
     if hasattr(settings, 'BACKEND_URL') and settings.BACKEND_URL:
         return f"{settings.BACKEND_URL.rstrip('/')}{obj_url}"
     if request:

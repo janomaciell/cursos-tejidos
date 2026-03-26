@@ -1,67 +1,74 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/axios';
 
-/**
- * Imagen que carga a través de la API Axios para poder
- * enviar el header `ngrok-skip-browser-warning` y evitar
- * que ngrok devuelva la página de advertencia en lugar de la imagen.
- */
-const makeFallbackSvg = (label = 'Curso') => {
-  const safeLabel = String(label || 'Curso').slice(0, 40);
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#fc5c0d" />
-          <stop offset="100%" stop-color="#c2412d" />
-        </linearGradient>
-      </defs>
-      <rect width="1200" height="750" fill="url(#bg)" />
-      <text x="600" y="350" text-anchor="middle" fill="#ffffff" font-size="52" font-family="Inter, Arial, sans-serif" font-weight="700">
-        Portada no disponible
-      </text>
-      <text x="600" y="430" text-anchor="middle" fill="#ffffff" opacity="0.9" font-size="40" font-family="Inter, Arial, sans-serif">
-        ${safeLabel}
-      </text>
-    </svg>
-  `;
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-};
-
 const NgrokImage = ({ src, alt, className, ...rest }) => {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+  const isNgrok = API_URL.includes('ngrok');
   const [imageSrc, setImageSrc] = useState(null);
-  const [fallbackUsed, setFallbackUsed] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  // Si la URL es absoluta externa (R2, S3, etc.), no necesita pasar por Axios
+  const isExternalUrl = src?.startsWith('http://') || src?.startsWith('https://');
 
   useEffect(() => {
-    if (!src) {
-      setImageSrc(makeFallbackSvg(alt));
-      setFallbackUsed(true);
+    let cancelled = false;
+    let objectUrl = null;
+
+    if (!src || isExternalUrl) {
+      setImageSrc(null);
+      setHasError(false);
       return;
     }
 
-    const url = /^https?:\/\//i.test(src)
-      ? src
-      : new URL(src, api.defaults.baseURL).toString();
-
-    setImageSrc(url);
-    setFallbackUsed(false);
-  }, [src, alt]);
-
-  return (
-    <img
-      src={imageSrc}
-      alt={alt || 'Portada del curso'}
-      className={className}
-      onError={() => {
-        if (!fallbackUsed) {
-          setImageSrc(makeFallbackSvg(alt));
-          setFallbackUsed(true);
+    const loadImage = async () => {
+      try {
+        const response = await api.get(src, { responseType: 'blob' });
+        if (cancelled) return;
+        objectUrl = URL.createObjectURL(response.data);
+        setImageSrc(objectUrl);
+        setHasError(false);
+      } catch (error) {
+        if (!cancelled) {
+          setHasError(true);
+          setImageSrc(null);
         }
-      }}
-      {...rest}
-    />
-  );
+      }
+    };
+
+    loadImage();
+
+    return () => {
+      cancelled = true;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [src, isExternalUrl]);
+
+  // URLs externas (R2) — img directo, sin Axios, sin ngrok header
+  if (isExternalUrl) {
+    if (!src || hasError) return <div className={className} {...rest} />;
+    return (
+      <img
+        src={src}
+        alt={alt}
+        className={className}
+        onError={() => setHasError(true)}
+        {...rest}
+      />
+    );
+  }
+
+  // Sin ngrok — img directo (Vite proxya /media → backend)
+  if (!isNgrok) {
+    if (!src || hasError) return <div className={className} {...rest} />;
+    return <img src={src} alt={alt} className={className} {...rest} />;
+  }
+
+  // Con ngrok y URL relativa — carga via Axios blob
+  if (hasError || !imageSrc) {
+    return <div className={className} {...rest} />;
+  }
+
+  return <img src={imageSrc} alt={alt} className={className} {...rest} />;
 };
 
 export default NgrokImage;
-
