@@ -9,6 +9,7 @@ from .models import Transaction, CourseAccess
 from .mercadopago import MercadoPagoService
 from apps.users.models import User
 from apps.courses.models import Course
+from .email_service import send_payment_confirmation
 
 logger = logging.getLogger(__name__)
 
@@ -135,10 +136,19 @@ def mercadopago_webhook(request):
         # Si está aprobado, dar acceso al curso
         # FIX: approve() ya no hace save(), así que el único save() es este de abajo
         if transaction.status == 'approved':
-            transaction.approve()
-            logger.info(f"Pago {payment_id} aprobado - Acceso otorgado")
+            already_approved = Transaction.objects.filter(
+                mp_payment_id=str(payment_id), status='approved'
+            ).exists()
 
-        transaction.save()
+            transaction.approve()
+            transaction.save()  # ← movemos save() AQUÍ (antes del email)
+
+            # Enviar email solo si recién se aprobó (idempotente)
+            if not already_approved:
+                send_payment_confirmation(transaction, payment_info)
+            logger.info(f"Pago {payment_id} aprobado - Acceso otorgado")
+        else:
+            transaction.save()
 
         return JsonResponse({"status": "success"}, status=200)
 

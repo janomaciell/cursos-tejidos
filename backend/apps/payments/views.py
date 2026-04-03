@@ -12,6 +12,7 @@ from .serializers import (
 )
 from .mercadopago import MercadoPagoService
 from apps.courses.models import Course
+from .email_service import send_payment_confirmation
 import logging
 
 logger = logging.getLogger(__name__)
@@ -202,9 +203,11 @@ def check_preference_status(request, preference_id):
                 # Si cambió a approved, dar acceso
                 if new_status == 'approved' and old_status != 'approved':
                     transaction.approve()
+                    transaction.save()
+                    send_payment_confirmation(transaction, payment_info)
                     logger.info(f"[Polling] ✓ Payment {transaction.mp_payment_id} APPROVED!")
-                
-                transaction.save()
+                else:
+                    transaction.save()
                 
             else:
                 # No tenemos payment_id: buscar por external_reference.
@@ -247,9 +250,11 @@ def check_preference_status(request, preference_id):
                     # Si está aprobado, dar acceso
                     if transaction.status == "approved":
                         transaction.approve()
+                        transaction.save()
+                        send_payment_confirmation(transaction, payment_data)
                         logger.info(f"[Polling] ✓ Payment {payment_id} APPROVED via polling!")
-                    
-                    transaction.save()
+                    else:
+                        transaction.save()
                 else:
                     logger.info(f"[Polling] No payment found yet (user probably still filling form)")
         
