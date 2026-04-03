@@ -34,7 +34,7 @@ def send_payment_confirmation(transaction, payment_info: dict):
         currency        = payment_info.get("currency_id", "ARS")
 
         frontend_url    = (getattr(settings, "FRONTEND_URL", "") or "").rstrip("/")
-        course_url      = f"{frontend_url}/cursos/{course.slug}" if frontend_url else ""
+        course_url      = f"{frontend_url}/mis-cursos" if frontend_url else ""
         support_email   = getattr(settings, "DEFAULT_FROM_EMAIL", "tejiendoconandy@gmail.com")
 
         subject = f"Pago confirmado - {course.title}"
