@@ -35,4 +35,37 @@ class CourseAccessSerializer(serializers.ModelSerializer):
 
 
 class CreatePaymentSerializer(serializers.Serializer):
-    course_id = serializers.IntegerField()
+    """Acepta course_id (individual) O course_ids (carrito).
+    
+    El frontend puede enviar:
+      - { "course_id": 5 }              → pago de un solo curso
+      - { "course_ids": [5, 8, 12] }    → pago de carrito (múltiples cursos)
+    """
+    course_id = serializers.IntegerField(required=False)
+    course_ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=False,
+        allow_empty=False,
+    )
+
+    def validate(self, attrs):
+        cid = attrs.get('course_id')
+        cids = attrs.get('course_ids')
+
+        if not cid and not cids:
+            raise serializers.ValidationError(
+                "Debe enviar 'course_id' o 'course_ids'."
+            )
+
+        # Normalize: always store a list in 'course_ids'
+        if cid and not cids:
+            attrs['course_ids'] = [cid]
+        elif cids and not cid:
+            pass  # already a list
+        # If both were sent, merge (deduplicate later in the view)
+        elif cid and cids:
+            if cid not in cids:
+                cids.append(cid)
+            attrs['course_ids'] = cids
+
+        return attrs

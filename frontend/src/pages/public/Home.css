@@ -232,6 +232,37 @@ html {
   height: 20px;
 }
 
+/* ─── Hero secondary CTA (Mis Cursos) ─── */
+.btn-hero-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: var(--white);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  padding: 1.2rem 2.5rem;
+  font-size: 1.05rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  text-decoration: none;
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-color);
+  border-color: var(--white);
+  transform: translateY(-3px);
+}
+
+.btn-hero-secondary svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* ===================================
    TRUST BANNER
    =================================== */

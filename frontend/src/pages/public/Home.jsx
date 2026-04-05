@@ -736,6 +736,10 @@ const Home = () => {
                 <FiArrowRight />
               </Button>
             </Link>
+            <Link to="/mis-cursos" className="btn-hero-secondary">
+              <FiBook />
+              <span>Mis Cursos</span>
+            </Link>
             <Link to="/como-funciona" className="btn-play-video">
               <FiPlay />
               <span>Ver cómo funciona</span>

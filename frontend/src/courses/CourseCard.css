@@ -107,5 +107,38 @@
   .course-price {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #6366f1;
+    color: var(--primary-color, #fc5c0d);
+  }
+
+  .cart-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #f3f4f6;
+    color: #4b5563;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cart-add-btn:hover {
+    background: var(--primary-color, #fc5c0d);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(252, 92, 13, 0.2);
+  }
+
+  .cart-add-btn.in-cart {
+    background: #10b981;
+    color: white;
+    cursor: default;
+  }
+
+  .cart-add-btn.in-cart:hover {
+    transform: none;
+    box-shadow: none;
   }

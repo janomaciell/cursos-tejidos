@@ -99,6 +99,78 @@ class MercadoPagoService:
             logger.error(f"[MP] Error creating preference: {str(e)}")
             raise Exception(f"Error al crear preferencia de MP: {str(e)}")
 
+    def create_cart_preference(self, courses, user, return_url, notification_url):
+        """Crear preferencia de pago en Mercado Pago para múltiples cursos (Carrito)."""
+        frontend_url = getattr(settings, 'FRONTEND_URL', '').strip()
+        base_url = frontend_url.rstrip('/') if frontend_url else "http://localhost:5173"
+        
+        logger.info(f"[MP] Using base_url for back_urls: {base_url}")
+        
+        items = []
+        for course in courses:
+            items.append({
+                "title": course.title,
+                "quantity": 1,
+                "unit_price": float(course.price),
+                "currency_id": "ARS",
+            })
+
+        # Para MP solo podemos pasar un external_reference y una cantidad limitada de metadata.
+        # Combinamos los ids
+        course_ids = "_".join([str(c.id) for c in courses])
+        
+        preference_data = {
+            "items": items,
+            "payer": {
+                "name": user.first_name or "Cliente",
+                "surname": user.last_name or "Sin apellido",
+                "email": user.email,
+            },
+            "back_urls": {
+                "success": f"{base_url}/payment-success",
+                "failure": f"{base_url}/payment-failure",
+                "pending": f"{base_url}/payment-pending",
+            },
+            "auto_return": "approved",
+            "notification_url": notification_url,
+            "statement_descriptor": "CURSOS COSTURA",
+            "external_reference": f"user_{user.id}_courses_{course_ids}",
+            "metadata": {
+                "user_id": user.id,
+                "course_ids": course_ids,
+            }
+        }
+
+        try:
+            logger.info(f"[MP] Creating cart preference for {len(courses)} courses")
+            preference_response = self.sdk.preference().create(preference_data)
+
+            response_status = preference_response.get("status", 200)
+            if response_status >= 400:
+                error_detail = preference_response.get("response", {})
+                error_msg = error_detail.get("message", "Error desconocido de Mercado Pago")
+                logger.error(f"[MP] Error {response_status}: {error_detail}")
+                raise Exception(error_msg)
+
+            preference = preference_response["response"]
+            logger.info(f"[MP] ✓ Cart Preference created: {preference['id']}")
+
+            init_point = preference["init_point"]
+            sandbox_init_point = (preference.get("sandbox_init_point") or "").strip()
+            if not sandbox_init_point and init_point and "sandbox." not in init_point:
+                sandbox_init_point = init_point.replace("www.mercadopago", "sandbox.mercadopago")
+            if not sandbox_init_point:
+                sandbox_init_point = init_point
+
+            return {
+                "preference_id": preference["id"],
+                "init_point": init_point,
+                "sandbox_init_point": sandbox_init_point,
+            }
+        except Exception as e:
+            logger.error(f"[MP] Error creating cart preference: {str(e)}")
+            raise Exception(f"Error al crear preferencia de MP para carrito: {str(e)}")
+
     def search_payments_by_preference(self, preference_id):
         """Buscar pagos asociados a una preferencia por preference_id.
         

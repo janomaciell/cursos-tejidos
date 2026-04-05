@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiClock, FiUsers, FiBook, FiStar, FiPlay, FiCheckCircle, FiLock, FiAward, FiDownload, FiShield } from 'react-icons/fi';
+import { FiClock, FiUsers, FiBook, FiStar, FiPlay, FiCheckCircle, FiLock, FiAward, FiDownload, FiShield, FiShoppingCart } from 'react-icons/fi';
 import Button from '../components/common/Button';
 import NgrokImage from '../components/common/NgrokImage';
+import { useCart } from '../context/CartContext';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './CourseDetail.css';
@@ -13,6 +14,7 @@ const CourseDetail = ({ course, hasAccess, onPurchase, loading, progress = {} })
   const navigate = useNavigate();
   const heroRef = useRef(null);
   const contentRef = useRef(null);
+  const { addItem, isInCart } = useCart();
 
   useEffect(() => {
     // Animaciones de entrada
@@ -183,23 +185,49 @@ const CourseDetail = ({ course, hasAccess, onPurchase, loading, progress = {} })
                   <div className="price">{formatPrice(course.price)}</div>
                 </div>
                 
-                <Button 
-                  size="large" 
-                  className="btn-purchase"
-                  onClick={onPurchase}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <span className="spinner"></span>
-                      Procesando...
-                    </>
-                  ) : (
-                    <>
-                      Comprar Ahora
-                    </>
-                  )}
-                </Button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
+                  <Button 
+                    size="large" 
+                    className="btn-purchase"
+                    onClick={onPurchase}
+                    disabled={loading}
+                    style={{ width: '100%' }}
+                  >
+                    {loading ? (
+                      <>
+                        <span className="spinner"></span>
+                        Procesando...
+                      </>
+                    ) : (
+                      <>
+                        Comprar Ahora
+                      </>
+                    )}
+                  </Button>
+
+                  <Button
+                    size="large"
+                    className={`btn-add-to-cart ${isInCart(course.id) ? 'in-cart' : ''}`}
+                    onClick={() => {
+                      if (!isInCart(course.id)) {
+                        addItem({
+                          id: course.id,
+                          title: course.title,
+                          price: course.price,
+                          thumbnail: course.cover_image,
+                          level: course.difficulty
+                        });
+                      }
+                    }}
+                    style={{ width: '100%', background: 'white', color: '#fc5c0d', border: '2px solid #fc5c0d' }}
+                  >
+                    {isInCart(course.id) ? (
+                      <><FiCheckCircle /> En el carrito</>
+                    ) : (
+                      <><FiShoppingCart /> Añadir al carrito</>
+                    )}
+                  </Button>
+                </div>
 
                 <div className="purchase-benefits">
                   <div className="benefit-item">
@@ -354,14 +382,38 @@ const CourseDetail = ({ course, hasAccess, onPurchase, loading, progress = {} })
                 <p>Únete a {course.total_students} estudiantes que ya están aprendiendo</p>
                 <div className="cta-price">{formatPrice(course.price)}</div>
               </div>
-              <Button 
-                size="large" 
-                className="btn-purchase-bottom"
-                onClick={onPurchase}
-                disabled={loading}
-              >
-                {loading ? 'Procesando...' : 'Comprar Curso'}
-              </Button>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <Button 
+                  size="large" 
+                  className="btn-purchase-bottom"
+                  onClick={onPurchase}
+                  disabled={loading}
+                >
+                  {loading ? 'Procesando...' : 'Comprar Curso'}
+                </Button>
+                <Button
+                  size="large"
+                  className={`btn-add-to-cart ${isInCart(course.id) ? 'in-cart' : ''}`}
+                  onClick={() => {
+                    if (!isInCart(course.id)) {
+                      addItem({
+                        id: course.id,
+                        title: course.title,
+                        price: course.price,
+                        thumbnail: course.cover_image,
+                        level: course.difficulty
+                      });
+                    }
+                  }}
+                  style={{ background: 'white', color: '#fc5c0d', border: '2px solid #fc5c0d' }}
+                >
+                  {isInCart(course.id) ? (
+                    <><FiCheckCircle /> En el carrito</>
+                  ) : (
+                    <><FiShoppingCart /> Añadir al carrito</>
+                  )}
+                </Button>
+              </div>
             </div>
           )}
         </div>

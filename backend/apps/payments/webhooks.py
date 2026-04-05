@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 @require_http_methods(["POST"])
 def mercadopago_webhook(request):
-    """Webhook para notificaciones de Mercado Pago"""
+    """Webhook para notificaciones de Mercado Pago (Soporta Carrito y Pago Individual)"""
     try:
         # Verificar firma del webhook
         mp_service = MercadoPagoService()
@@ -40,115 +40,125 @@ def mercadopago_webhook(request):
         payment_info = mp_service.get_payment_info(payment_id)
 
         # ------------------------------------------------------------------
-        # Resolver user / course a partir de metadata y external_reference
+        # Resolver user y courses a partir de metadata y external_reference
         # ------------------------------------------------------------------
         external_reference = payment_info.get("external_reference", "") or ""
         metadata = payment_info.get("metadata", {}) or {}
 
-        meta_user_id = metadata.get("user_id")
-        meta_course_id = metadata.get("course_id")
+        # 1. Intentar metadata
+        user_id = metadata.get("user_id")
+        course_ids_str = metadata.get("course_ids")  # Formato: "5_8_12"
+        if not course_ids_str and metadata.get("course_id"):
+            course_ids_str = str(metadata.get("course_id"))
 
-        ref_user_id = None
-        ref_course_id = None
-        if external_reference:
-            # external_reference esperado: "user_{user_id}_course_{course_id}"
-            match = re.match(r"user_(\d+)_course_(\d+)", str(external_reference).strip())
-            if match:
-                ref_user_id, ref_course_id = int(match.group(1)), int(match.group(2))
+        # 2. Si no hay en metadata, intentar external_reference
+        if not user_id or not course_ids_str:
+            if external_reference:
+                # Checkout individual: "user_1_course_5"
+                match_single = re.match(r"user_(\d+)_course_(\d+)", str(external_reference).strip())
+                if match_single:
+                    user_id = int(match_single.group(1))
+                    course_ids_str = match_single.group(2)
+                else:
+                    # Checkout carrito: "user_1_courses_5_8_12"
+                    match_cart = re.match(r"user_(\d+)_courses_(.+)", str(external_reference).strip())
+                    if match_cart:
+                        user_id = int(match_cart.group(1))
+                        course_ids_str = match_cart.group(2)
 
-        user_id = meta_user_id or ref_user_id
-        course_id = meta_course_id or ref_course_id
-
-        if not user_id or not course_id:
+        if not user_id or not course_ids_str:
             logger.error(
-                f"Webhook pago {payment_id}: no se pudo resolver user_id/course_id "
+                f"Webhook pago {payment_id}: no se pudo resolver user_id/courses "
                 f"(metadata={metadata}, external_reference={external_reference})"
             )
             return JsonResponse(
-                {"status": "error", "message": "No se pudo resolver usuario/curso del pago"},
+                {"status": "error", "message": "No se pudo resolver usuario/cursos del pago"},
                 status=400,
             )
+
+        course_ids = [int(cid) for cid in str(course_ids_str).split("_") if cid.strip().isdigit()]
 
         try:
             user = User.objects.get(id=user_id)
-            course = Course.objects.get(id=course_id)
-        except (User.DoesNotExist, Course.DoesNotExist) as e:
-            logger.error(f"Webhook pago {payment_id}: usuario o curso no encontrado - {e}")
+            courses = Course.objects.filter(id__in=course_ids)
+            if len(courses) != len(course_ids):
+                logger.warning(f"Webhook: no se encontraron todos los cursos {course_ids}")
+        except User.DoesNotExist:
+            logger.error(f"Webhook pago {payment_id}: usuario no encontrado")
             return JsonResponse(
-                {"status": "error", "message": "Usuario o curso no encontrado"},
+                {"status": "error", "message": "Usuario no encontrado"},
                 status=400,
             )
 
-        # ------------------------------------------------------------------
-        # Buscar/crear la transacción correcta (idempotente: MP puede enviar el webhook 2+ veces)
-        # ------------------------------------------------------------------
         pref_id = payment_info.get("preference_id") or ""
-        transaction = None
+        mp_status = payment_info.get("status")
+        internal_status = map_mp_status(mp_status)
 
-        # 0) Si ya existe una transacción con este payment_id, usarla (evita UNIQUE constraint)
-        transaction = Transaction.objects.filter(mp_payment_id=str(payment_id)).first()
+        for course in courses:
+            # ------------------------------------------------------------------
+            # Buscar/crear la transacción correcta (idempotente)
+            # ------------------------------------------------------------------
+            transaction = None
 
-        # 1) Si no, intentar por preference_id + usuario + curso (flujo normal)
-        if not transaction and pref_id:
-            transaction = (
-                Transaction.objects.filter(
-                    mp_preference_id=pref_id,
-                    user=user,
-                    course=course,
+            # 0) Por payment_id + course
+            transaction = Transaction.objects.filter(mp_payment_id=str(payment_id), course=course).first()
+
+            # 1) Por preference_id + usuario + course
+            if not transaction and pref_id:
+                transaction = (
+                    Transaction.objects.filter(
+                        mp_preference_id=pref_id,
+                        user=user,
+                        course=course,
+                    )
+                    .order_by("-created_at")
+                    .first()
                 )
-                .order_by("-created_at")
-                .first()
-            )
 
-        # 2) Si no está, tomar la última transacción pendiente de ese user/curso
-        if not transaction:
-            transaction = (
-                Transaction.objects.filter(
+            # 2) Última transacción pendiente
+            if not transaction:
+                transaction = (
+                    Transaction.objects.filter(
+                        user=user,
+                        course=course,
+                        status="pending",
+                    )
+                    .order_by("-created_at")
+                    .first()
+                )
+
+            # 3) Nueva
+            if not transaction:
+                transaction = Transaction(
                     user=user,
                     course=course,
+                    mp_preference_id=pref_id,
+                    amount=course.price,
                     status="pending",
                 )
-                .order_by("-created_at")
-                .first()
-            )
 
-        # 3) Si sigue sin encontrarse, crear una nueva usando los datos del pago
-        if not transaction:
-            transaction = Transaction(
-                user=user,
-                course=course,
-                mp_preference_id=pref_id,
-                amount=payment_info.get("transaction_amount", 0),
-                status="pending",
-            )
+            transaction.mp_payment_id = str(payment_id)
+            transaction.status = internal_status
+            transaction.payment_method = payment_info.get("payment_method_id", "")
+            transaction.payment_type = payment_info.get("payment_type_id", "")
+            transaction.mp_merchant_order_id = str(payment_info.get("order", {}).get("id", ""))
+            transaction.raw_data = payment_info
 
-        # En todos los casos, asociar el payment_id actual
-        transaction.mp_payment_id = str(payment_id)
+            # Aprobar y notificar
+            if transaction.status == 'approved':
+                already_approved = True if transaction.pk and Transaction.objects.filter(pk=transaction.pk, status='approved').exists() else False
 
-        # Actualizar campos del pago
-        mp_status = payment_info.get("status")
-        transaction.status = map_mp_status(mp_status)
-        transaction.payment_method = payment_info.get("payment_method_id", "")
-        transaction.payment_type = payment_info.get("payment_type_id", "")
-        transaction.mp_merchant_order_id = str(payment_info.get("order", {}).get("id", ""))
-        transaction.raw_data = payment_info
+                transaction.approve()
+                transaction.save()
 
-        # Si está aprobado, dar acceso al curso
-        # FIX: approve() ya no hace save(), así que el único save() es este de abajo
-        if transaction.status == 'approved':
-            already_approved = Transaction.objects.filter(
-                mp_payment_id=str(payment_id), status='approved'
-            ).exists()
-
-            transaction.approve()
-            transaction.save()  # ← movemos save() AQUÍ (antes del email)
-
-            # Enviar email solo si recién se aprobó (idempotente)
-            if not already_approved:
-                send_payment_confirmation(transaction, payment_info)
-            logger.info(f"Pago {payment_id} aprobado - Acceso otorgado")
-        else:
-            transaction.save()
+                if not already_approved:
+                    try:
+                        send_payment_confirmation(transaction, payment_info)
+                    except Exception as e:
+                        logger.error(f"Error al enviar email para tx {transaction.id}: {e}")
+                logger.info(f"Pago {payment_id} aprobado para curso {course.title}")
+            else:
+                transaction.save()
 
         return JsonResponse({"status": "success"}, status=200)
 

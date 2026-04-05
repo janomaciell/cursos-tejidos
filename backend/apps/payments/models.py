@@ -21,7 +21,7 @@ class Transaction(models.Model):
     # el payment_id lo asigna el webhook cuando MP confirma el pago.
     # null=True permite varias transacciones pendientes (sin payment_id aún).
     mp_payment_id = models.CharField(
-        'ID de pago MP', max_length=100, unique=True, blank=True, null=True
+        'ID de pago MP', max_length=100, blank=True, null=True, db_index=True
     )
     mp_preference_id = models.CharField('ID de preferencia MP', max_length=100, blank=True)
     mp_merchant_order_id = models.CharField('ID de orden MP', max_length=100, blank=True)
