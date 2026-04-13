@@ -124,7 +124,7 @@ const Register = () => {
             <div className="register-value">
               <h3 className="value-title">Comienza tu viaje hoy</h3>
               <p className="value-text">
-                Únete a más de 500 alumnas que ya están creando sus propias prendas 
+                Únete a más de 100 alumnas que ya están creando sus propias prendas 
                 y construyendo su futuro en la costura.
               </p>
             </div>

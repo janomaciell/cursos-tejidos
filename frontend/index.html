@@ -58,7 +58,9 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '3947582062053079');
-    fbq('track', 'PageView');
+    // Generar un event_id único para deduplicación (Browser + Server)
+    var eventId = 'pageview_' + new Date().getTime() + '_' + Math.random().toString(36).substring(2, 15);
+    fbq('track', 'PageView', {}, {eventID: eventId});
     </script>
     <!-- End Meta Pixel Code -->
   </head>

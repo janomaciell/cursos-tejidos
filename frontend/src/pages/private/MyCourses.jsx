@@ -432,7 +432,7 @@ const MyCourses = () => {
             <h2 className="empty-title">Aún no tienes cursos</h2>
             <p className="empty-text">
               Explora nuestro catálogo y comienza tu camino en la costura hoy mismo.<br />
-              Más de 500 alumnas ya están aprendiendo.
+              Más de 100 alumnas ya están aprendiendo.
             </p>
             <Link to="/cursos" className="browse-button">
               <FiBook />

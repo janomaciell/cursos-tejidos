@@ -115,7 +115,7 @@ const CourseCatalog = () => {
 
   const stats = [
     { icon: <FiBookOpen />, value: courses.length || '10+', label: 'Cursos disponibles' },
-    { icon: <FiTrendingUp />, value: '500+', label: 'Alumnas activas' },
+    { icon: <FiTrendingUp />, value: '100+', label: 'Alumnas activas' },
     { icon: <FiAward />, value: '100%', label: 'Técnica Profesional' }
   ];
 
