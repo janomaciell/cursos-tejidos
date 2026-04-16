@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { coursesAPI } from '../../api/courses';
 import CourseList from '../../courses/CourseList';
 import CourseFilter from '../../courses/CourseFilter';
-import { FiSearch, FiFilter, FiX, FiBookOpen, FiTrendingUp, FiAward } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './CourseCatalog.css';
@@ -17,7 +17,6 @@ const CourseCatalog = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [activeView, setActiveView] = useState('grid');
   const heroRef = useRef(null);
-  const searchRef = useRef(null);
 
   useEffect(() => {
     loadCourses();
@@ -26,27 +25,27 @@ const CourseCatalog = () => {
   useEffect(() => {
     const tl = gsap.timeline({ delay: 0.2 });
     
-    tl.fromTo('.catalog-hero-content',
-      { opacity: 0, y: 40 },
+    tl.fromTo('.action-bar-content',
+      { opacity: 0, y: -20 },
       { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
     );
 
-    tl.fromTo('.stat-card',
-      { opacity: 0, y: 30, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, stagger: 0.1, duration: 0.6, ease: 'back.out(1.2)' },
-      '-=0.5'
+    tl.fromTo(['.action-bar-title', '.action-bar-tools'],
+      { opacity: 0, y: -10 },
+      { opacity: 1, y: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out' },
+      '-=0.4'
     );
 
-    tl.fromTo('.search-section',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
-      '-=0.4'
+    tl.fromTo('.results-count-badge',
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' },
+      '-=0.3'
     );
 
     tl.fromTo('.catalog-sidebar',
       { opacity: 0, x: -30 },
       { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' },
-      '-=0.3'
+      '-=0.2'
     )
     .fromTo('.catalog-content',
       { opacity: 0, x: 30 },
@@ -113,106 +112,46 @@ const CourseCatalog = () => {
     );
   };
 
-  const stats = [
-    { icon: <FiBookOpen />, value: courses.length || '10+', label: 'Cursos disponibles' },
-    { icon: <FiTrendingUp />, value: '100+', label: 'Alumnas activas' },
-    { icon: <FiAward />, value: '100%', label: 'Técnica Profesional' }
-  ];
 
   return (
     <div className="catalog-page">
       {/* Header */}
-      <section className="catalog-hero" ref={heroRef}>
-        <div className="hero-pattern"></div>
-        <div className="catalog-hero-content">
-          <div className="breadcrumb">
-            <span>Inicio</span>
-            <span className="separator">/</span>
-            <span className="current">Catálogo</span>
-          </div>
+      <section className="catalog-action-bar" ref={heroRef}>
+        <div className="action-bar-content">
+          <h1 className="action-bar-title">Explorar Cursos</h1>
           
-          <h1 className="catalog-title">
-            Explorá Nuestros<br />
-            <span className="title-accent">Cursos de Tejido</span>  
-          </h1>
-          
-          <p className="catalog-subtitle">
-            Desde cero hasta nivel profesional. Encontrá el curso perfecto para tu nivel y objetivos.
-          </p>
-
-          <div className="hero-stats">
-            {stats.map((stat, index) => (
-              <div key={index} className="stat-card">
-                <div className="stat-icon">{stat.icon}</div>
-                <div className="stat-content">
-                  <div className="stat-value">{stat.value}</div>
-                  <div className="stat-label">{stat.label}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Search */}
-      <section className="search-section" ref={searchRef}>
-        <div className="search-wrapper">
-          <div className="search-container">
-            <div className="search-bar">
+          <div className="action-bar-tools">
+            <div className="search-container">
               <FiSearch className="search-icon" />
               <input
                 type="text"
-                placeholder="Buscar por nombre, tema o nivel..."
+                placeholder="¿Qué buscás?"
                 value={searchTerm}
                 onChange={handleSearch}
                 className="search-input"
               />
               {searchTerm && (
-                <button 
-                  className="clear-search-btn"
-                  onClick={clearSearch}
-                  aria-label="Limpiar búsqueda"
-                >
+                <button className="clear-search-btn" onClick={clearSearch}>
                   <FiX />
                 </button>
               )}
             </div>
-            
+
             <button 
               className="filter-toggle-btn"
               onClick={toggleFilters}
-              aria-label="Mostrar filtros"
+              aria-label="Filtros"
             >
               <FiFilter />
               <span>Filtros</span>
             </button>
-          </div>
-
-          <div className="search-meta">
-            <div className="results-info">
-              {loading ? (
-                <div className="loading-pulse">
-                  <span className="pulse-dot"></span>
-                  <span>Buscando cursos...</span>
-                </div>
-              ) : (
-                <p>
-                  Mostrando <span className="results-count">{courses.length}</span> 
-                  {' '}curso{courses.length !== 1 ? 's' : ''}
-                  {searchTerm && (
-                    <span className="search-query"> con "{searchTerm}"</span>
-                  )}
-                </p>
-              )}
-            </div>
 
             <div className="view-toggle">
               <button
                 className={`view-btn ${activeView === 'grid' ? 'active' : ''}`}
                 onClick={() => setActiveView('grid')}
-                aria-label="Vista de cuadrícula"
               >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                   <rect x="2" y="2" width="7" height="7" rx="1"/>
                   <rect x="11" y="2" width="7" height="7" rx="1"/>
                   <rect x="2" y="11" width="7" height="7" rx="1"/>
@@ -222,15 +161,18 @@ const CourseCatalog = () => {
               <button
                 className={`view-btn ${activeView === 'list' ? 'active' : ''}`}
                 onClick={() => setActiveView('list')}
-                aria-label="Vista de lista"
               >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                   <rect x="2" y="3" width="16" height="3" rx="1"/>
                   <rect x="2" y="8.5" width="16" height="3" rx="1"/>
                   <rect x="2" y="14" width="16" height="3" rx="1"/>
                 </svg>
               </button>
             </div>
+          </div>
+          
+          <div className="results-count-badge">
+            {courses.length} cursos
           </div>
         </div>
       </section>
